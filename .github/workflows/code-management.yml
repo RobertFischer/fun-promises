@@ -1,0 +1,29 @@
+# @format
+---
+name: Code Cleanup
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  clean:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+      - uses: actions/setup-node@v2-beta
+        with:
+          node-version: "14"
+      - run: ./script/bootstrap
+      - run: yarn install
+      - run: yarn docs:build
+      - run: ./script/update-codeowners
+      - run: git add -u .
+      - run: yarn lint-staged
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "style(cleanup): automatic code cleanup"

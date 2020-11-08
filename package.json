@@ -1,0 +1,75 @@
+{
+	"name": "@ve-mobile/fun-promises",
+	"version": "0.0.1",
+	"description": "A library for making Promises more friendly, fluent, and fun(ctional).",
+	"main": "dist/node/index.js",
+	"browser": "dist/browser/index.js",
+	"repository": "git@github.com:RobertFischer/fun-promises.git",
+	"author": "Robert Fischer",
+	"license": "Unlicense",
+	"private": false,
+	"keywords": [
+		"promise",
+		"performance",
+		"promises",
+		"promises-a",
+		"promises-aplus",
+		"async",
+		"await",
+		"deferred",
+		"deferreds",
+		"future",
+		"flow control",
+		"dsl",
+		"fluent interface",
+		"functional programming",
+		"functional"
+	],
+	"homepage": "https://robertfischer.github.io/fun-promises/",
+	"dependencies": {
+		"debug": "^4.2.0",
+		"lodash": "^4.17.20",
+		"ts-lib": "^0.0.5"
+	},
+	"devDependencies": {
+		"@types/lodash": "^4.14.165",
+		"cz-conventional-changelog": "^3.3.0",
+		"husky": "^4.3.0",
+		"jest": "^26.6.3",
+		"jest-extended": "^0.11.5",
+		"lint-staged": "^10.5.1",
+		"prettier": "^2.1.2",
+		"semantic-release": "^17.2.2",
+		"semantic-release-npm-deprecate-old-versions": "^1.0.1",
+		"ts-jest": "^26.4.3",
+		"typedoc": "^0.19.2",
+		"typedoc-plugin-nojekyll": "^1.0.1",
+		"typescript": "^4.1.1-rc"
+	},
+	"scripts": {
+		"test": "export 'DEBUG=fun-promises,fun-promises:*' && rm -rf ./dist && tsc --noEmit -p tsconfig.json && jest --detectOpenHandles --forceExit",
+		"docs:build": "rm -rf ./docs && typedoc --tsconfig tsconfig.json",
+		"watch:compile": "tsc --watch --noEmit -p tsconfig.json",
+		"watch:test": "yarn test --watch",
+		"build": "tsc -p tsconfig.json",
+		"prepack": "yarn install && yarn build && yarn docs:build",
+		"docs:serve": "yarn docs:build && http-server ./docs",
+		"polish": "prettier --write .",
+		"clean": "./script/clean"
+	},
+	"husky": {
+		"hooks": {
+			"pre-commit": "lint-staged",
+			"prepare-commit-msg": "./script/has-message \"$1\" || ( exec < /dev/tty && git cz --hook )"
+		}
+	},
+	"lint-staged": {
+		"*.ts": "tsc --noEmit --esModuleInterop",
+		"*.(js|json|yml|yaml|md|css|html|ts)": "prettier --write"
+	},
+	"config": {
+		"commitizen": {
+			"path": "./node_modules/cz-conventional-changelog"
+		}
+	}
+}

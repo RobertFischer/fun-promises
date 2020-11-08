@@ -1,0 +1,24 @@
+#!/bin/bash
+
+set -o pipefail
+set -exu
+
+cd "$(dirname "$0")/.."
+
+PYTHON="$(which python3 || which python)"
+PATH="$PATH:$("$PYTHON" -c 'import site; print(site.USER_BASE)')/bin"
+
+# bash syntax function for current directory git repository
+owners(){
+  for f in $(git ls-files); do
+    # filename
+    echo -n "$f "
+    # author emails if loc distribution >= 10%
+    git-fame -esnwMC --since 3.months --incl "$f" | tr '/' '|' \
+      | awk -F '|' '($6>=10) {print $2}' \
+      | xargs echo -n
+  done
+}
+
+# print to screen and file
+owners | sort -udf | tee .github/CODEOWNERS

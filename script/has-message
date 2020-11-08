@@ -1,0 +1,27 @@
+#!/bin/bash
+
+set -o pipefail
+set -eu
+
+# This checks to see if the git commit file actually contains anything that's meaningful.
+# If so, we want to use it; if not, we want to use commitizen.
+
+COMMIT_FILE="$(echo "$HUSKY_GIT_PARAMS" | cut -d ' ' -f 1)"
+
+if [ -z "$COMMIT_FILE" ]
+then
+
+	exit -1
+
+fi
+
+if [ -r "$COMMIT_FILE" ]
+then
+
+	exec egrep -v '^\s*(#.*)?$' "$COMMIT_FILE"
+
+else
+
+	exit -2
+
+fi
