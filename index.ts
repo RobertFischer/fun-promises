@@ -546,7 +546,7 @@ export default class FunPromise<T> implements Promise<Unpromise<T>> {
 		return this.processArray(async (ary) => {
 			const testResults = await Promise.all(_.map(ary, test));
 			return _.filter(ary, (item, idx) => {
-				item; //
+				item; // Need to refer to it in order to avoid a compile error.
 				return testResults[idx];
 			});
 		});
