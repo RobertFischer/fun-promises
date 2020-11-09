@@ -89,7 +89,6 @@
 		}
 	},
 	"lint-staged": {
-		"*.ts": "tsc --noEmit --esModuleInterop",
 		"*.((c|m)?js|json|ya?ml|md|css|html?|ts)": "prettier --write"
 	},
 	"config": {
