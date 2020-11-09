@@ -85,7 +85,7 @@
 		"serve:docs": "yarn build:docs && http-server ./docs",
 		"polish": "prettier --write .",
 		"clean": "./script/clean",
-		"update:browserslist": "npx browserslist@latest --update-db",
+		"update:browserslist": "yarn install browserslist@latest && browserslist --update-db",
 		"show:coverage:browsers": "BROWSERSLIST_ENV=browser npx browserslist && npx browserslist --coverage && npx browserslist --coverage=US && echo \"(The rest don't support promises.)\"",
 		"show:coverage:node": "BROWSERSLIST_ENV=node npx browserslist && npx browserslist --coverage && npx browserslist --coverage=US"
 	},
