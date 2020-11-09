@@ -48,6 +48,36 @@ export type PromisableIterable<T> = Promisable<Iterable<Promisable<T>>>;
 export type IterableOfPromisables<T> = Iterable<Promisable<T>>;
 
 /**
+ * The various states that a promise can be in.
+ */
+export enum PromiseState {
+	/**
+	 * The promise is neither resolved nor rejected.
+	 */
+	Pending = "pending",
+
+	/**
+	 * The promise has begun resolving, but is not yet fully resolved.
+	 */
+	Resolving = "resolving",
+
+	/**
+	 * The promise has resolved to a value.
+	 */
+	Resolved = "resolved",
+
+	/**
+	 * The promise has begun rejecting, but is not yet fully rejected.
+	 */
+	Rejecting = "rejecting",
+
+	/**
+	 * The promise has rejected with a cause.
+	 */
+	Rejected = "rejected",
+}
+
+/**
  * A class that is an "inside-out" [[`FunPromise`]]: the `resolve` and `reject` functions
  * from the callback are exposed as properties, and are therefore able to be called by
  * caller's code.
@@ -63,6 +93,11 @@ export class Deferral<T> {
 	readonly promise: FunPromise<T>;
 
 	/**
+	 * The state of `promise`.
+	 */
+	private stateValue: PromiseState = PromiseState.Pending;
+
+	/**
 	 * The function used to resolve [[`promise`]].
 	 */
 	private resolver: (it: Promisable<T>) => Promisable<void> | null = null;
@@ -72,13 +107,93 @@ export class Deferral<T> {
 	 */
 	private rejector: (err: unknown) => Promisable<void> | null = null;
 
+	/**
+	 * Provides the state of `promise`.
+	 */
+	get state() {
+		return this.stateValue;
+	}
+
+	/**
+	 * Whether `promise` is in the process of resolving or rejecting.
+	 */
+	get isSettling() {
+		switch (this.stateValue) {
+			case PromiseState.Resolving:
+				return true;
+			case PromiseState.Rejecting:
+				return true;
+			default:
+				return false;
+		}
+	}
+
+	/**
+	 * Whether `promise` has resolved.
+	 */
+	get isResolved() {
+		return this.stateValue === PromiseState.Resolved;
+	}
+
+	/**
+	 * Whether `promise` was rejected.
+	 */
+	get isRejected() {
+		return this.stateValue === PromiseState.Rejected;
+	}
+
+	/**
+	 * Resolves `promise` with the given value.
+	 */
 	resolve(it) {
-		if (this.resolver) this.resolver(it);
+		const { resolver } = this;
+		if (resolver) {
+			try {
+				const { rejector } = this;
+				this.stateValue = PromiseState.Resolving;
+				_.defer(() => {
+					try {
+						resolver(it);
+						this.stateValue = PromiseState.Resolved;
+					} catch (e) {
+						if (rejector) {
+							this.rejector = rejector;
+							this.reject(e);
+						} else {
+							console.warn(`Uncaught exception during resolution`, e);
+						}
+					}
+				});
+			} catch (e) {
+				this.reject(e);
+			} finally {
+				this.resolver = null;
+				this.rejector = null;
+			}
+		}
 		return this.promise;
 	}
 
-	reject(e) {
-		if (this.rejector) this.rejector(e);
+	/**
+	 * Rejects `promise` with the given cause.
+	 */
+	reject(e: Error) {
+		const { rejector } = this;
+		if (rejector) {
+			try {
+				this.stateValue = PromiseState.Rejecting;
+				_.defer(() => {
+					try {
+						rejector(e);
+					} finally {
+						this.stateValue = PromiseState.Rejected;
+					}
+				});
+			} finally {
+				this.resolver = null;
+				this.rejector = null;
+			}
+		}
 		return this.promise;
 	}
 
@@ -88,16 +203,8 @@ export class Deferral<T> {
 	 */
 	constructor() {
 		this.promise = FunPromise.new((resolve, reject) => {
-			this.resolver = (it) => {
-				this.resolver = null;
-				this.rejector = null;
-				resolve(it);
-			};
-			this.rejector = (err) => {
-				this.resolver = null;
-				this.rejector = null;
-				reject(err);
-			};
+			this.resolver = resolve;
+			this.rejector = reject;
 		});
 	}
 }
@@ -590,5 +697,12 @@ export default class FunPromise<T> implements Promise<Unpromise<T>> {
 	 */
 	simplify(): FunPromise<Unpromise<T>> {
 		return (this as unknown) as FunPromise<Unpromise<T>>;
+	}
+
+	/**
+	 * If the promise rejects, returns the cause as an [``Error``].  If the promise resolves, returns the resolved value.
+	 */
+	result(): FunPromise<Error | T> {
+		return this.catchError(_.identity);
 	}
 }
