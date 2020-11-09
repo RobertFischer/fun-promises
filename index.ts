@@ -11,6 +11,7 @@ function isError(it: unknown): it is Error {
 
 /**
  * Provides the type of elements within an [[`Iterable`]], which may be wrapped in one or more promises.
+ * The element type is also unwrapped any promises.
  */
 export type Element<T> = Unpromise<T> extends Iterable<infer U>
 	? Unpromise<U>
@@ -170,8 +171,8 @@ export default class FunPromise<T> implements Promise<Unpromise<T>> {
 		return FunPromise.wrap(
 			this.arrayify().wrapped.then(async (inputIterable) => {
 				const ary: Element<T>[] = _.clone(_.castArray(inputIterable));
-				const resultIterable = await handler(ary);
-				return _.toArray(resultIterable);
+				const resultIterable = handler(ary);
+				return Promise.all(_.toArray(resultIterable));
 			})
 		);
 	}
@@ -190,7 +191,7 @@ export default class FunPromise<T> implements Promise<Unpromise<T>> {
 
 	/**
 	 * Executes the provided function in a [[`FunPromise`]]. Useful to avoid [releasing Zalgo](https://blog.izs.me/2013/08/designing-apis-for-asynchrony)
-	 * when the means of creating the promised value might explode.
+	 * when the means of creating the promise might explode.
 	 */
 	static try<T>(fn: () => Promisable<T>): FunPromise<T> {
 		return FunPromise.new((resolver) => resolver(fn()));
@@ -209,7 +210,7 @@ export default class FunPromise<T> implements Promise<Unpromise<T>> {
 	 * [`_.castArray` from Lodash](https://lodash.com/docs/4.17.15#castArray).
 	 */
 	all() {
-		return this.processArray((ary) => FunPromise.all(ary));
+		return this.processArray(_.identity);
 	}
 
 	/**
@@ -417,6 +418,63 @@ export default class FunPromise<T> implements Promise<Unpromise<T>> {
 	}
 
 	/**
+	 * Given a [[`PromisableIterable`]], resolves each value provided and passes each value through the
+	 * `test` function, retaining only those for which the test returned `true`.
+	 *
+	 * The order of input elements is maintained, but not the resolution order.
+	 *
+	 * If the payload is not an array, then it is coerced into an array using
+	 * [`_.castArray` from Lodash](https://lodash.com/docs/4.17.15#castArray).
+	 */
+	static filter<T>(them: PromisableIterable<T>, filter) {
+		return FunPromise.resolve(them).filter(filter);
+	}
+
+	/**
+	 * `this.filter(test)` is the same as [[ FunPromise.filter | `FunPromise.filter(this, test)` ]].
+	 */
+	filter(
+		test: (it: Element<T>) => Promisable<boolean>
+	): FunPromise<Element<T>[]> {
+		return this.processArray(async (ary) => {
+			const testResults = await Promise.all(_.map(ary, test));
+			return _.filter(ary, (item, idx) => {
+				item; //
+				return testResults[idx];
+			});
+		});
+	}
+
+	/**
+	 * Given a [[`PromisableIterable`]], resolves each value provided and passes each value through the
+	 * `test` function, retaining only those for which the test returned `true`.
+	 *
+	 * The order of input elements and the resultion order are maintained.
+	 *
+	 * If the payload is not an array, then it is coerced into an array using
+	 * [`_.castArray` from Lodash](https://lodash.com/docs/4.17.15#castArray).
+	 */
+	static filterSeq<T>(them: PromisableIterable<T>, filter) {
+		return FunPromise.resolve(them).filterSeq(filter);
+	}
+
+	/**
+	 * `this.filterSeq(test)` is the same as [[ FunPromise.filterSeq | `FunPromise.filterSeq(this, test)` ]].
+	 */
+	filterSeq(
+		test: (it: Element<T>) => Promisable<boolean>
+	): FunPromise<Element<T>[]> {
+		return this.processArray(async (ary) => {
+			const result = [];
+			while (!_.isEmpty(ary)) {
+				const it = ary.shift();
+				if (await test(it)) result.push(it);
+			}
+			return result;
+		});
+	}
+
+	/**
 	 * Classic `then`, but returning a `FunPromise`.
 	 */
 	then(onfulfilled, onrejected?) {
@@ -515,15 +573,20 @@ export default class FunPromise<T> implements Promise<Unpromise<T>> {
 
 	/**
 	 * Converts a wrapped [[`Iterable`]] into an array.
+	 *
+	 * This method _mostly_ exists for the sake of type safety/sanity: it gets the value to [[ Element | `Element<T>[]` ]]
+	 * from a lot of weird places.
 	 */
 	arrayify(): FunPromise<Element<T>[]> {
-		return this.then((iterable) => [...iterable]);
+		return FunPromise.wrap(
+			this.wrapped.then((iterable) => _.toArray(iterable) as Element<T>[])
+		);
 	}
 
 	/**
 	 * Simplifies multiple layers of promise wrappers down to a single wrapper.
 	 *
-	 * This method exists solely for type safety: its behavior is actually implied in the `Promise/A+` spec.
+	 * This method exists solely for the sake of the type system: its behavior is actually implied in the `Promise/A+` spec.
 	 */
 	simplify(): FunPromise<Unpromise<T>> {
 		return (this as unknown) as FunPromise<Unpromise<T>>;

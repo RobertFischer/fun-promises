@@ -116,3 +116,5 @@ docs
 index.js
 index.d.ts
 index.*.map
+
+*-cache

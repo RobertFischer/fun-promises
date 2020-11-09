@@ -3,7 +3,8 @@
 	"version": "0.0.1",
 	"description": "A library for making Promises more friendly, fluent, and fun(ctional).",
 	"main": "dist/node/index.js",
-	"browser": "dist/browser/index.js",
+	"module": "dist/browser/esm/index.mjs",
+	"browser": "dist/browser/min/index.js",
 	"repository": "git@github.com:RobertFischer/fun-promises.git",
 	"author": "Robert Fischer",
 	"license": "Unlicense",
@@ -27,17 +28,28 @@
 	],
 	"homepage": "https://robertfischer.github.io/fun-promises/",
 	"dependencies": {
+		"@babel/plugin-transform-runtime": "^7.12.1",
+		"@babel/runtime": "^7.12.5",
+		"core-js": "^3.7.0",
 		"debug": "^4.2.0",
 		"lodash": "^4.17.20",
 		"ts-lib": "^0.0.5"
 	},
 	"devDependencies": {
+		"@babel/cli": "^7.12.1",
+		"@babel/core": "^7.12.3",
+		"@babel/plugin-proposal-class-properties": "^7.12.1",
+		"@babel/preset-env": "^7.12.1",
 		"@types/lodash": "^4.14.165",
+		"babel-minify": "^0.5.1",
+		"babel-plugin-lodash": "^3.3.4",
+		"browserslist": "^4.14.6",
 		"cz-conventional-changelog": "^3.3.0",
 		"husky": "^4.3.0",
 		"jest": "^26.6.3",
 		"jest-extended": "^0.11.5",
 		"lint-staged": "^10.5.1",
+		"parcel": "^2.0.0-beta.1",
 		"prettier": "^2.1.2",
 		"semantic-release": "^17.2.2",
 		"semantic-release-npm-deprecate-old-versions": "^1.0.1",
@@ -48,14 +60,23 @@
 	},
 	"scripts": {
 		"test": "export 'DEBUG=fun-promises,fun-promises:*' && rm -rf ./dist && tsc --noEmit -p tsconfig.json && jest --detectOpenHandles --forceExit",
-		"docs:build": "rm -rf ./docs && typedoc --tsconfig tsconfig.json",
+		"build:docs": "rm -rf ./docs && typedoc --tsconfig tsconfig.json",
 		"watch:compile": "tsc --watch --noEmit -p tsconfig.json",
 		"watch:test": "yarn test --watch",
-		"build": "tsc -p tsconfig.json",
-		"prepack": "yarn install && yarn build && yarn docs:build",
-		"docs:serve": "yarn docs:build && http-server ./docs",
+		"build": "yarn clean && yarn update:browserslist && yarn build:docs && yarn build:esnext && yarn build:node:cjs && yarn build:node:esm && yarn build:browser:cjs && yarn build:browser:esm && yarn build:browser:min",
+		"build:esnext": "tsc -p tsconfig.json",
+		"build:node:cjs": "BROWSERSLIST_ENV=node babel --config-file ./conf.d/babel/cjs.cjs --out-dir ./dist/node/cjs --out-file-extension .cjs ./dist/esnext/*.js --verbose",
+		"build:node:esm": "BROWSERSLIST_ENV=node babel --config-file ./conf.d/babel/esm.cjs --out-dir ./dist/node/esm --out-file-extension .mjs ./dist/esnext/*.js --verbose",
+		"build:browser:cjs": "BROWSERSLIST_ENV=browser babel --config-file ./conf.d/babel/cjs.cjs --out-dir ./dist/browser/cjs --out-file-extension .cjs ./dist/esnext/*.js --verbose",
+		"build:browser:esm": "BROWSERSLIST_ENV=browser babel  --config-file ./conf.d/babel/esm.cjs  --out-dir ./dist/browser/esm --out-file-extension .mjs ./dist/esnext/*.js --verbose",
+		"build:browser:min": "BROWSERSLIST_ENV=browser parcel build --log-level=verbose --target browser --dist-dir ./dist/browser/min ./index.ts",
+		"prepack": "yarn install && yarn build",
+		"serve:docs": "yarn build:docs && http-server ./docs",
 		"polish": "prettier --write .",
-		"clean": "./script/clean"
+		"clean": "./script/clean",
+		"update:browserslist": "npx browserslist@latest --update-db",
+		"show:coverage:browsers": "BROWSERSLIST_ENV=browser npx browserslist && npx browserslist --coverage && npx browserslist --coverage=US && echo \"(The rest don't support promises.)\"",
+		"show:coverage:node": "BROWSERSLIST_ENV=node npx browserslist"
 	},
 	"husky": {
 		"hooks": {
@@ -65,11 +86,27 @@
 	},
 	"lint-staged": {
 		"*.ts": "tsc --noEmit --esModuleInterop",
-		"*.(js|json|yml|yaml|md|css|html|ts)": "prettier --write"
+		"*.((c|m)?js|mjs|json|ya?ml|md|css|html?|ts)": "prettier --write"
 	},
 	"config": {
 		"commitizen": {
 			"path": "./node_modules/cz-conventional-changelog"
 		}
+	},
+	"browserslist": {
+		"node": [
+			"maintained node versions"
+		],
+		"browser": [
+			"defaults and supports promises",
+			">1% in US and supports promises",
+			">1% in GB and supports promises",
+			">1% in DE and supports promises",
+			">1% in JP and supports promises",
+			">1% in CN and supports promises",
+			">1% in IN and supports promises",
+			"last 2 years and supports promises",
+			"not dead"
+		]
 	}
 }

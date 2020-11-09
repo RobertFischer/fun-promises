@@ -6,3 +6,4 @@ set -exu
 cd "$(dirname "$0")/.."
 
 rm -rvf node_modules ./index.js ./index.d.ts ./*.map ./lib/*.js ./lib/*.d.ts ./lib/*.map dist docs
+exec yarn install
