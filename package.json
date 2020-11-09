@@ -96,7 +96,7 @@
 		}
 	},
 	"lint-staged": {
-		"*.((c|m)?js|json|ya?ml|md|css|html?|ts)": "prettier --write"
+		"*.((c|m)?js|json|y(a)?ml|md|css|htm(l)?|ts)": "prettier --write"
 	},
 	"config": {
 		"commitizen": {
