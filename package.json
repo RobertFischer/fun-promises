@@ -89,8 +89,8 @@
 		}
 	},
 	"lint-staged": {
-		"*.ts(x?)": "tsc --noEmit --esModuleInterop",
-		"*.((c|m)?js(x?)|json|ya?ml|md|css|html?|ts(x?))": "prettier --write"
+		"*.ts": "tsc --noEmit --esModuleInterop",
+		"*.((c|m)?js|json|ya?ml|md|css|html?|ts)": "prettier --write"
 	},
 	"config": {
 		"commitizen": {
