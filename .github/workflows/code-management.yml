@@ -19,9 +19,10 @@ jobs:
         with:
           node-version: "14"
       - run: ./script/bootstrap
-      - run: yarn install
-      - run: yarn docs:build
+      - name: NPM or Yarn install with caching
+        uses: bahmutov/npm-install@v1.1.0
       - run: ./script/update-codeowners
+      - run: yarn build:docs
       - run: git add -u .
       - run: yarn lint-staged
       - uses: stefanzweifel/git-auto-commit-action@v4
