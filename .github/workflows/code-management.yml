@@ -21,7 +21,6 @@ jobs:
       - run: ./script/bootstrap
       - name: NPM or Yarn install with caching
         uses: bahmutov/npm-install@v1.1.0
-      - run: ./script/update-codeowners
       - run: yarn build:docs
       - run: git add -u .
       - run: yarn lint-staged
