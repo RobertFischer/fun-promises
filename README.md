@@ -99,6 +99,15 @@ FunPromise.resolve([
 	.then((data) => renderUserData);
 ```
 
+#### Types
+
+There are types that represent unwrapped promises (`Unpromise`), things that may
+be promises or values (`Promisable`), and a few others that are a lot more
+esoteric.
+
+_NOTE_: Compiling these types requires TypeScript 4.1 or greater due to
+conditional recursive types being unavailable in 3.x and buggy in 4.0.x.
+
 ### Conventions
 
 #### Collection Methods and `*Seq` Methods
