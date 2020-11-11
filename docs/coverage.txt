@@ -1,5 +1,5 @@
 [Node]
-$ BROWSERSLIST_ENV=node npx browserslist && npx browserslist --coverage && npx browserslist --coverage=US
+$ BROWSERSLIST_ENV=node browserslist && browserslist --coverage && browserslist --coverage=US
 node 15.1.0
 node 14.15.0
 node 12.19.0
@@ -8,7 +8,7 @@ These browsers account for 91.78% of all users globally
 These browsers account for 88.6% of all users in the US
 
 [Browsers]
-$ BROWSERSLIST_ENV=browser npx browserslist && npx browserslist --coverage && npx browserslist --coverage=US && echo "(The rest don't support promises.)"
+$ BROWSERSLIST_ENV=browser browserslist && browserslist --coverage && browserslist --coverage=US && echo "(The rest don't support promises.)"
 and_chr 86
 and_ff 82
 and_qq 10.4
