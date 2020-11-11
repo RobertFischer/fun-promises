@@ -27,6 +27,5 @@ module.exports = {
 				debug: true,
 			},
 		],
-		"minify",
 	],
 };
