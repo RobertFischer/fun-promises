@@ -21,8 +21,9 @@ jobs:
       - run: yarn build:docs
       - run: git add -u .
       - run: yarn lint-staged
-      - run: git add -u .
-      - run: "git commit -m 'style(code cleanup): automatic code cleanup' ."
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "style(code cleanup): automated code cleanup changes"
       - run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
