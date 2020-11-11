@@ -494,8 +494,13 @@ export default class FunPromise {
      * Like [[`catch`]], but any non-[[`Error`]] that was thrown is
      * wrapped in an `Error`. (I bet a lot of your code assumes that
      * an error was thrown, doesn't it?)
+     *
+     * If you do not pass an argument, then this simply creates a promise
+     * that may either be the value on resolution or the error on rejection,
+     * similar to [[`finally`]] but the promise state is resolved instead of
+     * rejected.
      */
-    catchError(handler) {
+    catchError(handler = _.identity) {
         return this.catch((reason) => {
             if (_.isNil(reason)) {
                 throw new Error(`Promise was rejected without a reason`);
@@ -557,12 +562,6 @@ export default class FunPromise {
      */
     simplify() {
         return this;
-    }
-    /**
-     * If the promise rejects, returns the cause as an [``Error``].  If the promise resolves, returns the resolved value.
-     */
-    result() {
-        return this.catchError(_.identity);
     }
 }
 //# sourceMappingURL=index.js.map

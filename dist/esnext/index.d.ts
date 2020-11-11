@@ -5,13 +5,21 @@
  */
 export declare type Element<T> = Unpromise<T> extends Iterable<infer U> ? Unpromise<U> : never;
 /**
- * Provides the type of the resolution value of a [[`Promise`]].
+ * Provides the type of the resolution value after unwrapping all the [[`PromiseLike`]] and [[`Promisable`]] interfaces (if any).
  */
-export declare type Unpromise<T> = T extends PromiseLike<infer U> ? Unpromise<U> : T;
+export declare type Unpromise<T> = T extends PromiseLike<infer U> ? Unpromise<U> : T extends Promisable<infer U> ? U extends T ? T : Unpromise<U> : T;
 /**
  * Something which can be resolved: that is, either a value or a promise of a value.
  */
 export declare type Promisable<T> = T | PromiseLike<T>;
+/**
+ * Guarantees that there is at most one [[`Promise`]] wrapper.
+ */
+export declare type SimplifiedPromise<T> = Promise<Unpromise<T>>;
+/**
+ * Guarantees that there is at most one [[`Promisable`]] wrapper.
+ */
+export declare type SimplifiedPromisable<T> = Promisable<Unpromise<T>>;
 /**
  * An [[`Iterable`]] or a promise of an `Iterable`. Its elements are any mix of type `T` and/or `PromiseLike<T>`.
  * Used as a type for arguments.
@@ -106,7 +114,7 @@ export declare class Deferral<T> {
 /**
  * The class that you should use instead of [[`Promise`]].  It implements the `Promise` API, so it should be a drop-in replacement.
  */
-export default class FunPromise<T> implements Promise<Unpromise<T>> {
+export default class FunPromise<T> implements SimplifiedPromise<T> {
     protected readonly wrapped: Promise<T>;
     /**
      * Classic `[Symbol.toStringTag]` for compliance with [[`Promise<T>`]].
@@ -303,8 +311,13 @@ export default class FunPromise<T> implements Promise<Unpromise<T>> {
      * Like [[`catch`]], but any non-[[`Error`]] that was thrown is
      * wrapped in an `Error`. (I bet a lot of your code assumes that
      * an error was thrown, doesn't it?)
+     *
+     * If you do not pass an argument, then this simply creates a promise
+     * that may either be the value on resolution or the error on rejection,
+     * similar to [[`finally`]] but the promise state is resolved instead of
+     * rejected.
      */
-    catchError<U = never>(handler: (reason: Error) => U extends never ? void : U): FunPromise<T | U>;
+    catchError<U = never>(handler?: (reason: Error) => U extends never ? void : U): FunPromise<T | U>;
     /**
      * Allows you to "tap" into a chain and work with the result at that point in the chain without modifying the value.
      *
@@ -346,9 +359,5 @@ export default class FunPromise<T> implements Promise<Unpromise<T>> {
      * This method exists solely for the sake of the type system: its behavior is actually implied in the `Promise/A+` spec.
      */
     simplify(): FunPromise<Unpromise<T>>;
-    /**
-     * If the promise rejects, returns the cause as an [``Error``].  If the promise resolves, returns the resolved value.
-     */
-    result(): FunPromise<Error | T>;
 }
 //# sourceMappingURL=index.d.ts.map
