@@ -118,3 +118,5 @@ index.d.ts
 index.*.map
 
 *-cache
+
+dist
