@@ -124,13 +124,7 @@
 							<li>
 								<span class="tsd-signature-type">Promise</span
 								><span class="tsd-signature-symbol">&lt;</span
-								><a
-									href="../modules/_index_.html#unpromise"
-									class="tsd-signature-type"
-									>Unpromise</a
-								><span class="tsd-signature-symbol">&lt;</span
 								><span class="tsd-signature-type">T</span
-								><span class="tsd-signature-symbol">&gt;</span
 								><span class="tsd-signature-symbol">&gt;</span>
 							</li>
 						</ul>
@@ -294,13 +288,6 @@
 												href="_index_.funpromise.html#reducearray"
 												class="tsd-kind-icon"
 												>reduce<wbr />Array</a
-											>
-										</li>
-										<li class="tsd-kind-method tsd-parent-kind-class">
-											<a
-												href="_index_.funpromise.html#result"
-												class="tsd-kind-icon"
-												>result</a
 											>
 										</li>
 										<li
@@ -506,8 +493,8 @@
 											<li>
 												Defined in
 												<a
-													href="https://github.com/RobertFischer/fun-promises/blob/9f6ab35/index.ts#L219"
-													>index.ts:219</a
+													href="https://github.com/RobertFischer/fun-promises/blob/fc0577e/index.ts#L227"
+													>index.ts:227</a
 												>
 											</li>
 										</ul>
@@ -579,8 +566,8 @@
 									<li>
 										Defined in
 										<a
-											href="https://github.com/RobertFischer/fun-promises/blob/9f6ab35/index.ts#L219"
-											>index.ts:219</a
+											href="https://github.com/RobertFischer/fun-promises/blob/fc0577e/index.ts#L227"
+											>index.ts:227</a
 										>
 									</li>
 								</ul>
@@ -614,8 +601,8 @@
 									<li>
 										Defined in
 										<a
-											href="https://github.com/RobertFischer/fun-promises/blob/9f6ab35/index.ts#L229"
-											>index.ts:229</a
+											href="https://github.com/RobertFischer/fun-promises/blob/fc0577e/index.ts#L237"
+											>index.ts:237</a
 										>
 									</li>
 								</ul>
@@ -655,8 +642,8 @@
 											<li>
 												Defined in
 												<a
-													href="https://github.com/RobertFischer/fun-promises/blob/9f6ab35/index.ts#L319"
-													>index.ts:319</a
+													href="https://github.com/RobertFischer/fun-promises/blob/fc0577e/index.ts#L327"
+													>index.ts:327</a
 												>
 											</li>
 										</ul>
@@ -724,8 +711,8 @@
 											<li>
 												Defined in
 												<a
-													href="https://github.com/RobertFischer/fun-promises/blob/9f6ab35/index.ts#L687"
-													>index.ts:687</a
+													href="https://github.com/RobertFischer/fun-promises/blob/fc0577e/index.ts#L700"
+													>index.ts:700</a
 												>
 											</li>
 										</ul>
@@ -785,8 +772,8 @@
 											<li>
 												Defined in
 												<a
-													href="https://github.com/RobertFischer/fun-promises/blob/9f6ab35/index.ts#L594"
-													>index.ts:594</a
+													href="https://github.com/RobertFischer/fun-promises/blob/fc0577e/index.ts#L602"
+													>index.ts:602</a
 												>
 											</li>
 										</ul>
@@ -824,7 +811,7 @@
 								<li class="tsd-signature tsd-kind-icon">
 									catch<wbr />Error&lt;U&gt;<span class="tsd-signature-symbol"
 										>(</span
-									>handler<span class="tsd-signature-symbol">: </span
+									>handler<span class="tsd-signature-symbol">?: </span
 									><span class="tsd-signature-symbol">(</span>reason<span
 										class="tsd-signature-symbol"
 										>: </span
@@ -856,8 +843,8 @@
 											<li>
 												Defined in
 												<a
-													href="https://github.com/RobertFischer/fun-promises/blob/9f6ab35/index.ts#L610"
-													>index.ts:610</a
+													href="https://github.com/RobertFischer/fun-promises/blob/fc0577e/index.ts#L623"
+													>index.ts:623</a
 												>
 											</li>
 										</ul>
@@ -873,6 +860,15 @@
 												code assumes that an error was thrown, doesn&#39;t it?)
 											</p>
 										</div>
+										<p>
+											If you do not pass an argument, then this simply creates a
+											promise that may either be the value on resolution or the
+											error on rejection, similar to
+											<a href="_index_.funpromise.html#finally"
+												><code>finally</code></a
+											>
+											but the promise state is resolved instead of rejected.
+										</p>
 									</div>
 									<h4 class="tsd-type-parameters-title">Type parameters</h4>
 									<ul class="tsd-type-parameters">
@@ -884,6 +880,9 @@
 									<ul class="tsd-parameters">
 										<li>
 											<h5>
+												<span class="tsd-flag ts-flagDefault value"
+													>Default value</span
+												>
 												handler:
 												<span class="tsd-signature-symbol">(</span>reason<span
 													class="tsd-signature-symbol"
@@ -897,7 +896,8 @@
 												><span class="tsd-signature-symbol"> ? </span
 												><span class="tsd-signature-type">void</span
 												><span class="tsd-signature-symbol"> : </span
-												><span class="tsd-signature-type">U</span>
+												><span class="tsd-signature-type">U</span
+												><span class="tsd-signature-symbol"> = _.identity</span>
 											</h5>
 											<ul class="tsd-parameters">
 												<li class="tsd-parameter-signature">
@@ -984,8 +984,8 @@
 											<li>
 												Defined in
 												<a
-													href="https://github.com/RobertFischer/fun-promises/blob/9f6ab35/index.ts#L381"
-													>index.ts:381</a
+													href="https://github.com/RobertFischer/fun-promises/blob/fc0577e/index.ts#L389"
+													>index.ts:389</a
 												>
 											</li>
 										</ul>
@@ -1063,8 +1063,8 @@
 											<li>
 												Defined in
 												<a
-													href="https://github.com/RobertFischer/fun-promises/blob/9f6ab35/index.ts#L543"
-													>index.ts:543</a
+													href="https://github.com/RobertFischer/fun-promises/blob/fc0577e/index.ts#L551"
+													>index.ts:551</a
 												>
 											</li>
 										</ul>
@@ -1233,8 +1233,8 @@
 											<li>
 												Defined in
 												<a
-													href="https://github.com/RobertFischer/fun-promises/blob/9f6ab35/index.ts#L571"
-													>index.ts:571</a
+													href="https://github.com/RobertFischer/fun-promises/blob/fc0577e/index.ts#L579"
+													>index.ts:579</a
 												>
 											</li>
 										</ul>
@@ -1375,8 +1375,8 @@
 											<li>
 												Defined in
 												<a
-													href="https://github.com/RobertFischer/fun-promises/blob/9f6ab35/index.ts#L601"
-													>index.ts:601</a
+													href="https://github.com/RobertFischer/fun-promises/blob/fc0577e/index.ts#L609"
+													>index.ts:609</a
 												>
 											</li>
 										</ul>
@@ -1461,8 +1461,8 @@
 											<li>
 												Defined in
 												<a
-													href="https://github.com/RobertFischer/fun-promises/blob/9f6ab35/index.ts#L476"
-													>index.ts:476</a
+													href="https://github.com/RobertFischer/fun-promises/blob/fc0577e/index.ts#L484"
+													>index.ts:484</a
 												>
 											</li>
 										</ul>
@@ -1669,8 +1669,8 @@
 											<li>
 												Defined in
 												<a
-													href="https://github.com/RobertFischer/fun-promises/blob/9f6ab35/index.ts#L511"
-													>index.ts:511</a
+													href="https://github.com/RobertFischer/fun-promises/blob/fc0577e/index.ts#L519"
+													>index.ts:519</a
 												>
 											</li>
 										</ul>
@@ -1865,8 +1865,8 @@
 											<li>
 												Defined in
 												<a
-													href="https://github.com/RobertFischer/fun-promises/blob/9f6ab35/index.ts#L416"
-													>index.ts:416</a
+													href="https://github.com/RobertFischer/fun-promises/blob/fc0577e/index.ts#L424"
+													>index.ts:424</a
 												>
 											</li>
 										</ul>
@@ -2038,8 +2038,8 @@
 											<li>
 												Defined in
 												<a
-													href="https://github.com/RobertFischer/fun-promises/blob/9f6ab35/index.ts#L440"
-													>index.ts:440</a
+													href="https://github.com/RobertFischer/fun-promises/blob/fc0577e/index.ts#L448"
+													>index.ts:448</a
 												>
 											</li>
 										</ul>
@@ -2215,8 +2215,8 @@
 											<li>
 												Defined in
 												<a
-													href="https://github.com/RobertFischer/fun-promises/blob/9f6ab35/index.ts#L275"
-													>index.ts:275</a
+													href="https://github.com/RobertFischer/fun-promises/blob/fc0577e/index.ts#L283"
+													>index.ts:283</a
 												>
 											</li>
 										</ul>
@@ -2384,8 +2384,8 @@
 											<li>
 												Defined in
 												<a
-													href="https://github.com/RobertFischer/fun-promises/blob/9f6ab35/index.ts#L346"
-													>index.ts:346</a
+													href="https://github.com/RobertFischer/fun-promises/blob/fc0577e/index.ts#L354"
+													>index.ts:354</a
 												>
 											</li>
 										</ul>
@@ -2518,8 +2518,8 @@
 											<li>
 												Defined in
 												<a
-													href="https://github.com/RobertFischer/fun-promises/blob/9f6ab35/index.ts#L292"
-													>index.ts:292</a
+													href="https://github.com/RobertFischer/fun-promises/blob/fc0577e/index.ts#L300"
+													>index.ts:300</a
 												>
 											</li>
 										</ul>
@@ -2649,60 +2649,6 @@
 							</ul>
 						</section>
 						<section
-							class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class"
-						>
-							<a name="result" class="tsd-anchor"></a>
-							<h3>result</h3>
-							<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-								<li class="tsd-signature tsd-kind-icon">
-									result<span class="tsd-signature-symbol">(</span
-									><span class="tsd-signature-symbol">)</span
-									><span class="tsd-signature-symbol">: </span
-									><a href="_index_.funpromise.html" class="tsd-signature-type"
-										>FunPromise</a
-									><span class="tsd-signature-symbol">&lt;</span
-									><span class="tsd-signature-type">Error</span
-									><span class="tsd-signature-symbol"> | </span
-									><span class="tsd-signature-type">T</span
-									><span class="tsd-signature-symbol">&gt;</span>
-								</li>
-							</ul>
-							<ul class="tsd-descriptions">
-								<li class="tsd-description">
-									<aside class="tsd-sources">
-										<ul>
-											<li>
-												Defined in
-												<a
-													href="https://github.com/RobertFischer/fun-promises/blob/9f6ab35/index.ts#L705"
-													>index.ts:705</a
-												>
-											</li>
-										</ul>
-									</aside>
-									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>
-												If the promise rejects, returns the cause as an
-												[<code>Error</code>]. If the promise resolves, returns
-												the resolved value.
-											</p>
-										</div>
-									</div>
-									<h4 class="tsd-returns-title">
-										Returns
-										<a href="_index_.funpromise.html" class="tsd-signature-type"
-											>FunPromise</a
-										><span class="tsd-signature-symbol">&lt;</span
-										><span class="tsd-signature-type">Error</span
-										><span class="tsd-signature-symbol"> | </span
-										><span class="tsd-signature-type">T</span
-										><span class="tsd-signature-symbol">&gt;</span>
-									</h4>
-								</li>
-							</ul>
-						</section>
-						<section
 							class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"
 						>
 							<a name="return" class="tsd-anchor"></a>
@@ -2736,8 +2682,8 @@
 											<li>
 												Defined in
 												<a
-													href="https://github.com/RobertFischer/fun-promises/blob/9f6ab35/index.ts#L677"
-													>index.ts:677</a
+													href="https://github.com/RobertFischer/fun-promises/blob/fc0577e/index.ts#L690"
+													>index.ts:690</a
 												>
 											</li>
 										</ul>
@@ -2812,8 +2758,8 @@
 											<li>
 												Defined in
 												<a
-													href="https://github.com/RobertFischer/fun-promises/blob/9f6ab35/index.ts#L698"
-													>index.ts:698</a
+													href="https://github.com/RobertFischer/fun-promises/blob/fc0577e/index.ts#L711"
+													>index.ts:711</a
 												>
 											</li>
 										</ul>
@@ -2887,8 +2833,8 @@
 											<li>
 												Defined in
 												<a
-													href="https://github.com/RobertFischer/fun-promises/blob/9f6ab35/index.ts#L636"
-													>index.ts:636</a
+													href="https://github.com/RobertFischer/fun-promises/blob/fc0577e/index.ts#L649"
+													>index.ts:649</a
 												>
 											</li>
 										</ul>
@@ -3021,8 +2967,8 @@
 											<li>
 												Defined in
 												<a
-													href="https://github.com/RobertFischer/fun-promises/blob/9f6ab35/index.ts#L650"
-													>index.ts:650</a
+													href="https://github.com/RobertFischer/fun-promises/blob/fc0577e/index.ts#L663"
+													>index.ts:663</a
 												>
 											</li>
 										</ul>
@@ -3202,8 +3148,8 @@
 											<li>
 												Defined in
 												<a
-													href="https://github.com/RobertFischer/fun-promises/blob/9f6ab35/index.ts#L665"
-													>index.ts:665</a
+													href="https://github.com/RobertFischer/fun-promises/blob/fc0577e/index.ts#L678"
+													>index.ts:678</a
 												>
 											</li>
 										</ul>
@@ -3316,8 +3262,8 @@
 											<li>
 												Defined in
 												<a
-													href="https://github.com/RobertFischer/fun-promises/blob/9f6ab35/index.ts#L666"
-													>index.ts:666</a
+													href="https://github.com/RobertFischer/fun-promises/blob/fc0577e/index.ts#L679"
+													>index.ts:679</a
 												>
 											</li>
 										</ul>
@@ -3485,8 +3431,8 @@
 											<li>
 												Defined in
 												<a
-													href="https://github.com/RobertFischer/fun-promises/blob/9f6ab35/index.ts#L587"
-													>index.ts:587</a
+													href="https://github.com/RobertFischer/fun-promises/blob/fc0577e/index.ts#L595"
+													>index.ts:595</a
 												>
 											</li>
 										</ul>
@@ -3570,8 +3516,8 @@
 											<li>
 												Defined in
 												<a
-													href="https://github.com/RobertFischer/fun-promises/blob/9f6ab35/index.ts#L310"
-													>index.ts:310</a
+													href="https://github.com/RobertFischer/fun-promises/blob/fc0577e/index.ts#L318"
+													>index.ts:318</a
 												>
 											</li>
 										</ul>
@@ -3680,8 +3626,8 @@
 											<li>
 												Defined in
 												<a
-													href="https://github.com/RobertFischer/fun-promises/blob/9f6ab35/index.ts#L374"
-													>index.ts:374</a
+													href="https://github.com/RobertFischer/fun-promises/blob/fc0577e/index.ts#L382"
+													>index.ts:382</a
 												>
 											</li>
 										</ul>
@@ -3807,8 +3753,8 @@
 											<li>
 												Defined in
 												<a
-													href="https://github.com/RobertFischer/fun-promises/blob/9f6ab35/index.ts#L536"
-													>index.ts:536</a
+													href="https://github.com/RobertFischer/fun-promises/blob/fc0577e/index.ts#L544"
+													>index.ts:544</a
 												>
 											</li>
 										</ul>
@@ -3948,8 +3894,8 @@
 											<li>
 												Defined in
 												<a
-													href="https://github.com/RobertFischer/fun-promises/blob/9f6ab35/index.ts#L564"
-													>index.ts:564</a
+													href="https://github.com/RobertFischer/fun-promises/blob/fc0577e/index.ts#L572"
+													>index.ts:572</a
 												>
 											</li>
 										</ul>
@@ -4076,8 +4022,8 @@
 											<li>
 												Defined in
 												<a
-													href="https://github.com/RobertFischer/fun-promises/blob/9f6ab35/index.ts#L465"
-													>index.ts:465</a
+													href="https://github.com/RobertFischer/fun-promises/blob/fc0577e/index.ts#L473"
+													>index.ts:473</a
 												>
 											</li>
 										</ul>
@@ -4219,8 +4165,8 @@
 											<li>
 												Defined in
 												<a
-													href="https://github.com/RobertFischer/fun-promises/blob/9f6ab35/index.ts#L500"
-													>index.ts:500</a
+													href="https://github.com/RobertFischer/fun-promises/blob/fc0577e/index.ts#L508"
+													>index.ts:508</a
 												>
 											</li>
 										</ul>
@@ -4349,8 +4295,8 @@
 											<li>
 												Defined in
 												<a
-													href="https://github.com/RobertFischer/fun-promises/blob/9f6ab35/index.ts#L409"
-													>index.ts:409</a
+													href="https://github.com/RobertFischer/fun-promises/blob/fc0577e/index.ts#L417"
+													>index.ts:417</a
 												>
 											</li>
 										</ul>
@@ -4472,8 +4418,8 @@
 											<li>
 												Defined in
 												<a
-													href="https://github.com/RobertFischer/fun-promises/blob/9f6ab35/index.ts#L433"
-													>index.ts:433</a
+													href="https://github.com/RobertFischer/fun-promises/blob/fc0577e/index.ts#L441"
+													>index.ts:441</a
 												>
 											</li>
 										</ul>
@@ -4575,8 +4521,8 @@
 											<li>
 												Defined in
 												<a
-													href="https://github.com/RobertFischer/fun-promises/blob/9f6ab35/index.ts#L266"
-													>index.ts:266</a
+													href="https://github.com/RobertFischer/fun-promises/blob/fc0577e/index.ts#L274"
+													>index.ts:274</a
 												>
 											</li>
 										</ul>
@@ -4677,8 +4623,8 @@
 											<li>
 												Defined in
 												<a
-													href="https://github.com/RobertFischer/fun-promises/blob/9f6ab35/index.ts#L336"
-													>index.ts:336</a
+													href="https://github.com/RobertFischer/fun-promises/blob/fc0577e/index.ts#L344"
+													>index.ts:344</a
 												>
 											</li>
 										</ul>
@@ -4836,8 +4782,8 @@
 											<li>
 												Defined in
 												<a
-													href="https://github.com/RobertFischer/fun-promises/blob/9f6ab35/index.ts#L253"
-													>index.ts:253</a
+													href="https://github.com/RobertFischer/fun-promises/blob/fc0577e/index.ts#L261"
+													>index.ts:261</a
 												>
 											</li>
 										</ul>
@@ -4921,8 +4867,8 @@
 											<li>
 												Defined in
 												<a
-													href="https://github.com/RobertFischer/fun-promises/blob/9f6ab35/index.ts#L303"
-													>index.ts:303</a
+													href="https://github.com/RobertFischer/fun-promises/blob/fc0577e/index.ts#L311"
+													>index.ts:311</a
 												>
 											</li>
 										</ul>
@@ -5050,8 +4996,8 @@
 											<li>
 												Defined in
 												<a
-													href="https://github.com/RobertFischer/fun-promises/blob/9f6ab35/index.ts#L237"
-													>index.ts:237</a
+													href="https://github.com/RobertFischer/fun-promises/blob/fc0577e/index.ts#L245"
+													>index.ts:245</a
 												>
 											</li>
 										</ul>
@@ -5281,13 +5227,6 @@
 											>reduce<wbr />Array</a
 										>
 									</li>
-									<li class="tsd-kind-method tsd-parent-kind-class">
-										<a
-											href="_index_.funpromise.html#result"
-											class="tsd-kind-icon"
-											>result</a
-										>
-									</li>
 									<li
 										class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"
 									>
@@ -5475,6 +5414,24 @@
 									href="../modules/_index_.html#promisableiterable"
 									class="tsd-kind-icon"
 									>Promisable<wbr />Iterable</a
+								>
+							</li>
+							<li
+								class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter"
+							>
+								<a
+									href="../modules/_index_.html#simplifiedpromisable"
+									class="tsd-kind-icon"
+									>Simplified<wbr />Promisable</a
+								>
+							</li>
+							<li
+								class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter"
+							>
+								<a
+									href="../modules/_index_.html#simplifiedpromise"
+									class="tsd-kind-icon"
+									>Simplified<wbr />Promise</a
 								>
 							</li>
 							<li

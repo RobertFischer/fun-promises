@@ -164,6 +164,24 @@
 										<li
 											class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter"
 										>
+											<a
+												href="_index_.html#simplifiedpromisable"
+												class="tsd-kind-icon"
+												>Simplified<wbr />Promisable</a
+											>
+										</li>
+										<li
+											class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter"
+										>
+											<a
+												href="_index_.html#simplifiedpromise"
+												class="tsd-kind-icon"
+												>Simplified<wbr />Promise</a
+											>
+										</li>
+										<li
+											class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter"
+										>
 											<a href="_index_.html#unpromise" class="tsd-kind-icon"
 												>Unpromise</a
 											>
@@ -205,7 +223,7 @@
 									<li>
 										Defined in
 										<a
-											href="https://github.com/RobertFischer/fun-promises/blob/9f6ab35/index.ts#L16"
+											href="https://github.com/RobertFischer/fun-promises/blob/fc0577e/index.ts#L16"
 											>index.ts:16</a
 										>
 									</li>
@@ -252,8 +270,8 @@
 									<li>
 										Defined in
 										<a
-											href="https://github.com/RobertFischer/fun-promises/blob/9f6ab35/index.ts#L48"
-											>index.ts:48</a
+											href="https://github.com/RobertFischer/fun-promises/blob/fc0577e/index.ts#L56"
+											>index.ts:56</a
 										>
 									</li>
 								</ul>
@@ -294,8 +312,8 @@
 									<li>
 										Defined in
 										<a
-											href="https://github.com/RobertFischer/fun-promises/blob/9f6ab35/index.ts#L36"
-											>index.ts:36</a
+											href="https://github.com/RobertFischer/fun-promises/blob/fc0577e/index.ts#L34"
+											>index.ts:34</a
 										>
 									</li>
 								</ul>
@@ -343,8 +361,8 @@
 									<li>
 										Defined in
 										<a
-											href="https://github.com/RobertFischer/fun-promises/blob/9f6ab35/index.ts#L42"
-											>index.ts:42</a
+											href="https://github.com/RobertFischer/fun-promises/blob/fc0577e/index.ts#L50"
+											>index.ts:50</a
 										>
 									</li>
 								</ul>
@@ -356,6 +374,100 @@
 										<code>Iterable</code>. Its elements are any mix of type
 										<code>T</code> and/or <code>PromiseLike&lt;T&gt;</code>.
 										Used as a type for arguments.
+									</p>
+								</div>
+							</div>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>T</h4>
+								</li>
+							</ul>
+						</section>
+						<section
+							class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter"
+						>
+							<a name="simplifiedpromisable" class="tsd-anchor"></a>
+							<h3>Simplified<wbr />Promisable</h3>
+							<div class="tsd-signature tsd-kind-icon">
+								Simplified<wbr />Promisable&lt;T&gt;<span
+									class="tsd-signature-symbol"
+									>:</span
+								>
+								<a href="_index_.html#promisable" class="tsd-signature-type"
+									>Promisable</a
+								><span class="tsd-signature-symbol">&lt;</span
+								><a href="_index_.html#unpromise" class="tsd-signature-type"
+									>Unpromise</a
+								><span class="tsd-signature-symbol">&lt;</span
+								><span class="tsd-signature-type">T</span
+								><span class="tsd-signature-symbol">&gt;</span
+								><span class="tsd-signature-symbol">&gt;</span>
+							</div>
+							<aside class="tsd-sources">
+								<ul>
+									<li>
+										Defined in
+										<a
+											href="https://github.com/RobertFischer/fun-promises/blob/fc0577e/index.ts#L44"
+											>index.ts:44</a
+										>
+									</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>
+										Guarantees that there is at most one
+										<a href="_index_.html#promisable"
+											><code>Promisable</code></a
+										>
+										wrapper.
+									</p>
+								</div>
+							</div>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>T</h4>
+								</li>
+							</ul>
+						</section>
+						<section
+							class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter"
+						>
+							<a name="simplifiedpromise" class="tsd-anchor"></a>
+							<h3>Simplified<wbr />Promise</h3>
+							<div class="tsd-signature tsd-kind-icon">
+								Simplified<wbr />Promise&lt;T&gt;<span
+									class="tsd-signature-symbol"
+									>:</span
+								>
+								<span class="tsd-signature-type">Promise</span
+								><span class="tsd-signature-symbol">&lt;</span
+								><a href="_index_.html#unpromise" class="tsd-signature-type"
+									>Unpromise</a
+								><span class="tsd-signature-symbol">&lt;</span
+								><span class="tsd-signature-type">T</span
+								><span class="tsd-signature-symbol">&gt;</span
+								><span class="tsd-signature-symbol">&gt;</span>
+							</div>
+							<aside class="tsd-sources">
+								<ul>
+									<li>
+										Defined in
+										<a
+											href="https://github.com/RobertFischer/fun-promises/blob/fc0577e/index.ts#L39"
+											>index.ts:39</a
+										>
+									</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>
+										Guarantees that there is at most one
+										[[<code>Promise</code>]] wrapper.
 									</p>
 								</div>
 							</div>
@@ -386,6 +498,25 @@
 								><span class="tsd-signature-type">U</span
 								><span class="tsd-signature-symbol">&gt;</span
 								><span class="tsd-signature-symbol"> : </span
+								><span class="tsd-signature-type">T</span
+								><span class="tsd-signature-symbol"> extends </span
+								><span class="tsd-signature-type">Promisable</span
+								><span class="tsd-signature-symbol">&lt;</span
+								><span class="tsd-signature-symbol">infer </span> U<span
+									class="tsd-signature-symbol"
+									>&gt;</span
+								><span class="tsd-signature-symbol"> ? </span
+								><span class="tsd-signature-type">U</span
+								><span class="tsd-signature-symbol"> extends </span
+								><span class="tsd-signature-type">T</span
+								><span class="tsd-signature-symbol"> ? </span
+								><span class="tsd-signature-type">T</span
+								><span class="tsd-signature-symbol"> : </span
+								><span class="tsd-signature-type">Unpromise</span
+								><span class="tsd-signature-symbol">&lt;</span
+								><span class="tsd-signature-type">U</span
+								><span class="tsd-signature-symbol">&gt;</span
+								><span class="tsd-signature-symbol"> : </span
 								><span class="tsd-signature-type">T</span>
 							</div>
 							<aside class="tsd-sources">
@@ -393,7 +524,7 @@
 									<li>
 										Defined in
 										<a
-											href="https://github.com/RobertFischer/fun-promises/blob/9f6ab35/index.ts#L23"
+											href="https://github.com/RobertFischer/fun-promises/blob/fc0577e/index.ts#L23"
 											>index.ts:23</a
 										>
 									</li>
@@ -402,8 +533,12 @@
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>
-										Provides the type of the resolution value of a
-										[[<code>Promise</code>]].
+										Provides the type of the resolution value after unwrapping
+										all the [[<code>PromiseLike</code>]] and
+										<a href="_index_.html#promisable"
+											><code>Promisable</code></a
+										>
+										interfaces (if any).
 									</p>
 								</div>
 							</div>
@@ -478,6 +613,22 @@
 							>
 								<a href="_index_.html#promisableiterable" class="tsd-kind-icon"
 									>Promisable<wbr />Iterable</a
+								>
+							</li>
+							<li
+								class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter"
+							>
+								<a
+									href="_index_.html#simplifiedpromisable"
+									class="tsd-kind-icon"
+									>Simplified<wbr />Promisable</a
+								>
+							</li>
+							<li
+								class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter"
+							>
+								<a href="_index_.html#simplifiedpromise" class="tsd-kind-icon"
+									>Simplified<wbr />Promise</a
 								>
 							</li>
 							<li
