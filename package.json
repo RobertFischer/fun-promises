@@ -1,5 +1,5 @@
 {
-	"name": "@ve-mobile/fun-promises",
+	"name": "fun-promises",
 	"version": "1.0.0-rc.1",
 	"description": "A library for making Promises more friendly, fluent, and fun(ctional).",
 	"main": "dist/node/cjs/index.cjs",
