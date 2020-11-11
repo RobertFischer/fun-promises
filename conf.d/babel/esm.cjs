@@ -2,9 +2,10 @@
 
 module.exports = {
 	sourceMaps: true,
-	compact: true,
-	minified: true,
-	comments: false,
+	inputSourceMap: true,
+	compact: false,
+	minified: false,
+	comments: true,
 	moduleId: "FunPromise",
 	plugins: [
 		[
