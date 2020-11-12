@@ -81,7 +81,7 @@
 		"build:browser:cjs": "BROWSERSLIST_ENV=browser babel --config-file ./conf.d/babel/cjs.cjs --out-dir ./dist/browser/cjs --out-file-extension .cjs ./dist/esnext/*.js --verbose",
 		"build:browser:esm": "BROWSERSLIST_ENV=browser babel  --config-file ./conf.d/babel/esm.cjs  --out-dir ./dist/browser/esm --out-file-extension .mjs ./dist/esnext/*.js --verbose",
 		"build:browser:min": "BROWSERSLIST_ENV=browser mkdir -p ./dist/browser/min && cp ./package.json ./dist/browser/min && cp -r ./node_modules ./dist/browser/min && cp ./conf.d/babel/cjs.cjs ./dist/browser/min/babel.config.cjs && cd ./dist/browser/min && parcel build --log-level=verbose --target browser --dist-dir . ../../esnext/index.js --no-scope-hoist && rm -r package.json node_modules babel.config.cjs",
-		"prepack": "yarn install && yarn build",
+		"prepack": "yarn build",
 		"serve:docs": "yarn build:docs && http-server ./docs",
 		"polish": "prettier --write .",
 		"clean": "./script/clean",
@@ -96,7 +96,8 @@
 		}
 	},
 	"lint-staged": {
-		"*.(js|cjs|mjs|json|yaml|yml|md|css|htm|htm|ts)": "prettier --write"
+		"*.(js|cjs|mjs|json|yaml|yml|md|css|htm|htm|ts)": "prettier --write",
+		"*.json": "jq ."
 	},
 	"config": {
 		"commitizen": {
