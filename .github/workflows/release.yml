@@ -1,12 +1,12 @@
 # @format
 ---
-name: Code Cleanup
+name: Release
 
 on:
   push:
 
 jobs:
-  clean:
+  perform-release:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
