@@ -35,6 +35,7 @@ module.exports = {
 		{ path: "docs/**/*", label: "Docs" },
 		{ path: "LICENSE", label: "License" },
 		{ path: "README.md", label: "README" },
+		{ path: "CHANGELOG.md", label: "Changelog" },
 		{ path: "package.json", label: "package.json" },
 	],
 	tarballDir: "dist",
