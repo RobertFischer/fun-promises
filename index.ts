@@ -256,7 +256,8 @@ export default class FunPromise<T> implements SimplifiedPromise<T> {
 
 	/**
 	 * Creates a `FunPromise` which resolves to the value of the argument, resolving the
-	 * value if it is a [[`PromiseLike`]].
+	 * value if it is a [[`PromiseLike`]].  If you are trying to decide between this and
+	 * [[`wrap`]], pick this.
 	 */
 	static resolve<T>(it: Promisable<T>): FunPromise<T> {
 		if (it instanceof Promise || it instanceof FunPromise) {
@@ -424,7 +425,9 @@ export default class FunPromise<T> implements SimplifiedPromise<T> {
 	map<U = Element<T>>(
 		mapper: (it: Element<T>) => Promisable<U>
 	): FunPromise<U[]> {
-		return this.reduceArray((ary) => Promise.all(_.map(ary, mapper)));
+		return this.reduceArray((ary) =>
+			Promise.all(_.map(ary, async (it) => await mapper(it)))
+		);
 	}
 
 	/**
@@ -450,9 +453,76 @@ export default class FunPromise<T> implements SimplifiedPromise<T> {
 	): FunPromise<U[]> {
 		return this.reduceArray(async (ary) => {
 			const result = [];
-			result.length = ary.length;
 			while (!_.isEmpty(ary)) {
-				result.push(mapper(await ary.shift()));
+				result.push(await mapper(await ary.shift()));
+			}
+			return result;
+		});
+	}
+
+	/**
+	 * Given a [[`PromisableIterable`]], resolves each value provided and passes each value through the
+	 * `mapper` function, collecting the results into a flattened array.
+	 *
+	 * The resolution order is not maintained -- that is, an element at index 0 might not resolve
+	 * until after the element at index 1.
+	 *
+	 * If the payload is not an array, then it is coerced into an array using
+	 * [`_.castArray` from Lodash](https://lodash.com/docs/4.17.15#castArray).
+	 */
+	static flatMap<T>(them: PromisableIterable<T>, mapper) {
+		return FunPromise.resolve(them).flatMap(mapper);
+	}
+
+	/**
+	 * `this.map(mapper)` is the same as [[ FunPromise.flatMap | `FunPromise.flatMap(this, mapper)` ]].
+	 */
+	flatMap<U = Element<T>>(
+		mapper: (it: Element<T>) => PromisableIterable<U>
+	): FunPromise<U[]> {
+		return this.reduceArray(async (ary) => {
+			const results = [];
+			await Promise.all(
+				_.map(ary, async (it) => {
+					await Promise.all(
+						_.map(_.toArray(await mapper(it)), async (itsItem) =>
+							results.push(await itsItem)
+						)
+					);
+				})
+			);
+			return results;
+		});
+	}
+
+	/**
+	 * Given a [[`PromisableIterable`]], resolves each value provided and passes each value through the
+	 * `mapper` function, collecting the results.
+	 *
+	 * The order of input elements is maintained, as is the resolution order -- that is, the element at
+	 * index 1 will wait to be resolved by this method until until after the element at index 0 has
+	 * resolved.
+	 *
+	 * If the payload is not an array, then it is coerced into an array using
+	 * [`_.castArray` from Lodash](https://lodash.com/docs/4.17.15#castArray).
+	 */
+	static flatMapSeq<T>(them: PromisableIterable<T>, mapper) {
+		return FunPromise.resolve(them).flatMapSeq(mapper);
+	}
+
+	/**
+	 * `this.flatMapSeq(mapper)` is the same as [[ FunPromise.flatMapSeq | `FunPromise.flatMapSeq(this, mapper)` ]].
+	 */
+	flatMapSeq<U = Element<T>>(
+		mapper: (it: Element<T>) => PromisableIterable<U>
+	): FunPromise<U[]> {
+		return this.reduceArray(async (ary) => {
+			const result = [];
+			while (!_.isEmpty(ary)) {
+				const roundResult = await mapper(await ary.shift());
+				await Promise.all(
+					_.map(_.toArray(roundResult), async (it) => result.push(await it))
+				);
 			}
 			return result;
 		});
@@ -707,8 +777,29 @@ export default class FunPromise<T> implements SimplifiedPromise<T> {
 	 * Simplifies multiple layers of promise wrappers down to a single wrapper.
 	 *
 	 * This method exists solely for the sake of the type system: its behavior is actually implied in the `Promise/A+` spec.
+	 * Also, note that a [[`FunPromise`]] is a
 	 */
 	simplify(): FunPromise<Unpromise<T>> {
 		return (this as unknown) as FunPromise<Unpromise<T>>;
+	}
+
+	/**
+	 * Given two [[`Promisable`]] values, returns a promise that resolves to a tuple/array where the first element
+	 * is the result of the first argument, and the second element is the result of the second argument.
+	 */
+	static join<T, U>(
+		left: Promisable<T>,
+		right: Promisable<U>
+	): FunPromise<[T, U]> {
+		return FunPromise.resolve(left).join(right);
+	}
+
+	/**
+	 * Given [[`Promisable`]] argument, returns a promise that resolves to a tuple/array where the first element
+	 * is the result of this promise, and the second element is the result of the argument.
+	 */
+	join<U>(them: Promisable<U>): FunPromise<[T, U]> {
+		const { wrapped } = this;
+		return FunPromise.try(async () => [await wrapped, await them]);
 	}
 }
