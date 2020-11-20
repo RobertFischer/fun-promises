@@ -1,0 +1,11 @@
+{
+	"extends": "../tsconfig.json",
+	"compilerOptions": {
+		"outDir": "../dist/es6/umd/",
+		"target": "ES6",
+		"module": "UMD",
+		"bundledPackageName": "FunPromise",
+		"resolveJsonModule": false,
+		"isolatedModules": false
+	}
+}

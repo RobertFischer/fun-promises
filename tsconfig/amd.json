@@ -1,0 +1,11 @@
+{
+	"extends": "../tsconfig.json",
+	"compilerOptions": {
+		"outFile": "../dist/es6/amd/index.js",
+		"target": "ES6",
+		"module": "AMD",
+		"bundledPackageName": "FunPromise",
+		"isolatedModules": false,
+		"strict": false
+	}
+}

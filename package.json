@@ -2,10 +2,11 @@
 	"name": "fun-promises",
 	"version": "1.0.0-rc.3",
 	"description": "A library for making Promises more friendly, fluent, and fun(ctional).",
-	"main": "dist/node/cjs/index.cjs",
-	"module": "dist/node/esm/index.mjs",
+	"main": "dist/node/v14/index.js",
+	"module": "dist/es6/esm/index.js",
 	"browser": "dist/browser/min/index.js",
-	"source": "./index.ts",
+	"reactNative": "dist/rn/index.js",
+	"source": "index.ts",
 	"repository": "git@github.com:RobertFischer/fun-promises.git",
 	"author": "Robert Fischer",
 	"license": "Unlicense",
@@ -29,11 +30,11 @@
 	],
 	"homepage": "https://robertfischer.github.io/fun-promises/",
 	"dependencies": {
-		"@babel/runtime": "^7.12.5",
+		"@babel/runtime-corejs3": "^7.12.5",
 		"core-js": "^3.7.0",
 		"debug": "^4.2.0",
 		"lodash": "^4.17.20",
-		"ts-lib": "^0.0.5"
+		"tslib": "^2.0.3"
 	},
 	"devDependencies": {
 		"@babel/cli": "^7.12.1",
@@ -47,17 +48,20 @@
 		"@semantic-release/github": "^7.1.1",
 		"@semantic-release/npm": "^7.0.6",
 		"@semantic-release/release-notes-generator": "^9.0.1",
+		"@tsconfig/node10": "^1.0.7",
+		"@tsconfig/node12": "^1.0.7",
+		"@tsconfig/node14": "^1.0.0",
+		"@tsconfig/react-native": "^1.0.2",
 		"@types/lodash": "^4.14.165",
 		"babel-minify": "^0.5.1",
 		"babel-plugin-lodash": "^3.3.4",
-		"browserslist": "^4.14.7",
 		"conventional-changelog-conventionalcommits": "^4.5.0",
 		"cz-conventional-changelog": "^3.3.0",
 		"husky": "^4.3.0",
 		"jest": "^26.6.3",
 		"jest-extended": "^0.11.5",
 		"lint-staged": "^10.5.1",
-		"parcel": "^2.0.0-beta.1",
+		"parcel": "^1.12.4",
 		"prettier": "^2.1.2",
 		"semantic-release": "^17.2.2",
 		"semantic-release-npm-deprecate-old-versions": "^1.0.1",
@@ -67,27 +71,30 @@
 		"typescript": "^4.1.1-rc"
 	},
 	"scripts": {
-		"test": "export 'DEBUG=fun-promises,fun-promises:*' && rm -rf ./dist && tsc --noEmit -p tsconfig.json && jest --detectOpenHandles --forceExit",
-		"build:docs": "rm -rf ./docs && yarn build:docs:typedocs && yarn update:browserslist && yarn build:docs:coverage && yarn build:docs:changelog",
+		"test": "DEBUG='fun-promises,fun-promises:*' tsc --noEmit -p tsconfig.json && jest --detectOpenHandles --forceExit",
+		"build:docs": "rm -rf ./docs && yarn build:docs:typedocs && yarn build:docs:changelog && yarn build docs:test && yarn build:docs:coverage",
 		"build:docs:typedocs": "typedoc --tsconfig tsconfig.json",
-		"build:docs:coverage": "( echo '[Node]' && yarn show:coverage:node && echo '' && echo '[Browsers]' && yarn show:coverage:browsers ) | tee ./docs/coverage.txt",
 		"build:docs:changelog": "cp ./CHANGELOG.md ./docs/ || true",
+		"build:docs:test": "yarn test | tee ./docs/test-results.txt",
+		"build:docs:coverage": "npx browserslist --update-db && (( echo 'Explicitly Supported Browsers (MUST support Promises)' && npx browserslist && npx browserslist --coverage && npx browserslist --coverage=US ) | tee ./docs/coverage.txt)",
 		"watch:compile": "tsc --watch --noEmit -p tsconfig.json",
 		"watch:test": "yarn test --watch",
-		"build": "yarn build:esnext && yarn build:node:cjs && yarn build:node:esm && yarn build:browser:cjs && yarn build:browser:esm && yarn build:browser:min",
+		"build": "DEBUG='*' rm -rf dist && yarn build:esnext && yarn build:es6 && yarn build:node && yarn build:browser && yarn build:docs",
 		"build:esnext": "tsc -p tsconfig.json",
-		"build:node:cjs": "BROWSERSLIST_ENV=node babel --config-file ./conf.d/babel/cjs.cjs --out-dir ./dist/node/cjs --out-file-extension .cjs ./dist/esnext/*.js --verbose",
-		"build:node:esm": "BROWSERSLIST_ENV=node babel --config-file ./conf.d/babel/esm.cjs --out-dir ./dist/node/esm --out-file-extension .mjs ./dist/esnext/*.js --verbose",
-		"build:browser:cjs": "BROWSERSLIST_ENV=browser babel --config-file ./conf.d/babel/cjs.cjs --out-dir ./dist/browser/cjs --out-file-extension .cjs ./dist/esnext/*.js --verbose",
-		"build:browser:esm": "BROWSERSLIST_ENV=browser babel  --config-file ./conf.d/babel/esm.cjs  --out-dir ./dist/browser/esm --out-file-extension .mjs ./dist/esnext/*.js --verbose",
-		"build:browser:min": "BROWSERSLIST_ENV=browser mkdir -p ./dist/browser/min && cp ./package.json ./dist/browser/min && cp -r ./node_modules ./dist/browser/min && cp ./conf.d/babel/cjs.cjs ./dist/browser/min/babel.config.cjs && cd ./dist/browser/min && parcel build --log-level=verbose --target browser --dist-dir . ../../esnext/index.js --no-scope-hoist && rm -r package.json node_modules babel.config.cjs",
+		"build:es6": "yarn build:cjs && yarn build:esm && yarn build:umd && yarn build:amd",
+		"build:cjs": "tsc -p ./tsconfig/cjs.json",
+		"build:esm": "tsc -p ./tsconfig/esm.json",
+		"build:umd": "tsc -p ./tsconfig/umd.json",
+		"build:amd": "tsc -p ./tsconfig/amd.json",
+		"build:node": "yarn build:node:10 && yarn build:node:12 && yarn build:node:14",
+		"build:node:10": "tsc -p ./tsconfig/node10.json",
+		"build:node:12": "tsc -p ./tsconfig/node12.json",
+		"build:node:14": "tsc -p ./tsconfig./node14.json",
+		"build:browser": "yarn build:esnext && parcel build ./dist/esnext/index.js --target browser --out-dir ./dist/browser/ --global FunPromise --detailed-report 15",
 		"prepack": "yarn build",
 		"serve:docs": "yarn build:docs && http-server ./docs",
 		"polish": "prettier --write .",
-		"clean": "./script/clean",
-		"update:browserslist": "npx browserslist@latest --update-db",
-		"show:coverage:browsers": "BROWSERSLIST_ENV=browser browserslist && browserslist --coverage && browserslist --coverage=US && echo \"(The rest don't support promises.)\"",
-		"show:coverage:node": "BROWSERSLIST_ENV=node browserslist && browserslist --coverage && browserslist --coverage=US"
+		"clean": "./script/clean"
 	},
 	"husky": {
 		"hooks": {
@@ -104,14 +111,9 @@
 			"path": "./node_modules/cz-conventional-changelog"
 		}
 	},
-	"browserslist": {
-		"node": [
-			"maintained node versions"
-		],
-		"browser": [
-			"defaults and supports promises",
-			"last 2 years and supports promises",
-			"not dead"
-		]
-	}
+	"sideEffects": false,
+	"browserslist": [
+		"defaults, cover 95% and supports promises",
+		"not dead"
+	]
 }

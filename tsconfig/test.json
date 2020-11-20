@@ -1,0 +1,10 @@
+{
+	"compilerOptions": {
+		"noUnusedLocals": false,
+		"noUnusedParameters": false,
+		"allowJs": true,
+		"checkJs": false,
+		"esModuleInterop": true,
+		"target": "ES6"
+	}
+}

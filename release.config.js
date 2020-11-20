@@ -1,6 +1,36 @@
 /** @format */
 
+const _ = require("lodash");
+const path = require("path");
 const { name } = require("./package.json");
+
+function readDistPath(file, prop = "outDir") {
+	const distPath = path.relative(
+		".",
+		path.resolve(
+			"./tsconfig",
+			require(`./tsconfig/${file}.json`).compilerOptions[prop]
+		)
+	);
+	if (prop === "outFile") {
+		return distPath;
+	} else {
+		return `${distPath}/**/*`;
+	}
+}
+
+const distributions = {
+	NPM: `dist/${name}-v\${nextRelease.version}.tgz`,
+	"Browser Single-File": "./dist/browser/index.js",
+	"ES6 AMD Single-File": readDistPath("amd", "outFile"),
+	"ES6 CJS": readDistPath("cjs"),
+	"ES6 ESM": readDistPath("esm"),
+	"ES6 UMD": readDistPath("umd"),
+	"Node 10": readDistPath("node10"),
+	"Node 12": readDistPath("node12"),
+	"Node 14": readDistPath("node14"),
+	"React Native": readDistPath("rn"),
+};
 
 module.exports = {
 	branches: [
@@ -18,26 +48,12 @@ module.exports = {
 		"semantic-release-npm-deprecate-old-versions",
 	],
 	preset: "conventionalcommits",
-	assets: [
-		{ path: "dist/esnext/**/*", label: "ESNext Distribution" },
-		{
-			path: "dist/browser/min/index.js",
-			label: "Browser Single-File Distribution",
-		},
-		{ path: "dist/browser/cjs/**/*", label: "Browser CJS Distribution" },
-		{ path: "dist/browser/esm/**/*", label: "Browser ESM Distribution" },
-		{ path: "dist/node/cjs/**/*", label: "Node CJS Distribution" },
-		{ path: "dist/node/esm/**/*", label: "Node ESM Distribution" },
-		{
-			path: `dist/${name}-v\${nextRelease.version}.tgz`,
-			label: "NPM Distribution",
-		},
+	assets: _.concat(
 		{ path: "docs/**/*", label: "Docs" },
 		{ path: "LICENSE", label: "License" },
-		{ path: "README.md", label: "README" },
-		{ path: "CHANGELOG.md", label: "Changelog" },
 		{ path: "package.json", label: "package.json" },
-	],
+		_.map(distributions, (path, label) => ({ path, label }))
+	),
 	tarballDir: "dist",
 	changelogFile: "CHANGELOG.md",
 	changelogTitle: `${name} Changelog`,
