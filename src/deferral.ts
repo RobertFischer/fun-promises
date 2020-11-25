@@ -56,6 +56,20 @@ export default class Deferral<T> {
 	}
 
 	/**
+	 * Whether `promise` has resolved or rejected.
+	 */
+	get isSettled() {
+		switch (this.stateValue) {
+			case PromiseState.Resolved:
+				return true;
+			case PromiseState.Rejected:
+				return true;
+			default:
+				return false;
+		}
+	}
+
+	/**
 	 * Whether `promise` has resolved.
 	 */
 	get isResolved() {
@@ -129,9 +143,32 @@ export default class Deferral<T> {
 	 * and reject functions.
 	 */
 	constructor() {
-		this.promise = new FunPromise((resolve, reject) => {
-			this.resolver = resolve;
-			this.rejector = reject;
-		});
+		this.promise = new FunPromise(
+			new Promise((resolve, reject) => {
+				this.resolver = resolve;
+				this.rejector = reject;
+			})
+		);
+	}
+
+	/**
+	 * Whether or not the deferral is cancelled.
+	 */
+	get isCancelled() {
+		return (
+			!this.isSettled() && this.resolver === null && this.resolver === null
+		);
+	}
+
+	/**
+	 * Cancels the deferral.  If the deferral is not settled, its callbacks will
+	 * never be called. If the deferral is settled or cancelled, this is a noop.
+	 */
+	cancel() {
+		if (this.isSettled()) return;
+		this.stateValue = PromiseState.Cancelled;
+		this.resolver = null;
+		this.rejector = null;
+		this.promise.catch(_.noop); // Suppress "UnhandledException" errors.
 	}
 }

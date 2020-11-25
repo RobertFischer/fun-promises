@@ -9,64 +9,66 @@
 /// <reference path="../node_modules/typescript/lib/lib.es2020.promise.d.ts" />
 /// <reference path="../node_modules/typescript/lib/lib.esnext.promise.d.ts" />
 
-import type { Promisable, PromisableIterable, Unpromise } from "./types";
+import type { Promisable, PromisableIterable, Unpromise, Item } from "./types";
 
-import isFunction from "lodash/isFunction";
-import toArray from "lodash/toArray";
-import identity from "lodash/identity";
+import _isFunction from "lodash/isFunction";
+import _toArray from "lodash/toArray";
+import _identity from "lodash/identity";
+import _isError from "lodash/isError";
 import _noop from "lodash/noop";
+import _ from "lodash";
 
 /**
  * The class that you should use instead of [[`Promise`]].  It implements the `Promise` API, so it should be a drop-in replacement.
  */
-export default class FunPromise<T>
-	extends Promise<T>
-	implements PromiseLike<T> {
+export default class FunPromise<T> implements Promise<T> {
 	/**
-	 * Whether or not this promise has been cancelled.
+	 * Constructor, which takes the promise to wrap.
 	 */
-	private cancelled: boolean = false;
-
-	/**
-	 * Constructor, which takes as an argument the promise callback.  Note that we guarantee in the constructor that
-	 * every promise is settled precisely once, so don't worry about that logic in your callbacks.
-	 */
-	constructor(
-		callback: (
-			resolve: (value: Promisable<T>) => void,
-			reject?: (reason?: any) => void
-		) => void
-	) {
-		super((baseResolve, baseReject) => {
-			const resolve = (it) => {
-				if (this.cancelled) return;
-				this.cancel();
-				return baseResolve(it);
-			};
-			const reject = (e) => {
-				if (this.cancelled) return;
-				this.cancel();
-				if (isFunction(baseReject)) {
-					return baseReject(e);
-				} else {
-					throw e;
-				}
-			};
-			callback(resolve, reject);
-		});
-	}
+	constructor(protected readonly wrapped: Promise<T>) {}
 
 	/**
 	 * Takes a value (or a promise of a value) and returns a promise wrapping
 	 * it, after unwrapping as many layers of [[`PromiseLike`]] wrappers as
 	 * necessary.
 	 */
-	static resolve<T = void>(value?: Promisable<T>): FunPromise<T> {
-		if (value instanceof FunPromise) {
-			return value;
-		} else {
-			return new FunPromise<T>((resolve) => resolve(value));
-		}
+	static resolve<T = void>(value?: Promisable<T>): FunPromise<Unpromise<T>> {
+		return new FunPromise(Promise.resolve(value)).simplify();
+	}
+
+	/**
+	 * Takes a value (or a promise of a value) and resolves to the new value,
+	 * disregarding any previous resolution value.  If this promise rejects,
+	 *
+	 */
+	resolve<T2 = void>(value?: Promisable<T2>): FunPromise<Unpromise<T2>> {
+		return new FunPromise(this.wrapped.then(() => value)).simplify();
+	}
+
+	/**
+	 * Takes a value (or a promise of a value) and returns a promise rejecting
+	 * with that value, after unwrapping as many layers of [[`PromiseLike`]]
+	 * wrappers as necessary.
+	 */
+	static reject<T>(value?: Promisable<T>): FunPromise<never> {
+		return new FunPromise(
+			new Promise(async (resolve, reject) => {
+				reject(await value);
+			})
+		);
+	}
+
+	/**
+	 * Takes a value (or a promise of a value) and returns a promise rejecting
+	 * with that value, after unwrapping as many layers of [[`PromiseLike`]]
+	 * wrappers as necessary.  This disregards any existing status.
+	 */
+	reject(value?: Promisable<T2>): FunPromise<never> {
+		return new FunPromise(
+			new Promise(async (resolve, reject) => {
+				reject(await value);
+			})
+		);
 	}
 
 	/**
@@ -75,11 +77,22 @@ export default class FunPromise<T>
 	 * @param onrejected The optional callback to execute when the Promise is rejected.  If provided, the result of this callback is the new resolution value, and this promise is resolved, not rejected.
 	 * @returns A Promise for the completion of which ever callback is executed.
 	 */
-	then<TResult1 = T, TResult2 = never>(
+	then<TResult1 = T>(
+		onfulfilled: (value: T) => Promisable<TResult1>
+	): FunPromise<TResult1>;
+	then<TResult1 = T, TResult2 = TResult1>(
 		onfulfilled: (value: T) => Promisable<TResult1>,
-		onrejected?: (reason: unknown) => Promisable<TResult2>
+		onrejected: (reason: any) => Promisable<TResult2>
+	): FunPromise<TResult1 | TResult2>;
+	then<TResult1 = T, TResult2 = TResult1>(
+		onfulfilled: (value: T) => Promisable<TResult1>,
+		onrejected?: (reason: any) => Promisable<TResult2>
 	): FunPromise<TResult1 | TResult2> {
-		return FunPromise.resolve(super.then(onfulfilled, onrejected));
+		if (_.isNil(onrejected)) {
+			return new FunPromise(this.wrapped.then(onfulfilled));
+		} else {
+			return new FunPromise(this.wrapped.then(onfulfilled, onrejected));
+		}
 	}
 
 	/**
@@ -88,9 +101,9 @@ export default class FunPromise<T>
 	 * @returns A Promise for the completion of the callback.
 	 */
 	catch<TResult = never>(
-		onrejected: (reason: any) => Promisable<TResult> = identity
+		onrejected: (reason: any) => Promisable<TResult> = _identity
 	): FunPromise<T | TResult> {
-		return FunPromise.resolve(super.catch(onrejected));
+		return new FunPromise(this.wrapped.catch(onrejected));
 	}
 
 	/**
@@ -99,6 +112,7 @@ export default class FunPromise<T>
 	 * @param values An array of Promises.
 	 * @returns A new Promise.
 	 */
+	static all<T>(values: PromisableIterable<T>): FunPromise<T[]>;
 	static all<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
 		values: [
 			Promisable<T1>,
@@ -178,9 +192,11 @@ export default class FunPromise<T>
 		values: [Promisable<T1>, Promisable<T2>]
 	): FunPromise<[T1, T2]>;
 	static all<T1>(values: [Promisable<T1>]): FunPromise<[T1]>;
-	static all<T>(values: PromisableIterable<T>): FunPromise<T[]>;
-	static all(values: any): any {
-		return FunPromise.resolve(values).then(toArray).then(Promise.all);
+	static all(...values: any[]): any {
+		return FunPromise.resolve(_.flatten(values)).all();
+	}
+	all(): FunPromise<Item<T>[]> {
+		return this.arrayify().then((ary) => Promise.all(ary));
 	}
 
 	/**
@@ -297,31 +313,23 @@ export default class FunPromise<T>
 	static try<T>(source: Promisable<() => Promisable<T>>): FunPromise<T>;
 	static try<T, ArgT = any>(
 		source: (...args: ArgT[]) => Promisable<T>,
-		args?: ArgT[]
+		...args: ArgT[]
 	): FunPromise<T> {
-		return new FunPromise(async (resolve, reject) => {
-			try {
-				const f = await source;
-				if (!args || args.length === 0) {
-					resolve(f());
-				} else {
-					const realArgs = await Promise.all(args);
-					resolve(f(...realArgs));
+		return new FunPromise(
+			new Promise(async (resolve, reject) => {
+				try {
+					const f = await source;
+					if (!args || args.length === 0) {
+						resolve(f());
+					} else {
+						const realArgs = await Promise.all(args);
+						resolve(f(...realArgs));
+					}
+				} catch (e) {
+					reject(e);
 				}
-			} catch (e) {
-				reject(e);
-			}
-		});
-	}
-
-	/**
-	 * If this promise is still pending, then cancelling prevents any of the handlers from
-	 * firing.  Calling this method multiple times has no effect.
-	 */
-	cancel() {
-		if (this.cancelled) return;
-		this.catch(_noop); // Disable unhandled rejection errors
-		this.cancelled = true;
+			})
+		);
 	}
 
 	/**
@@ -336,5 +344,147 @@ export default class FunPromise<T>
 	 */
 	simplify(): FunPromise<Unpromise<T>> {
 		return (this as unknown) as FunPromise<Unpromise<T>>;
+	}
+
+	/**
+	 * Coerces the resolve value (which must be an [[`Iterable`]]) into an array.  The `Iterable` requirement
+	 * comes from the `Item<T>` return value: `Item<T>` is equivalent to `never` if `T` is not an `Iterable`.
+	 */
+	arrayify(): FunPromise<Item<T>[]> {
+		return this.then((val) => [...((val as unknown) as Iterable<Item<T>>)]);
+	}
+
+	/**
+	 * Given a mapping function, apply the mapping function to each element of the promise's resolved value,
+	 * and return an array with the results of the mapping.  If any of the mapping results are rejected,
+	 * the entire operation will be rejected.
+	 *
+	 * The order of the elements in the result correspond to the order of the elements in the promise's
+	 * resolved value.  However, the resolution order is not guaranteed.  For example, although the
+	 * output at index 0 will hold the mapping of the input element at index 0, it is not guaranteed that
+	 * the mapping of index 0 will be awaited before the mapping of index 1.
+	 */
+	map<T2 = Item<T>>(mapper: (it: Item<T>) => Promisable<T2>): FunPromise<T2[]> {
+		const results = [];
+		return FunPromise.try(async () => {
+			await Promise.all(
+				_.map(await this.arrayify(), async (value, idx) => {
+					results[idx] = await mapper(value);
+				})
+			);
+			return results;
+		});
+	}
+
+	static map<T, T2 = T>(
+		values: PromisableIterable<T>,
+		mapper: (it: T) => Promisable<T2>
+	): FunPromise<T2[]> {
+		return FunPromise.resolve(values).map(mapper);
+	}
+
+	/**
+	 * Required to implement [[`Promise`]], but you almost certainly don't care about it.
+	 */
+	get [Symbol.toStringTag]() {
+		return this.wrapped[Symbol.toStringTag];
+	}
+
+	/**
+	 * Executes the provided code whether the promise rejects or resolves.
+	 */
+	finally(): FunPromise<T>;
+	finally(onfinally: () => void): FunPromise<T>;
+	finally(onfinally?) {
+		if (_.isFunction(onfinally)) {
+			return new FunPromise(this.wrapped.finally(onfinally));
+		} else {
+			return this;
+		}
+	}
+
+	/**
+	 * Given a [[`PromisableIterable`]] whose values are nullary functions returning [[Promisable|`Promisable<T>`]],
+	 * this executes all the functions simultaneously and returns the first whose return value passes the provided test.
+	 * The default test returns true if the value is not `null` or `undefined`.
+	 *
+	 * If no function resolves successfully, the last seen rejection is thrown. If some functions resolve but some reject,
+	 * and none of the resolved values pass the test, then the last seen rejection is thrown.
+	 *
+	 * If all the functions resolve but to a value but no value passes the test, then this rejects with an error saying as much.
+	 */
+	static coalesce<T>(
+		fns: PromisableIterable<() => Promisable<T>>,
+		test: (item: T) => boolean = _.negate(_.isNil)
+	): FunPromise<T> {
+		return FunPromise.resolve(fns).coalesce(test);
+	}
+
+	/**
+	 * Given that the resolved value is an iterable of nullary functions, this executes all the functions simultaneously and
+	 * returns the first whose return value passes the provided test.  The default test returns true if the value is not
+	 * `null` or `undefined`.
+	 *
+	 * If no function resolves successfully, the last seen rejection is thrown. If some functions resolve but some reject,
+	 * and none of the resolved values pass the test, then the last seen rejection is thrown.
+	 *
+	 * If all the functions resolve but to a value but no value passes the test, then this rejects with an error saying as much.
+	 */
+	coalesce(
+		test: (item: ReturnType<Item<T>>) => boolean = _.negate(_.isNil)
+	): FunPromise<ReturnType<Item<T>>> {
+		const fns = this.arrayify();
+		return new FunPromise(
+			new Promise(async (resolve, reject) => {
+				let resolved = false;
+				let lastSeenReason = new Error("No value emerged from coalescing");
+				await FunPromise.map(await fns, async (fn) => {
+					try {
+						const result = await fn();
+						if (resolved) return;
+						if (test(result)) {
+							resolve(result);
+							resolved = true;
+						}
+					} catch (e) {
+						lastSeenReason = e;
+					}
+				});
+				if (!resolved) reject(lastSeenReason);
+			})
+		);
+	}
+
+	/**
+	 * Waits for `waitTimeMs` milliseconds before resolving.  If `returnValue` is provided, resolves with the provided value.
+	 *
+	 * If `waitTimeMs` is less than or equal to zero, then it simply defers until the call stack is clear.
+	 */
+	static delay(waitTimeMs: number): FunPromise<void>;
+	static delay<T>(
+		waitTimeMs: number,
+		returnValue: Promisable<T>
+	): FunPromise<T>;
+	static delay(waitTimeMs, returnValue?) {
+		return FunPromise.resolve().delay(waitTimeMs, returnValue);
+	}
+
+	/**
+	 * Waits for `waitTimeMs` milliseconds before resolving.  If `returnValue` is provided, resolves with the provided value.
+	 *
+	 * If `waitTimeMs` is less than or equal to zero, then it simply defers until the call stack is clear.
+	 */
+	delay(waitTimeMs: number): FunPromise<void>;
+	delay<T>(waitTimeMs: number, returnValue: Promisable<T>): FunPromise<T>;
+	delay(waitTimeMs, returnValue?) {
+		if (waitTimeMs <= 0) {
+			return new FunPromise(
+				new Promise((resolve) => _.defer(resolve, returnValue))
+			);
+		} else {
+			return new FunPromise(
+				new Promise((resolve) => _.delay(resolve, waitTimeMs, returnValue))
+			);
+		}
 	}
 }

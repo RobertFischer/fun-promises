@@ -4,7 +4,9 @@
  * Provides the type of elements within an [[`Iterable`]], which may be wrapped in one or more promises.
  * The element type is also unwrapped any promises.
  */
-export type Element<T> = Unpromise<T> extends Iterable<infer U>
+export type Item<T> = Unpromise<T> extends Array<infer U>
+	? Unpromise<U>
+	: Unpromise<T> extends Iterable<infer U>
 	? Unpromise<U>
 	: never;
 
@@ -43,7 +45,7 @@ export type SimplifiedPromisable<T> = Promisable<Unpromise<T>>;
  * An [[`Iterable`]] or a promise of an `Iterable`. Its elements are any mix of type `T` and/or `PromiseLike<T>`.
  * Used as a type for arguments.
  */
-export type PromisableIterable<T> = Promisable<Iterable<Promisable<T>>>;
+export type PromisableIterable<T> = Promisable<IterableOfPromisables<T>>;
 
 /**
  * Represents an `Iterable` that is not a promise but an actual value that is an `Iterable`,
@@ -79,4 +81,10 @@ export enum PromiseState {
 	 * The promise has rejected with a cause.
 	 */
 	Rejected = "rejected",
+
+	/**
+	 * The promise has been cancelled, which will prevent its
+	 * callbacks from firing.
+	 */
+	Cancelled = "cancelled",
 }
