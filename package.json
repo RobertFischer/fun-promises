@@ -105,7 +105,7 @@
 	"husky": {
 		"hooks": {
 			"pre-commit": "lint-staged",
-			"pre-push": "yarn test",
+			"pre-push": "yarn test && yarn build:esnext && yarn build:docs",
 			"prepare-commit-msg": "./script/has-message \"$1\" || ( exec < /dev/tty && git cz --hook )"
 		}
 	},
