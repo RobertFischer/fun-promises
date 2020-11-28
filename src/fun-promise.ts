@@ -9,13 +9,7 @@
 /// <reference path="../node_modules/typescript/lib/lib.es2020.promise.d.ts" />
 /// <reference path="../node_modules/typescript/lib/lib.esnext.promise.d.ts" />
 
-import type {
-	Promisable,
-	PromisableIterable,
-	Unpromise,
-	Item,
-	FunctionReturnType,
-} from "./types";
+import type { Promisable, PromisableIterable, Unpromise, Item } from "./types";
 
 import _isFunction from "lodash/isFunction";
 import _toArray from "lodash/toArray";
@@ -504,6 +498,7 @@ export default class FunPromise<T> implements Promise<T> {
 	filter(test: (it: Item<T>) => Promisable<boolean>): FunPromise<Item<T>[]> {
 		return this.arrayify().then(async (ary) => {
 			const results = await FunPromise.map(ary, async (it) => test(await it));
+			// @ts-ignore
 			return _.filter(ary, (it, idx) => results[idx]);
 		});
 	}
