@@ -8,7 +8,14 @@ module.exports = (api) => {
 		sourceMaps: true,
 		preset: ["@babel/preset-env"],
 		plugins: [
-			"babel-plugin-lodash",
+			[
+				"babel-plugin-import",
+				{
+					libraryName: "lodash",
+					libraryDirectory: "",
+					camel2DashComponentName: false,
+				},
+			],
 			[
 				"@babel/plugin-transform-runtime",
 				{

@@ -3,7 +3,7 @@
 import FunPromise from "./fun-promise";
 import { PromiseState, Promisable } from "./types";
 import _defer from "lodash/defer";
-import _ from "lodash";
+import _noop from "lodash/noop";
 
 /**
  * A class that is an "inside-out" [[`FunPromise`]]: the `resolve` and `reject` functions
@@ -168,6 +168,6 @@ export default class Deferral<T> {
 		this.stateValue = PromiseState.Cancelled;
 		this.resolver = null;
 		this.rejector = null;
-		this.promise.catch(_.noop); // Suppress "UnhandledException" errors.
+		this.promise.catch(_noop); // Suppress "UnhandledException" errors.
 	}
 }

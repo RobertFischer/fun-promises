@@ -11,12 +11,19 @@
 
 import type { Promisable, PromisableIterable, Unpromise, Item } from "./types";
 
-import _isFunction from "lodash/isFunction";
-import _toArray from "lodash/toArray";
+import _defer from "lodash/defer";
+import _delay from "lodash/delay";
+import _filter from "lodash/filter";
+import _flatten from "lodash/flatten";
 import _identity from "lodash/identity";
+import _isEmpty from "lodash/isEmpty";
 import _isError from "lodash/isError";
+import _isFunction from "lodash/isFunction";
+import _isNil from "lodash/isNil";
+import _map from "lodash/map";
+import _negate from "lodash/negate";
 import _noop from "lodash/noop";
-import _ from "lodash";
+import _toArray from "lodash/toArray";
 
 // import Debug from "debug";
 // const debug = Debug("fun-promises");
@@ -82,7 +89,7 @@ export default class FunPromise<T> implements Promise<T> {
 		onfulfilled: (value: T) => Promisable<TResult1>,
 		onrejected?: (reason: any) => Promisable<TResult2>
 	): FunPromise<TResult1 | TResult2> {
-		if (_.isNil(onrejected)) {
+		if (_isNil(onrejected)) {
 			return new FunPromise(this.wrapped.then(onfulfilled));
 		} else {
 			return new FunPromise(this.wrapped.then(onfulfilled, onrejected));
@@ -187,7 +194,7 @@ export default class FunPromise<T> implements Promise<T> {
 	): FunPromise<[T1, T2]>;
 	static all<T1>(values: [Promisable<T1>]): FunPromise<[T1]>;
 	static all(...values: any[]): any {
-		return FunPromise.resolve(_.flatten(values)).all();
+		return FunPromise.resolve(_flatten(values)).all();
 	}
 	all(): FunPromise<Item<T>[]> {
 		return this.arrayify().then((ary) => Promise.all(ary));
@@ -313,7 +320,7 @@ export default class FunPromise<T> implements Promise<T> {
 		...args: ArgT[]
 	): FunPromise<T> {
 		return FunPromise.resolve(source).then((f) => {
-			if (_.isEmpty(args)) {
+			if (_isEmpty(args)) {
 				return f();
 			} else {
 				return Promise.all(args).then((realArgs) => f(...realArgs));
@@ -342,7 +349,7 @@ export default class FunPromise<T> implements Promise<T> {
 	 * Note that this function does *NOT* resolve the items within the array.
 	 */
 	arrayify(): FunPromise<Item<T>[]> {
-		return this.then(_.toArray);
+		return this.then(_toArray);
 	}
 
 	/**
@@ -369,7 +376,7 @@ export default class FunPromise<T> implements Promise<T> {
 		const results = [];
 		return FunPromise.try(async () => {
 			await Promise.all(
-				_.map(await this.arrayify(), async (value, idx) => {
+				_map(await this.arrayify(), async (value, idx) => {
 					results[idx] = await mapper(value);
 				})
 			);
@@ -402,7 +409,7 @@ export default class FunPromise<T> implements Promise<T> {
 	finally(): FunPromise<T>;
 	finally(onfinally: () => void): FunPromise<T>;
 	finally(onfinally?) {
-		if (_.isFunction(onfinally)) {
+		if (_isFunction(onfinally)) {
 			return new FunPromise(this.wrapped.finally(onfinally));
 		} else {
 			return this;
@@ -421,7 +428,7 @@ export default class FunPromise<T> implements Promise<T> {
 	 */
 	static coalesce<T>(
 		fns: PromisableIterable<() => Promisable<T>>,
-		test: (item: T) => Promisable<boolean> = _.negate(_.isNil)
+		test: (item: T) => Promisable<boolean> = _negate(_isNil)
 	): FunPromise<T> {
 		let resolved = false;
 		let lastSeenReason = new Error("No values left after coalescing");
@@ -475,11 +482,11 @@ export default class FunPromise<T> implements Promise<T> {
 	): FunPromise<T> {
 		if (waitTimeMs <= 0) {
 			return new FunPromise(
-				new Promise((resolve) => _.defer(resolve, returnValue))
+				new Promise((resolve) => _defer(resolve, returnValue))
 			);
 		} else {
 			return new FunPromise(
-				new Promise((resolve) => _.delay(resolve, waitTimeMs, returnValue))
+				new Promise((resolve) => _delay(resolve, waitTimeMs, returnValue))
 			);
 		}
 	}
@@ -499,7 +506,7 @@ export default class FunPromise<T> implements Promise<T> {
 		return this.arrayify().then(async (ary) => {
 			const results = await FunPromise.map(ary, async (it) => test(await it));
 			// @ts-ignore
-			return _.filter(ary, (it, idx) => results[idx]);
+			return _filter(ary, (it, idx) => results[idx]);
 		});
 	}
 
