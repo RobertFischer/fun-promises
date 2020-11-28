@@ -5,7 +5,7 @@
 		"includeVersion": true,
 		"inputFiles": ["index.ts", "./src/types.ts"],
 		"includeDeclarations": true,
-		"excludeNotExported": false,
+		"excludeNotExported": true,
 		"excludeExternals": false,
 		"listInvalidSymbolLinks": true,
 		"mode": "modules",
