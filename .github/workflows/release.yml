@@ -22,7 +22,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - run: yarn polish
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: "chore(release): post-Semantic Release execution"
