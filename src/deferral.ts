@@ -3,6 +3,7 @@
 import FunPromise from "./fun-promise";
 import { PromiseState, Promisable } from "./types";
 import _defer from "lodash/defer";
+import _ from "lodash";
 
 /**
  * A class that is an "inside-out" [[`FunPromise`]]: the `resolve` and `reject` functions
@@ -155,9 +156,7 @@ export default class Deferral<T> {
 	 * Whether or not the deferral is cancelled.
 	 */
 	get isCancelled() {
-		return (
-			!this.isSettled() && this.resolver === null && this.resolver === null
-		);
+		return !this.isSettled && this.resolver === null && this.resolver === null;
 	}
 
 	/**
@@ -165,7 +164,7 @@ export default class Deferral<T> {
 	 * never be called. If the deferral is settled or cancelled, this is a noop.
 	 */
 	cancel() {
-		if (this.isSettled()) return;
+		if (this.isSettled) return;
 		this.stateValue = PromiseState.Cancelled;
 		this.resolver = null;
 		this.rejector = null;
