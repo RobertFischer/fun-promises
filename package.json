@@ -80,7 +80,7 @@
 		"build:docs:typedocs": "typedoc --tsconfig tsconfig.json",
 		"build:docs:changelog": "cp ./CHANGELOG.md ./docs/ || true",
 		"build:docs:test": "yarn test --verbose | tee ./docs/test-results.txt",
-		"build:docs:coverage": "npx browserslist --update-db && (( echo 'Explicitly Supported Browsers (MUST support Promises)' && npx browserslist && npx browserslist --coverage && npx browserslist --coverage=US ) | tee ./docs/coverage.txt)",
+		"build:docs:coverage": "mkdir -p ./docs && npx browserslist --update-db && (( echo 'Explicitly Supported Browsers (MUST support Promises)' && npx browserslist && npx browserslist --coverage && npx browserslist --coverage=US && echo 'Note that functionally equivalent but unlisted browsers do not count in these stats, so real coverage is much higher than the percentages reported.' ) | tee ./docs/coverage.txt)",
 		"watch:compile": "tsc --watch --noEmit -p tsconfig.json",
 		"watch:test": "yarn test --watch",
 		"build": "DEBUG='*' echo 'Executing build' && rm -rf dist && yarn build:esnext && yarn build:es6 && yarn build:node && yarn build:browser && yarn build:docs",
