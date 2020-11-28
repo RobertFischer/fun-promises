@@ -1,23 +1,22 @@
-yarn run v1.22.10
 $ jest --detectOpenHandles --forceExit './assumptions.test.js' './src/fun-promise.test.js' --verbose
-PASS src/fun-promise.test.js
+PASS src/fun-promise.test.js (6.147 s)
   FunPromise
-    ✓ can be constructed and resolved (3 ms)
+    ✓ can be constructed and resolved (2 ms)
     resolve
       static
         resolves correctly
-          ✓ with a value (1 ms)
+          ✓ with a value (11 ms)
           ✓ without a value (1 ms)
-          ✓ rejects when provided a rejection (2 ms)
+          ✓ rejects when provided a rejection (1 ms)
       instance
         resolves correctly
           ✓ with a value (1 ms)
           ✓ without a value (1 ms)
-          ✓ rejects when provided a rejection (5 ms)
+          ✓ rejects when provided a rejection
     then
       ✓ works without onrejected (1 ms)
     catch
-      ✓ handles rejections (1 ms)
+      ✓ handles rejections (2 ms)
       ✓ returns the error when not passed an argument (1 ms)
     arrayify
       ✓ basically works (1 ms)
@@ -30,85 +29,85 @@ PASS src/fun-promise.test.js
           ✓ for 1 arguments (1 ms)
           ✓ for 2 arguments (1 ms)
           ✓ for 3 arguments (1 ms)
-          ✓ for 4 arguments
+          ✓ for 4 arguments (1 ms)
           ✓ for 5 arguments (1 ms)
-          ✓ for 6 arguments (1 ms)
+          ✓ for 6 arguments
           ✓ for 7 arguments (1 ms)
-          ✓ for 8 arguments
+          ✓ for 8 arguments (1 ms)
           ✓ for 9 arguments (1 ms)
       instance
         basically works
           ✓ for 0 arguments (1 ms)
           ✓ for 1 arguments (1 ms)
           ✓ for 2 arguments
-          ✓ for 3 arguments (1 ms)
+          ✓ for 3 arguments (2 ms)
           ✓ for 4 arguments (1 ms)
-          ✓ for 5 arguments
-          ✓ for 6 arguments (1 ms)
-          ✓ for 7 arguments (1 ms)
-          ✓ for 8 arguments (1 ms)
+          ✓ for 5 arguments (1 ms)
+          ✓ for 6 arguments
+          ✓ for 7 arguments (2 ms)
+          ✓ for 8 arguments
           ✓ for 9 arguments (1 ms)
     try
       ✓ basically works (1 ms)
       ✓ works with one argument (1 ms)
-      ✓ explodes properly
+      ✓ explodes properly (1 ms)
     map
       static
-        ✓ basically works (2 ms)
-        ✓ works with some test values (1 ms)
+        ✓ basically works (1 ms)
+        ✓ works with some test values (7 ms)
       instance
         ✓ basically works (1 ms)
-        ✓ works with some test values
+        ✓ works with some test values (1 ms)
     Symbol.toStringTag
-      ✓ is the same as the promise passed in (1 ms)
+      ✓ is the same as the promise passed in
     finally
-      ✓ returns the same promise when given no arguments (6 ms)
-      ✓ executes on resolution (1 ms)
+      ✓ returns the same promise when given no arguments (1 ms)
+      ✓ executes on resolution
       ✓ executes on rejection
     reject
       static
-        ✓ rejects correctly
+        ✓ rejects correctly (1 ms)
         ✓ doesn't change the object that is rejected (1 ms)
       instance
         ✓ rejects correctly
         ✓ doesn't change the object that is rejected (1 ms)
     coalesce
       ✓ basically works (1 ms)
-      ✓ returns the first resolving value (1013 ms)
+      ✓ returns the first resolving value (1008 ms)
       ✓ returns the value that passes the test (2 ms)
       ✓ throws the error if nothing passes the test (1 ms)
-      ✓ punts appropriately after the first resolution (2 ms)
+      ✓ punts appropriately after the first resolution (1 ms)
     delay
       static
         When requesting a delay of -1000 milliseconds
           basically works
-            ✓ with no arg (2 ms)
-            ✓ with one arg (5 ms)
+            ✓ with no arg (1 ms)
+            ✓ with one arg (2 ms)
         When requesting a delay of -1 milliseconds
           basically works
             ✓ with no arg (1 ms)
-            ✓ with one arg (3 ms)
+            ✓ with one arg
         When requesting a delay of 0 milliseconds
           basically works
-            ✓ with no arg
-            ✓ with one arg
+            ✓ with no arg (1 ms)
+            ✓ with one arg (2 ms)
         When requesting a delay of 1 milliseconds
           basically works
-            ✓ with no arg
-            ✓ with one arg (2 ms)
+            ✓ with no arg (1 ms)
+            ✓ with one arg
         When requesting a delay of 1000 milliseconds
           basically works
             ✓ with no arg (1 ms)
-            ✓ with one arg (1001 ms)
+            ✓ with one arg (1000 ms)
       instance
         When requesting a delay of -1000 milliseconds
           basically works
             ✓ with no arg (1 ms)
-            ✓ with one arg (2 ms)
+            ✓ with one arg (3 ms)
         When requesting a delay of -1 milliseconds
           basically works
-            ✓ with no arg
-            ✓ with one arg (2 ms)
+            ✓ with no arg (2 ms)
+            ✓ with one arg (8 ms)
         When requesting a delay of 0 milliseconds
           basically works
             ✓ with no arg (1 ms)
@@ -120,23 +119,23 @@ PASS src/fun-promise.test.js
         When requesting a delay of 1000 milliseconds
           basically works
             ✓ with no arg (1 ms)
-            ✓ with one arg (1001 ms)
+            ✓ with one arg (1000 ms)
     simplify
       ✓ basically works (1 ms)
     filter
       static
-        ✓ basically works (5 ms)
+        ✓ basically works (4 ms)
       instance
         ✓ basically works (2 ms)
     arrayifyResolved
-      ✓ basically works (1 ms)
+      ✓ basically works
       ✓ returns a clone (1 ms)
       ✓ resolves arguments (1 ms)
 
 PASS ./assumptions.test.js
   lodash
     castArray
-      ✓ DOES NOT turn iterables into arrays (5 ms)
+      ✓ DOES NOT turn iterables into arrays (1 ms)
     toArray
       ✓ does turn iterables into arrays (1 ms)
 
@@ -156,6 +155,5 @@ Lines        : 100% ( 65/65 )
 Test Suites: 2 passed, 2 total
 Tests:       81 passed, 81 total
 Snapshots:   0 total
-Time:        4.223 s, estimated 5 s
+Time:        6.401 s
 Ran all test suites matching /.\/assumptions.test.js|.\/src\/fun-promise.test.js/i.
-Done in 5.68s.
