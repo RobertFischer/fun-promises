@@ -9,7 +9,13 @@
 /// <reference path="../node_modules/typescript/lib/lib.es2020.promise.d.ts" />
 /// <reference path="../node_modules/typescript/lib/lib.esnext.promise.d.ts" />
 
-import type { Promisable, PromisableIterable, Unpromise, Item } from "./types";
+import type {
+	Promisable,
+	PromisableIterable,
+	Unpromise,
+	Item,
+	FunctionReturnType,
+} from "./types";
 
 import _isFunction from "lodash/isFunction";
 import _toArray from "lodash/toArray";
@@ -17,6 +23,9 @@ import _identity from "lodash/identity";
 import _isError from "lodash/isError";
 import _noop from "lodash/noop";
 import _ from "lodash";
+
+// import Debug from "debug";
+// const debug = Debug("fun-promises");
 
 /**
  * The class that you should use instead of [[`Promise`]].  It implements the `Promise` API, so it should be a drop-in replacement.
@@ -29,20 +38,19 @@ export default class FunPromise<T> implements Promise<T> {
 
 	/**
 	 * Takes a value (or a promise of a value) and returns a promise wrapping
-	 * it, after unwrapping as many layers of [[`PromiseLike`]] wrappers as
-	 * necessary.
+	 * it.
 	 */
-	static resolve<T = void>(value?: Promisable<T>): FunPromise<Unpromise<T>> {
-		return new FunPromise(Promise.resolve(value)).simplify();
+	static resolve<T = void>(value?: Promisable<T>): FunPromise<T> {
+		return new FunPromise(Promise.resolve(value));
 	}
 
 	/**
 	 * Takes a value (or a promise of a value) and resolves to the new value,
-	 * disregarding any previous resolution value.  If this promise rejects,
+	 * disregarding any previous resolution value.
 	 *
 	 */
-	resolve<T2 = void>(value?: Promisable<T2>): FunPromise<Unpromise<T2>> {
-		return new FunPromise(this.wrapped.then(() => value)).simplify();
+	resolve<T2 = void>(value?: Promisable<T2>): FunPromise<T2> {
+		return new FunPromise(this.wrapped.then(() => value));
 	}
 
 	/**
@@ -50,12 +58,8 @@ export default class FunPromise<T> implements Promise<T> {
 	 * with that value, after unwrapping as many layers of [[`PromiseLike`]]
 	 * wrappers as necessary.
 	 */
-	static reject<T>(value?: Promisable<T>): FunPromise<never> {
-		return new FunPromise(
-			new Promise(async (resolve, reject) => {
-				reject(await value);
-			})
-		);
+	static reject(value?: unknown): FunPromise<never> {
+		return new FunPromise(Promise.reject(value));
 	}
 
 	/**
@@ -63,12 +67,8 @@ export default class FunPromise<T> implements Promise<T> {
 	 * with that value, after unwrapping as many layers of [[`PromiseLike`]]
 	 * wrappers as necessary.  This disregards any existing status.
 	 */
-	reject(value?: Promisable<T2>): FunPromise<never> {
-		return new FunPromise(
-			new Promise(async (resolve, reject) => {
-				reject(await value);
-			})
-		);
+	reject(value?: unknown): FunPromise<never> {
+		return FunPromise.reject(value);
 	}
 
 	/**
@@ -208,7 +208,10 @@ export default class FunPromise<T> implements Promise<T> {
 	 * a [[`PromiseLike`]], then they will be resolved and the resolution value will be passed into the
 	 * function instead.
 	 *
-	 * This function is really useful to [avoid releasing Zalgo](https://blog.izs.me/2013/08/designing-apis-for-asynchrony).
+	 * This function is really useful in the following cases:
+	 *   1. to [avoid releasing Zalgo](https://blog.izs.me/2013/08/designing-apis-for-asynchrony)
+	 *   2. when you want to create a `FunPromise` based on an `async` function
+	 *   3. when you want to create a `FunPromise` based on a normal function
 	 */
 	static try<T, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8>(
 		source: Promisable<
@@ -312,24 +315,16 @@ export default class FunPromise<T> implements Promise<T> {
 	): FunPromise<T>;
 	static try<T>(source: Promisable<() => Promisable<T>>): FunPromise<T>;
 	static try<T, ArgT = any>(
-		source: (...args: ArgT[]) => Promisable<T>,
+		source: Promisable<(...args: ArgT[]) => Promisable<T>>,
 		...args: ArgT[]
 	): FunPromise<T> {
-		return new FunPromise(
-			new Promise(async (resolve, reject) => {
-				try {
-					const f = await source;
-					if (!args || args.length === 0) {
-						resolve(f());
-					} else {
-						const realArgs = await Promise.all(args);
-						resolve(f(...realArgs));
-					}
-				} catch (e) {
-					reject(e);
-				}
-			})
-		);
+		return FunPromise.resolve(source).then((f) => {
+			if (_.isEmpty(args)) {
+				return f();
+			} else {
+				return Promise.all(args).then((realArgs) => f(...realArgs));
+			}
+		});
 	}
 
 	/**
@@ -349,9 +344,21 @@ export default class FunPromise<T> implements Promise<T> {
 	/**
 	 * Coerces the resolve value (which must be an [[`Iterable`]]) into an array.  The `Iterable` requirement
 	 * comes from the `Item<T>` return value: `Item<T>` is equivalent to `never` if `T` is not an `Iterable`.
+	 *
+	 * Note that this function does *NOT* resolve the items within the array.
 	 */
 	arrayify(): FunPromise<Item<T>[]> {
-		return this.then((val) => [...((val as unknown) as Iterable<Item<T>>)]);
+		return this.then(_.toArray);
+	}
+
+	/**
+	 * Coerces the resolve value (which must be an [[`Iterable`]]) into an array.  The `Iterable` requirement
+	 * comes from the `Item<T>` return value: `Item<T>` is equivalent to `never` if `T` is not an `Iterable`.
+	 *
+	 * Note that this function *ALSO* resolves the items within the array.
+	 */
+	arrayifyResolved(): FunPromise<Item<T>[]> {
+		return this.arrayify().then((ary) => Promise.all(ary));
 	}
 
 	/**
@@ -376,6 +383,9 @@ export default class FunPromise<T> implements Promise<T> {
 		});
 	}
 
+	/**
+	 * Equivalent to `FunPromise.resolve(values).map(mapper)`.
+	 */
 	static map<T, T2 = T>(
 		values: PromisableIterable<T>,
 		mapper: (it: T) => Promisable<T2>
@@ -385,6 +395,8 @@ export default class FunPromise<T> implements Promise<T> {
 
 	/**
 	 * Required to implement [[`Promise`]], but you almost certainly don't care about it.
+	 *
+	 * All the same, it returns the string tag of the underlying promise.
 	 */
 	get [Symbol.toStringTag]() {
 		return this.wrapped[Symbol.toStringTag];
@@ -415,44 +427,33 @@ export default class FunPromise<T> implements Promise<T> {
 	 */
 	static coalesce<T>(
 		fns: PromisableIterable<() => Promisable<T>>,
-		test: (item: T) => boolean = _.negate(_.isNil)
+		test: (item: T) => Promisable<boolean> = _.negate(_.isNil)
 	): FunPromise<T> {
-		return FunPromise.resolve(fns).coalesce(test);
-	}
-
-	/**
-	 * Given that the resolved value is an iterable of nullary functions, this executes all the functions simultaneously and
-	 * returns the first whose return value passes the provided test.  The default test returns true if the value is not
-	 * `null` or `undefined`.
-	 *
-	 * If no function resolves successfully, the last seen rejection is thrown. If some functions resolve but some reject,
-	 * and none of the resolved values pass the test, then the last seen rejection is thrown.
-	 *
-	 * If all the functions resolve but to a value but no value passes the test, then this rejects with an error saying as much.
-	 */
-	coalesce(
-		test: (item: ReturnType<Item<T>>) => boolean = _.negate(_.isNil)
-	): FunPromise<ReturnType<Item<T>>> {
-		const fns = this.arrayify();
-		return new FunPromise(
-			new Promise(async (resolve, reject) => {
-				let resolved = false;
-				let lastSeenReason = new Error("No value emerged from coalescing");
-				await FunPromise.map(await fns, async (fn) => {
-					try {
-						const result = await fn();
-						if (resolved) return;
-						if (test(result)) {
-							resolve(result);
+		let resolved = false;
+		let lastSeenReason = new Error("No values left after coalescing");
+		let resolveValue;
+		return FunPromise.map(fns, (fn) =>
+			FunPromise.try(fn)
+				.then((result) => {
+					if (resolved) return null;
+					return FunPromise.try(test, result).then((testResult) => {
+						if (resolved) return null;
+						if (testResult) {
 							resolved = true;
+							resolveValue = result;
 						}
-					} catch (e) {
-						lastSeenReason = e;
-					}
-				});
-				if (!resolved) reject(lastSeenReason);
-			})
-		);
+					});
+				})
+				.catch((e) => {
+					lastSeenReason = e;
+				})
+		).then(() => {
+			if (resolved) {
+				return resolveValue;
+			} else {
+				throw lastSeenReason;
+			}
+		});
 	}
 
 	/**
@@ -474,9 +475,10 @@ export default class FunPromise<T> implements Promise<T> {
 	 *
 	 * If `waitTimeMs` is less than or equal to zero, then it simply defers until the call stack is clear.
 	 */
-	delay(waitTimeMs: number): FunPromise<void>;
-	delay<T>(waitTimeMs: number, returnValue: Promisable<T>): FunPromise<T>;
-	delay(waitTimeMs, returnValue?) {
+	delay<T = void>(
+		waitTimeMs: number,
+		returnValue?: Promisable<T>
+	): FunPromise<T> {
 		if (waitTimeMs <= 0) {
 			return new FunPromise(
 				new Promise((resolve) => _.defer(resolve, returnValue))
@@ -486,5 +488,33 @@ export default class FunPromise<T> implements Promise<T> {
 				new Promise((resolve) => _.delay(resolve, waitTimeMs, returnValue))
 			);
 		}
+	}
+
+	/**
+	 * Given a filtering function, apply the filtering function to each element of the promise's resolved value,
+	 * and return an array with the values for which the filtering function returns `true`.  If any of the filtering
+	 * results are rejected, the entire operation will be rejected.
+	 *
+	 * The order of the elements in the result are stable with regard to the order of the elements in the promise's
+	 * resolved value.  That is, if `X < Y` and `input[X]` and `input[Y]` are both in the input, and `input[X]` and
+	 * `input[Y]` both pass the filtering function, then the output index of `input[X]` will be less than the output
+	 * index of `input[Y]`. However, the resolution order is not guaranteed: that is, `input[Y]` may be resolved and
+	 * tested before `input[X]` even though `input[X]` has a lower output index than `input[Y]`.
+	 */
+	filter(test: (it: Item<T>) => Promisable<boolean>): FunPromise<Item<T>[]> {
+		return this.arrayify().then(async (ary) => {
+			const results = await FunPromise.map(ary, async (it) => test(await it));
+			return _.filter(ary, (it, idx) => results[idx]);
+		});
+	}
+
+	/**
+	 * Equivalent to `FunPromise.resolve(items).filter(test)`.
+	 */
+	static filter<T>(
+		items: PromisableIterable<T>,
+		test: (it: Item<PromisableIterable<T>>) => Promisable<boolean>
+	): FunPromise<Item<PromisableIterable<T>>[]> {
+		return FunPromise.resolve(items).filter(test);
 	}
 }

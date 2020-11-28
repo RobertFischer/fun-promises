@@ -5,9 +5,9 @@
  * The element type is also unwrapped any promises.
  */
 export type Item<T> = Unpromise<T> extends Array<infer U>
-	? Unpromise<U>
+	? U
 	: Unpromise<T> extends Iterable<infer U>
-	? Unpromise<U>
+	? U
 	: never;
 
 /**
@@ -52,6 +52,14 @@ export type PromisableIterable<T> = Promisable<IterableOfPromisables<T>>;
  * although it may produce either values or promises of values or both.
  */
 export type IterableOfPromisables<T> = Iterable<Promisable<T>>;
+
+/**
+ * Similar to [[`ReturnType`]] but defers the check for function-ness until type resolution,
+ * instead of requiring the type to be known to be a function.
+ */
+export type FunctionReturnType<T> = T extends (...args: any) => infer U
+	? U
+	: never;
 
 /**
  * The various states that a promise can be in.

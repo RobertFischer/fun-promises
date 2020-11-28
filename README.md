@@ -39,21 +39,14 @@ as having accessor to query the state of `promise`.
 #### `try`
 
 Wrap your execution in a promise, so that even its invocation
-[won't release Zalgo](https://blog.izs.me/2013/08/designing-apis-for-asynchrony).
+[won't release Zalgo](https://blog.izs.me/2013/08/designing-apis-for-asynchrony),
+or as a convinent way to build a `FunPromise` off of an `async` function.
 
 ```typescript
 FunPromise.try(() => doSomething(explosivelyFailingParamCalculation()));
-```
-
-#### `catchError`
-
-Like `catch`, but ensures that the argument is an `Error`. (You can throw
-anything in JavaScript!)
-
-```typescript
-sketchyCall().catchError((e) =>
-	console.warn(`Failed to make sketchyCall: ${e.message}`, e)
-);
+FunPromise.try(async () => {
+	/* do stuff */ await something; /* do more stuff */
+});
 ```
 
 #### `tap`
@@ -111,28 +104,6 @@ _NOTE_: Compiling these types requires TypeScript 4.1 or greater due to
 conditional recursive types being unavailable in 3.x and buggy in 4.0.x. As of
 this writing, that means explicitly installing `typescript@^4.1.1-rc`, but
 [you can double-check the npm versions page yourself](https://www.npmjs.com/package/typescript?activeTab=versions).
-
-### Conventions
-
-#### Collection Methods and `*Seq` Methods
-
-There are a number of collection methods provided, such as `fold`, `map`, and
-`filter`. These methods assume that they are acting on a
-`FunPromise<T extends Iterable<U>>`, and the type system will ensure that you
-are if you're using Typescript: attempts to call those functions on something
-that is not `Iterable` will end up with a return type of `FunPromise<never>`.
-If, however, you circumvent the typing (eg: by using JavaScript to call the
-method), then the resolved value of the `FunPromise` will be cast to an array
-using [`_.castArray` from Lodash](https://lodash.com/docs/4.17.15#castArray),
-which probably does what you want.
-
-There are also methods whose names end in `*Seq`. These methods also operate on
-a `FunPromise<T extends Iterable<U>>`. They are functionally identical to their
-`Seq`-less counterparts, but with one additional guarantee: the first element of
-the iterable will be forced to resolve and will be processed before ever looking
-at the second element, and so on. This may be useful for debugging or other
-times when you are particular about making sure one thing works before the next
-occurs.
 
 ### Distributions
 
