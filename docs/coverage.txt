@@ -43,3 +43,4 @@ samsung 12.0
 samsung 11.1-11.2
 These browsers account for 92.76% of all users globally
 These browsers account for 92.89% of all users in the US
+Note that functionally equivalent but unlisted browsers do not count in these stats, so real coverage is much higher than the percentages reported.
