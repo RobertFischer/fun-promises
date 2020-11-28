@@ -1,0 +1,669 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Fun Promises API - v4.1.2</title>
+	<meta name="description" content="Documentation for Fun Promises API - v4.1.2">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">Fun Promises API - v4.1.2</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+							<input type="checkbox" id="tsd-filter-only-exported" />
+							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="globals.html">Globals</a>
+				</li>
+			</ul>
+			<h1>Fun Promises API - v4.1.2</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<!-- @format -->
+				<a href="#fun-promises" id="fun-promises" style="color: inherit; text-decoration: none;">
+					<h1>fun-promises</h1>
+				</a>
+				<a href="#a-library-for-making-promises-more-friendly-fluent-and-functional" id="a-library-for-making-promises-more-friendly-fluent-and-functional" style="color: inherit; text-decoration: none;">
+					<h2>A library for making Promises more friendly, fluent, and fun(ctional).</h2>
+				</a>
+				<a href="#what-this-is-not" id="what-this-is-not" style="color: inherit; text-decoration: none;">
+					<h3>What This Is Not</h3>
+				</a>
+				<p>This is <em>not</em> an implementation of <a href="https://promisesaplus.com/">Promises/A+</a>. It
+					is not a polyfill or a <a href="https://github.com/sindresorhus/ponyfill">ponyfill</a>. In
+					fact, it assumes that you have <code>Promise</code> available as a global, either through a
+				polyfill or natively.</p>
+				<a href="#what-this-is" id="what-this-is" style="color: inherit; text-decoration: none;">
+					<h3>What This Is</h3>
+				</a>
+				<p>This is a library that extends the native <code>Promise</code> implementation with a number
+					of useful utilities, so that your code is faster and easier. It is inspired by
+					libraries like <a href="http://bluebirdjs.com/"><code>bluebird</code></a> and
+					<a href="https://github.com/tildeio/rsvp.js/blob/master/README.md"><code>rsvp.js</code></a>, except
+					without the overhead of providing its own <code>Promise</code> implementation. Native
+					promises have been competitive in performance since Node 10
+					(<a href="https://www.npmjs.com/package/bluebird#note">even <code>bluebird</code> says so</a>) but
+					there&#39;s a lot of functionality which native <code>Promises</code> don&#39;t supply. Fun
+				Promises gives you that better API without the overhead.</p>
+				<a href="#some-highlights" id="some-highlights" style="color: inherit; text-decoration: none;">
+					<h3>Some Highlights</h3>
+				</a>
+				<p>For more details on these APIs, see
+					<a href="https://robertfischer.github.io/fun-promises/">GitHub Pages</a>. You particularly
+					may want to check out
+				<a href="http://robertfischer.github.io/fun-promises/test-results.txt">the BDD spec</a>.</p>
+				<a href="#deferral-class" id="deferral-class" style="color: inherit; text-decoration: none;">
+					<h4><code>Deferral</code> class</h4>
+				</a>
+				<p>This is an inside-out promise: it gives you access to the <code>resolve</code> and <code>reject</code>
+					methods of the promise so that you can perform operations on them later, as well
+				as having accessor to query the state of <code>promise</code>.</p>
+				<a href="#try" id="try" style="color: inherit; text-decoration: none;">
+					<h4><code>try</code></h4>
+				</a>
+				<p>Wrap your execution in a promise, so that even its invocation
+					<a href="https://blog.izs.me/2013/08/designing-apis-for-asynchrony">won&#39;t release Zalgo</a>,
+				or as a convinent way to build a <code>FunPromise</code> off of an <code>async</code> function.</p>
+				<pre><code class="language-typescript">FunPromise.try(<span class="hljs-function">() =&gt;</span> doSomething(explosivelyFailingParamCalculation()));
+FunPromise.try(<span class="hljs-keyword">async</span> () =&gt; {
+    <span class="hljs-comment">/* do stuff */</span> <span class="hljs-keyword">await</span> something; <span class="hljs-comment">/* do more stuff */</span>
+});</code></pre>
+				<a href="#tap" id="tap" style="color: inherit; text-decoration: none;">
+					<h4><code>tap</code></h4>
+				</a>
+				<p>This lets you take a look at a resolved value without risking changing it. This
+				is extremely useful for debugging log messages.</p>
+				<pre><code class="language-typescript">someExpensiveOperation()
+    .tap(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> debug(<span class="hljs-string">&quot;Value from someExpensiveOperation&quot;</span>, value))
+    .then(<span class="hljs-comment">/* ... */</span>);</code></pre>
+				<a href="#race" id="race" style="color: inherit; text-decoration: none;">
+					<h4><code>race</code></h4>
+				</a>
+				<p>Fire off a bunch of promises and return whichever one resolves first. (The
+				results of any later-resolving promises are discarded.)</p>
+				<pre><code class="language-typescript">getRelatedShows().race(<span class="hljs-function">(<span class="hljs-params">someShow</span>) =&gt;</span> renderSuggestedShow(someShow));</code></pre>
+				<a href="#coalesce" id="coalesce" style="color: inherit; text-decoration: none;">
+					<h4><code>coalesce</code></h4>
+				</a>
+				<p>Given a bunch of functions that return either values or promises of values,
+				execute them sequentially and return the first one what resolves.</p>
+				<pre><code class="language-typescript">FunPromise.coalesce([
+    lookupUserInMemoryCache,
+    lookupUserInRedisCache,
+    lookupUserInDB,
+]).then(<span class="hljs-function">(<span class="hljs-params">data</span>) =&gt;</span> renderUserData(data));</code></pre>
+				<p>That code is equivalent to:</p>
+				<pre><code class="language-typescript">FunPromise.resolve([
+    lookupUserInMemoryCache,
+    lookupUserInRedisCache,
+    lookupUserInDB,
+])
+    .coalesce()
+    .then(<span class="hljs-function">(<span class="hljs-params">data</span>) =&gt;</span> renderUserData);</code></pre>
+				<a href="#types" id="types" style="color: inherit; text-decoration: none;">
+					<h4>Types</h4>
+				</a>
+				<p>There are types that represent unwrapped promises (<code>Unpromise</code>), things that may
+					be promises or values (<code>Promisable</code>), and a few others that are a lot more
+				esoteric.</p>
+				<p><em>NOTE</em>: Compiling these types requires TypeScript 4.1 or greater due to
+					conditional recursive types being unavailable in 3.x and buggy in 4.0.x. As of
+					this writing, that means explicitly installing <code>typescript@^4.1.1-rc</code>, but
+				<a href="https://www.npmjs.com/package/typescript?activeTab=versions">you can double-check the npm versions page yourself</a>.</p>
+				<a href="#distributions" id="distributions" style="color: inherit; text-decoration: none;">
+					<h3>Distributions</h3>
+				</a>
+				<p>By default, your packager should automatically grab the appropriate distribution
+					through the <code>package.json</code> configuration within this library. If you&#39;re curious
+					or if you have a weird use case, then each distribution has a few different
+					flavors of the codebase to choose from. These all live under the <code>./dist</code>
+				directory.</p>
+				<a href="#esnext" id="esnext" style="color: inherit; text-decoration: none;">
+					<h4>ESNext</h4>
+				</a>
+				<p>Within <code>./dist/esnext</code> is the result of the Typescript compilation with the
+					<a href="https://www.typescriptlang.org/tsconfig#module">&quot;ESNext&quot; <code>module</code> setting</a> and
+					the <a href="https://www.typescriptlang.org/tsconfig#target">&quot;ESNext&quot; <code>target</code> setting</a>.
+					Note that it is subject to change as new ECMAScript standards are put out and
+					Typescript&#39;s JavaScript generation continues to catch up to them, and mostly
+				exists for developers to see code that results from compilation.</p>
+				<a href="#es6" id="es6" style="color: inherit; text-decoration: none;">
+					<h4>ES6</h4>
+				</a>
+				<p>Within <code>./dist/es6</code> are the folders <code>amd</code>, <code>umd</code>, <code>cjs</code> (CommonJS), and <code>esm</code>
+					(ECMAScript Modules). These contain the result of the Typescript compilation
+					with the corresponding
+					<a href="https://www.typescriptlang.org/tsconfig#module"><code>module</code> setting</a> and the
+				<a href="https://www.typescriptlang.org/tsconfig#target">&quot;ES6&quot; <code>target</code> setting</a>.</p>
+				<p>The only single-file distribution is the <code>es6/amd</code> distribution.</p>
+				<a href="#node" id="node" style="color: inherit; text-decoration: none;">
+					<h4>Node</h4>
+				</a>
+				<p>Within <code>./dist/node</code> are the folders <code>v10</code>, <code>v12</code>, <code>v14</code>, each of which
+					containing the Typescript compilation based on
+					<a href="https://github.com/tsconfig/bases#node-10-tsconfigjson">the recommended <code>tsconfig.json</code> configs</a>.
+					for those environments. All the versions are the exact same code as of this
+				writing, so we default Node to using <code>node/v14</code>.</p>
+				<a href="#react-native" id="react-native" style="color: inherit; text-decoration: none;">
+					<h4>React Native</h4>
+				</a>
+				<p>Within <code>./dist/rn</code> is the result of the Typescript compilation based on
+					<a href="https://github.com/tsconfig/bases#react-native-tsconfigjson">the recommended <code>tsconfig.json</code> config for React Native</a>.
+					This is also referred to under the <code>reactNative</code> key in <code>package.json</code>, which
+				<a href="https://facebook.github.io/metro/docs/configuration/#resolvermainfields">you should configure in your <code>metro.config.js</code> to prefer</a>.</p>
+				<a href="#browser" id="browser" style="color: inherit; text-decoration: none;">
+					<h4>Browser</h4>
+				</a>
+				<p>The file at <code>./dist/browser/index.js</code> is the result of transpiling the result of
+					the <code>ESNext</code> code above using <a href="http://parceljs.org/">Parcel</a>. The result is a
+					single minified file, appropriate for use in a CDN. It exposes the module under
+				the global <code>FunPromise</code> namespace.</p>
+				<a href="#documentation" id="documentation" style="color: inherit; text-decoration: none;">
+					<h3>Documentation</h3>
+				</a>
+				<p>The full documentation (including this content) is available on
+				<a href="https://robertfischer.github.io/fun-promises/">GitHub Pages</a>.</p>
+				<a href="#specifications" id="specifications" style="color: inherit; text-decoration: none;">
+					<h4>Specifications</h4>
+				</a>
+				<p>Our test specs are
+				<a href="https://robertfischer.github.io/fun-promises/test-results.txt">published here</a>.</p>
+				<a href="#contributing--todo-" id="contributing--todo-" style="color: inherit; text-decoration: none;">
+					<h3>Contributing [ TODO ]</h3>
+				</a>
+				<a href="#design-philosophy--todo-" id="design-philosophy--todo-" style="color: inherit; text-decoration: none;">
+					<h4>Design Philosophy [ TODO ]</h4>
+				</a>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="globals.html"><em>Globals</em></a>
+					</li>
+					<li class="label tsd-is-external">
+						<span>Internals</span>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_index_.html">&quot;index&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_src_types_.html">&quot;src/types&quot;</a>
+					</li>
+					<li class="label tsd-is-external">
+						<span>Externals</span>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__babel_parser_typings_babel_parser_d_.html">&quot;node_<wbr>modules/@babel/parser/typings/babel-<wbr>parser.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__babel_types_lib_index_ts3_7_d_.html">&quot;node_<wbr>modules/@babel/types/lib/index-<wbr>ts3.7.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_babel__core_index_d_.html">&quot;node_<wbr>modules/@types/babel__core/index.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_babel__generator_index_d_.html">&quot;node_<wbr>modules/@types/babel__generator/index.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_babel__template_index_d_.html">&quot;node_<wbr>modules/@types/babel__template/index.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_babel__traverse_index_d_.html">&quot;node_<wbr>modules/@types/babel__traverse/index.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_debug_index_d_.html">&quot;node_<wbr>modules/@types/debug/index.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_graceful_fs_index_d_.html">&quot;node_<wbr>modules/@types/graceful-<wbr>fs/index.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_istanbul_lib_coverage_index_d_.html">&quot;node_<wbr>modules/@types/istanbul-<wbr>lib-<wbr>coverage/index.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_istanbul_lib_report_index_d_.html">&quot;node_<wbr>modules/@types/istanbul-<wbr>lib-<wbr>report/index.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_istanbul_reports_index_d_.html">&quot;node_<wbr>modules/@types/istanbul-<wbr>reports/index.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_jest_index_d_.html">&quot;node_<wbr>modules/@types/jest/index.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_lodash_common_array_d_.html">&quot;node_<wbr>modules/@types/lodash/common/array.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_lodash_common_collection_d_.html">&quot;node_<wbr>modules/@types/lodash/common/collection.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_lodash_common_common_d_.html">&quot;node_<wbr>modules/@types/lodash/common/common.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_lodash_common_date_d_.html">&quot;node_<wbr>modules/@types/lodash/common/date.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_lodash_common_function_d_.html">&quot;node_<wbr>modules/@types/lodash/common/function.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_lodash_common_lang_d_.html">&quot;node_<wbr>modules/@types/lodash/common/lang.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_lodash_common_math_d_.html">&quot;node_<wbr>modules/@types/lodash/common/math.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_lodash_common_number_d_.html">&quot;node_<wbr>modules/@types/lodash/common/number.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_lodash_common_object_d_.html">&quot;node_<wbr>modules/@types/lodash/common/object.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_lodash_common_seq_d_.html">&quot;node_<wbr>modules/@types/lodash/common/seq.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_lodash_common_string_d_.html">&quot;node_<wbr>modules/@types/lodash/common/string.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_lodash_common_util_d_.html">&quot;node_<wbr>modules/@types/lodash/common/util.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_lodash_defer_d_.html">&quot;node_<wbr>modules/@types/lodash/defer.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_lodash_delay_d_.html">&quot;node_<wbr>modules/@types/lodash/delay.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_lodash_filter_d_.html">&quot;node_<wbr>modules/@types/lodash/filter.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_lodash_flatten_d_.html">&quot;node_<wbr>modules/@types/lodash/flatten.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_lodash_identity_d_.html">&quot;node_<wbr>modules/@types/lodash/identity.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_lodash_index_d_.html">&quot;node_<wbr>modules/@types/lodash/index.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_lodash_isempty_d_.html">&quot;node_<wbr>modules/@types/lodash/is<wbr>Empty.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_lodash_iserror_d_.html">&quot;node_<wbr>modules/@types/lodash/is<wbr>Error.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_lodash_isfunction_d_.html">&quot;node_<wbr>modules/@types/lodash/is<wbr>Function.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_lodash_isnil_d_.html">&quot;node_<wbr>modules/@types/lodash/is<wbr>Nil.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_lodash_map_d_.html">&quot;node_<wbr>modules/@types/lodash/map.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_lodash_negate_d_.html">&quot;node_<wbr>modules/@types/lodash/negate.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_lodash_noop_d_.html">&quot;node_<wbr>modules/@types/lodash/noop.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_lodash_toarray_d_.html">&quot;node_<wbr>modules/@types/lodash/to<wbr>Array.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_minimist_index_d_.html">&quot;node_<wbr>modules/@types/minimist/index.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_node_assert_d_.html">&quot;node_<wbr>modules/@types/node/assert.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_node_async_hooks_d_.html">&quot;node_<wbr>modules/@types/node/async_<wbr>hooks.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_node_base_d_.html">&quot;node_<wbr>modules/@types/node/base.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_node_buffer_d_.html">&quot;node_<wbr>modules/@types/node/buffer.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_node_child_process_d_.html">&quot;node_<wbr>modules/@types/node/child_<wbr>process.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_node_cluster_d_.html">&quot;node_<wbr>modules/@types/node/cluster.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_node_console_d_.html">&quot;node_<wbr>modules/@types/node/console.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_node_constants_d_.html">&quot;node_<wbr>modules/@types/node/constants.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_node_crypto_d_.html">&quot;node_<wbr>modules/@types/node/crypto.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_node_dgram_d_.html">&quot;node_<wbr>modules/@types/node/dgram.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_node_dns_d_.html">&quot;node_<wbr>modules/@types/node/dns.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_node_domain_d_.html">&quot;node_<wbr>modules/@types/node/domain.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_node_events_d_.html">&quot;node_<wbr>modules/@types/node/events.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_node_fs_d_.html">&quot;node_<wbr>modules/@types/node/fs.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_node_fs_promises_d_.html">&quot;node_<wbr>modules/@types/node/fs/promises.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_node_globals_d_.html">&quot;node_<wbr>modules/@types/node/globals.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_node_globals_global_d_.html">&quot;node_<wbr>modules/@types/node/globals.global.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_node_http_d_.html">&quot;node_<wbr>modules/@types/node/http.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_node_http2_d_.html">&quot;node_<wbr>modules/@types/node/http2.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_node_https_d_.html">&quot;node_<wbr>modules/@types/node/https.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_node_index_d_.html">&quot;node_<wbr>modules/@types/node/index.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_node_inspector_d_.html">&quot;node_<wbr>modules/@types/node/inspector.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_node_module_d_.html">&quot;node_<wbr>modules/@types/node/module.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_node_net_d_.html">&quot;node_<wbr>modules/@types/node/net.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_node_os_d_.html">&quot;node_<wbr>modules/@types/node/os.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_node_path_d_.html">&quot;node_<wbr>modules/@types/node/path.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_node_perf_hooks_d_.html">&quot;node_<wbr>modules/@types/node/perf_<wbr>hooks.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_node_process_d_.html">&quot;node_<wbr>modules/@types/node/process.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_node_punycode_d_.html">&quot;node_<wbr>modules/@types/node/punycode.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_node_querystring_d_.html">&quot;node_<wbr>modules/@types/node/querystring.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_node_readline_d_.html">&quot;node_<wbr>modules/@types/node/readline.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_node_repl_d_.html">&quot;node_<wbr>modules/@types/node/repl.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_node_stream_d_.html">&quot;node_<wbr>modules/@types/node/stream.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_node_string_decoder_d_.html">&quot;node_<wbr>modules/@types/node/string_<wbr>decoder.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_node_timers_d_.html">&quot;node_<wbr>modules/@types/node/timers.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_node_tls_d_.html">&quot;node_<wbr>modules/@types/node/tls.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_node_trace_events_d_.html">&quot;node_<wbr>modules/@types/node/trace_<wbr>events.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_node_ts3_4_base_d_.html">&quot;node_<wbr>modules/@types/node/ts3.4/base.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_node_ts3_6_base_d_.html">&quot;node_<wbr>modules/@types/node/ts3.6/base.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_node_tty_d_.html">&quot;node_<wbr>modules/@types/node/tty.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_node_url_d_.html">&quot;node_<wbr>modules/@types/node/url.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_node_util_d_.html">&quot;node_<wbr>modules/@types/node/util.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_node_v8_d_.html">&quot;node_<wbr>modules/@types/node/v8.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_node_vm_d_.html">&quot;node_<wbr>modules/@types/node/vm.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_node_wasi_d_.html">&quot;node_<wbr>modules/@types/node/wasi.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_node_worker_threads_d_.html">&quot;node_<wbr>modules/@types/node/worker_<wbr>threads.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_node_zlib_d_.html">&quot;node_<wbr>modules/@types/node/zlib.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_normalize_package_data_index_d_.html">&quot;node_<wbr>modules/@types/normalize-<wbr>package-<wbr>data/index.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_parse_json_index_d_.html">&quot;node_<wbr>modules/@types/parse-<wbr>json/index.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_prettier_index_d_.html">&quot;node_<wbr>modules/@types/prettier/index.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_q_index_d_.html">&quot;node_<wbr>modules/@types/q/index.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_retry_index_d_.html">&quot;node_<wbr>modules/@types/retry/index.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_stack_utils_index_d_.html">&quot;node_<wbr>modules/@types/stack-<wbr>utils/index.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_yargs_parser_index_d_.html">&quot;node_<wbr>modules/@types/yargs-<wbr>parser/index.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules__types_yargs_index_d_.html">&quot;node_<wbr>modules/@types/yargs/index.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules_jest_diff_build_cleanupsemantic_d_.html">&quot;node_<wbr>modules/jest-<wbr>diff/build/cleanup<wbr>Semantic.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules_jest_diff_build_difflines_d_.html">&quot;node_<wbr>modules/jest-<wbr>diff/build/diff<wbr>Lines.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules_jest_diff_build_index_d_.html">&quot;node_<wbr>modules/jest-<wbr>diff/build/index.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules_jest_diff_build_printdiffs_d_.html">&quot;node_<wbr>modules/jest-<wbr>diff/build/print<wbr>Diffs.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules_jest_diff_build_types_d_.html">&quot;node_<wbr>modules/jest-<wbr>diff/build/types.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules_pretty_format_build_index_d_.html">&quot;node_<wbr>modules/pretty-<wbr>format/build/index.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules_pretty_format_build_types_d_.html">&quot;node_<wbr>modules/pretty-<wbr>format/build/types.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules_tslib_tslib_d_.html">&quot;node_<wbr>modules/tslib/tslib.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules_typescript_lib_lib_es2015_collection_d_.html">&quot;node_<wbr>modules/typescript/lib/lib.es2015.collection.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules_typescript_lib_lib_es2015_core_d_.html">&quot;node_<wbr>modules/typescript/lib/lib.es2015.core.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules_typescript_lib_lib_es2015_d_.html">&quot;node_<wbr>modules/typescript/lib/lib.es2015.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules_typescript_lib_lib_es2015_generator_d_.html">&quot;node_<wbr>modules/typescript/lib/lib.es2015.generator.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules_typescript_lib_lib_es2015_iterable_d_.html">&quot;node_<wbr>modules/typescript/lib/lib.es2015.iterable.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules_typescript_lib_lib_es2015_promise_d_.html">&quot;node_<wbr>modules/typescript/lib/lib.es2015.promise.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules_typescript_lib_lib_es2015_proxy_d_.html">&quot;node_<wbr>modules/typescript/lib/lib.es2015.proxy.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules_typescript_lib_lib_es2015_reflect_d_.html">&quot;node_<wbr>modules/typescript/lib/lib.es2015.reflect.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules_typescript_lib_lib_es2015_symbol_d_.html">&quot;node_<wbr>modules/typescript/lib/lib.es2015.symbol.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules_typescript_lib_lib_es2015_symbol_wellknown_d_.html">&quot;node_<wbr>modules/typescript/lib/lib.es2015.symbol.wellknown.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules_typescript_lib_lib_es2016_array_include_d_.html">&quot;node_<wbr>modules/typescript/lib/lib.es2016.array.include.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules_typescript_lib_lib_es2016_d_.html">&quot;node_<wbr>modules/typescript/lib/lib.es2016.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules_typescript_lib_lib_es2017_d_.html">&quot;node_<wbr>modules/typescript/lib/lib.es2017.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules_typescript_lib_lib_es2017_intl_d_.html">&quot;node_<wbr>modules/typescript/lib/lib.es2017.intl.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules_typescript_lib_lib_es2017_object_d_.html">&quot;node_<wbr>modules/typescript/lib/lib.es2017.object.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules_typescript_lib_lib_es2017_sharedmemory_d_.html">&quot;node_<wbr>modules/typescript/lib/lib.es2017.sharedmemory.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules_typescript_lib_lib_es2017_string_d_.html">&quot;node_<wbr>modules/typescript/lib/lib.es2017.string.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules_typescript_lib_lib_es2017_typedarrays_d_.html">&quot;node_<wbr>modules/typescript/lib/lib.es2017.typedarrays.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules_typescript_lib_lib_es2018_asyncgenerator_d_.html">&quot;node_<wbr>modules/typescript/lib/lib.es2018.asyncgenerator.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules_typescript_lib_lib_es2018_asynciterable_d_.html">&quot;node_<wbr>modules/typescript/lib/lib.es2018.asynciterable.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules_typescript_lib_lib_es2018_d_.html">&quot;node_<wbr>modules/typescript/lib/lib.es2018.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules_typescript_lib_lib_es2018_intl_d_.html">&quot;node_<wbr>modules/typescript/lib/lib.es2018.intl.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules_typescript_lib_lib_es2018_promise_d_.html">&quot;node_<wbr>modules/typescript/lib/lib.es2018.promise.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules_typescript_lib_lib_es2018_regexp_d_.html">&quot;node_<wbr>modules/typescript/lib/lib.es2018.regexp.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules_typescript_lib_lib_es2020_bigint_d_.html">&quot;node_<wbr>modules/typescript/lib/lib.es2020.bigint.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules_typescript_lib_lib_es2020_promise_d_.html">&quot;node_<wbr>modules/typescript/lib/lib.es2020.promise.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules_typescript_lib_lib_es5_d_.html">&quot;node_<wbr>modules/typescript/lib/lib.es5.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules_typescript_lib_lib_esnext_intl_d_.html">&quot;node_<wbr>modules/typescript/lib/lib.esnext.intl.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules_typescript_lib_lib_esnext_promise_d_.html">&quot;node_<wbr>modules/typescript/lib/lib.esnext.promise.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_src_deferral_.html">&quot;src/deferral&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_src_fun_promise_.html">&quot;src/fun-<wbr>promise&quot;</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
