@@ -1,0 +1,27 @@
+# @format
+---
+name: Release
+
+on:
+  push:
+
+jobs:
+  perform-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+      - uses: actions/setup-node@v2-beta
+        with:
+          node-version: "14"
+      - name: NPM or Yarn install with caching
+        uses: bahmutov/npm-install@v1.1.0
+      - run: yarn build:docs
+      - run: npx semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "chore(release): post-Semantic Release execution"

@@ -1,0 +1,10 @@
+{
+	"extends": "../tsconfig.json",
+	"compilerOptions": {
+		"outFile": "../dist/es6/amd/index.js",
+		"target": "ES6",
+		"module": "AMD",
+		"isolatedModules": false,
+		"strict": false
+	}
+}

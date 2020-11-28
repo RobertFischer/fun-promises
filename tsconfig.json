@@ -1,0 +1,44 @@
+{
+	"include": ["/**/*.ts", "src/**/*.js", "src/**/*.json", "index.ts"],
+	"typedocOptions": {
+		"excludePrivate": true,
+		"includeVersion": true,
+		"inputFiles": ["index.ts", "./src/types.ts"],
+		"includeDeclarations": true,
+		"excludeNotExported": true,
+		"excludeExternals": false,
+		"listInvalidSymbolLinks": true,
+		"mode": "modules",
+		"name": "Fun Promises API",
+		"out": "docs",
+		"readme": "README.md",
+		"stripInternal": true
+	},
+	"compilerOptions": {
+		"target": "ESNext",
+		"module": "ESNext",
+		"outDir": "dist/esnext",
+		"moduleResolution": "node",
+		"allowJs": true,
+		"checkJs": false,
+		"composite": false,
+		"declaration": true,
+		"declarationMap": true,
+		"sourceMap": true,
+		"inlineSources": true,
+		"importHelpers": true,
+		"isolatedModules": true,
+		"allowSyntheticDefaultImports": true,
+		"noImplicitReturns": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"allowUnreachableCode": false,
+		"importsNotUsedAsValues": "error",
+		"newLine": "lf",
+		"resolveJsonModule": true,
+		"useDefineForClassFields": true
+	},
+	"typeAcquisition": {
+		"enable": true
+	}
+}

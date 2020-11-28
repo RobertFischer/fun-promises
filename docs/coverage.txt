@@ -1,0 +1,46 @@
+Explicitly Supported Browsers (MUST support Promises)
+and_chr 86
+and_ff 82
+and_qq 10.4
+and_uc 12.12
+android 81
+baidu 7.12
+chrome 87
+chrome 86
+chrome 85
+chrome 84
+chrome 83
+chrome 81
+chrome 80
+chrome 79
+chrome 49
+edge 87
+edge 86
+edge 85
+edge 18
+firefox 83
+firefox 82
+firefox 81
+firefox 78
+ios_saf 14
+ios_saf 13.4-13.7
+ios_saf 13.3
+ios_saf 13.0-13.1
+ios_saf 12.2-12.4
+ios_saf 12.0-12.1
+ios_saf 11.3-11.4
+ios_saf 10.3
+ios_saf 9.3
+kaios 2.5
+op_mob 59
+opera 72
+opera 71
+safari 14
+safari 13.1
+safari 13
+safari 12.1
+samsung 12.0
+samsung 11.1-11.2
+These browsers account for 92.76% of all users globally
+These browsers account for 92.89% of all users in the US
+Note that functionally equivalent but unlisted browsers do not count in these stats, so real coverage is much higher than the percentages reported.

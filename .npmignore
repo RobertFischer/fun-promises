@@ -1,0 +1,8 @@
+.*
+*.config.*
+*.test.*
+infrastructure
+script
+docs
+conf.d
+

@@ -1,0 +1,29 @@
+# @format
+
+name: Pull Request Linter
+
+on:
+  pull_request:
+    types:
+      - opened
+      - ready_for_review
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Assign PR to creator
+        uses: thomaseizinger/assign-pr-creator-action@v1.0.0
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Assign size label
+        uses: pascalgn/size-label-action@v0.2.3
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+      - name: Checks to see if PRs are dirty
+        uses: eps1lon/actions-label-merge-conflict@releases/2.x
+        with:
+          dirtyLabel: "Cannot Be Merged"
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          commentOnDirty: "Please resolve the conflicts with the target branch."
+          commentOnClean: "Conflicts have been resolved."
