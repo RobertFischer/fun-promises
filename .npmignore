@@ -5,4 +5,4 @@ infrastructure
 script
 docs
 conf.d
-
+tsconfig/*
