@@ -75,7 +75,7 @@
 		"typescript": "^4.1.2"
 	},
 	"scripts": {
-		"test": "jest --detectOpenHandles --forceExit './assumptions.test.js' './src/fun-promise.test.js'",
+		"test": "jest --detectOpenHandles --forceExit ./*.test.js ./src/*.test.js",
 		"build:docs": "rm -rf ./docs && yarn build:docs:typedocs && yarn build:docs:changelog && yarn build:docs:test && yarn build:docs:coverage",
 		"build:docs:typedocs": "typedoc --tsconfig tsconfig.json",
 		"build:docs:changelog": "cp ./CHANGELOG.md ./docs/ || true",
