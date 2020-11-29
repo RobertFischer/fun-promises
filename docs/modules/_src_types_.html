@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>&quot;src/types&quot; | Fun Promises API - v4.1.2</title>
-	<meta name="description" content="Documentation for Fun Promises API - v4.1.2">
+	<title>&quot;src/types&quot; | Fun Promises API - v1.0.0-rc.5</title>
+	<meta name="description" content="Documentation for Fun Promises API - v1.0.0-rc.5">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
 </head>
@@ -22,7 +22,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="../index.html" class="title">Fun Promises API - v4.1.2</a>
+					<a href="../index.html" class="title">Fun Promises API - v1.0.0-rc.5</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -38,8 +38,6 @@
 							</div>
 							<input type="checkbox" id="tsd-filter-inherited" checked />
 							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
-							<input type="checkbox" id="tsd-filter-externals" checked />
-							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
 						</div>
 					</div>
 					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
@@ -107,12 +105,12 @@
 					<div class="tsd-signature tsd-kind-icon">Function<wbr>Return<wbr>Type&lt;T&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-symbol">infer </span> U<span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">U</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">never</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/bc51554/src/types.ts#L60">src/types.ts:60</a></li>
+							<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/91db587/src/types.ts#L60">src/types.ts:60</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Similar to <a href="_node_modules_typescript_lib_lib_es5_d_.html#returntype"><code>ReturnType</code></a> but defers the check for function-ness until type resolution,
+							<p>Similar to [[<code>ReturnType</code>]] but defers the check for function-ness until type resolution,
 							instead of requiring the type to be known to be a function.</p>
 						</div>
 					</div>
@@ -129,12 +127,12 @@
 					<div class="tsd-signature tsd-kind-icon">Item&lt;T&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Unpromise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">infer </span> U<span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">U</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">Unpromise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">Iterable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">infer </span> U<span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">U</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">never</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/bc51554/src/types.ts#L7">src/types.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/91db587/src/types.ts#L7">src/types.ts:7</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Provides the type of elements within an <a href="../interfaces/_node_modules_typescript_lib_lib_es2015_iterable_d_.iterable.html"><code>Iterable</code></a>, which may be wrapped in one or more promises.
+							<p>Provides the type of elements within an [[<code>Iterable</code>]], which may be wrapped in one or more promises.
 							The element type is also unwrapped any promises.</p>
 						</div>
 					</div>
@@ -148,10 +146,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
 					<a name="iterableofpromisables" class="tsd-anchor"></a>
 					<h3>Iterable<wbr>OfPromisables</h3>
-					<div class="tsd-signature tsd-kind-icon">Iterable<wbr>OfPromisables&lt;T&gt;<span class="tsd-signature-symbol">:</span> <a href="../interfaces/_node_modules_typescript_lib_lib_es2015_iterable_d_.iterable.html" class="tsd-signature-type">Iterable</a><span class="tsd-signature-symbol">&lt;</span><a href="_src_types_.html#promisable" class="tsd-signature-type">Promisable</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">Iterable<wbr>OfPromisables&lt;T&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Iterable</span><span class="tsd-signature-symbol">&lt;</span><a href="_src_types_.html#promisable" class="tsd-signature-type">Promisable</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/bc51554/src/types.ts#L54">src/types.ts:54</a></li>
+							<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/91db587/src/types.ts#L54">src/types.ts:54</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -170,10 +168,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
 					<a name="promisable" class="tsd-anchor"></a>
 					<h3>Promisable</h3>
-					<div class="tsd-signature tsd-kind-icon">Promisable&lt;T&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_node_modules_typescript_lib_lib_es5_d_.promiselike.html" class="tsd-signature-type">PromiseLike</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">Promisable&lt;T&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">PromiseLike</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/bc51554/src/types.ts#L27">src/types.ts:27</a></li>
+							<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/91db587/src/types.ts#L27">src/types.ts:27</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -194,12 +192,12 @@
 					<div class="tsd-signature tsd-kind-icon">Promisable<wbr>Iterable&lt;T&gt;<span class="tsd-signature-symbol">:</span> <a href="_src_types_.html#promisable" class="tsd-signature-type">Promisable</a><span class="tsd-signature-symbol">&lt;</span><a href="_src_types_.html#iterableofpromisables" class="tsd-signature-type">IterableOfPromisables</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/bc51554/src/types.ts#L48">src/types.ts:48</a></li>
+							<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/91db587/src/types.ts#L48">src/types.ts:48</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>An <a href="../interfaces/_node_modules_typescript_lib_lib_es2015_iterable_d_.iterable.html"><code>Iterable</code></a> or a promise of an <code>Iterable</code>. Its elements are any mix of type <code>T</code> and/or <code>PromiseLike&lt;T&gt;</code>.
+							<p>An [[<code>Iterable</code>]] or a promise of an <code>Iterable</code>. Its elements are any mix of type <code>T</code> and/or <code>PromiseLike&lt;T&gt;</code>.
 							Used as a type for arguments.</p>
 						</div>
 					</div>
@@ -216,7 +214,7 @@
 					<div class="tsd-signature tsd-kind-icon">Simplified<wbr>Promisable&lt;T&gt;<span class="tsd-signature-symbol">:</span> <a href="_src_types_.html#promisable" class="tsd-signature-type">Promisable</a><span class="tsd-signature-symbol">&lt;</span><a href="_src_types_.html#unpromise" class="tsd-signature-type">Unpromise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/bc51554/src/types.ts#L42">src/types.ts:42</a></li>
+							<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/91db587/src/types.ts#L42">src/types.ts:42</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -234,15 +232,15 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
 					<a name="simplifiedpromise" class="tsd-anchor"></a>
 					<h3>Simplified<wbr>Promise</h3>
-					<div class="tsd-signature tsd-kind-icon">Simplified<wbr>Promise&lt;T&gt;<span class="tsd-signature-symbol">:</span> <a href="../interfaces/_node_modules_typescript_lib_lib_es5_d_.promise.html" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="_src_types_.html#unpromise" class="tsd-signature-type">Unpromise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">Simplified<wbr>Promise&lt;T&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="_src_types_.html#unpromise" class="tsd-signature-type">Unpromise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/bc51554/src/types.ts#L32">src/types.ts:32</a></li>
+							<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/91db587/src/types.ts#L32">src/types.ts:32</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Guarantees that there is at most one <a href="../interfaces/_node_modules_typescript_lib_lib_es5_d_.promise.html"><code>Promise</code></a> wrapper.</p>
+							<p>Guarantees that there is at most one [[<code>Promise</code>]] wrapper.</p>
 						</div>
 					</div>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -255,15 +253,15 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
 					<a name="simplifiedpromiselike" class="tsd-anchor"></a>
 					<h3>Simplified<wbr>Promise<wbr>Like</h3>
-					<div class="tsd-signature tsd-kind-icon">Simplified<wbr>Promise<wbr>Like&lt;T&gt;<span class="tsd-signature-symbol">:</span> <a href="../interfaces/_node_modules_typescript_lib_lib_es5_d_.promiselike.html" class="tsd-signature-type">PromiseLike</a><span class="tsd-signature-symbol">&lt;</span><a href="_src_types_.html#unpromise" class="tsd-signature-type">Unpromise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">Simplified<wbr>Promise<wbr>Like&lt;T&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">PromiseLike</span><span class="tsd-signature-symbol">&lt;</span><a href="_src_types_.html#unpromise" class="tsd-signature-type">Unpromise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/bc51554/src/types.ts#L37">src/types.ts:37</a></li>
+							<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/91db587/src/types.ts#L37">src/types.ts:37</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Guarantees that there is at most one <a href="../interfaces/_node_modules_typescript_lib_lib_es5_d_.promiselike.html"><code>PromiseLike</code></a> wrapper.</p>
+							<p>Guarantees that there is at most one [[<code>PromiseLike</code>]] wrapper.</p>
 						</div>
 					</div>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -279,12 +277,12 @@
 					<div class="tsd-signature tsd-kind-icon">Unpromise&lt;T&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">PromiseLike</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">infer </span> U<span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">Unpromise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">U</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">Promisable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">infer </span> U<span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">U</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">Unpromise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">U</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">T</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/bc51554/src/types.ts#L16">src/types.ts:16</a></li>
+							<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/91db587/src/types.ts#L16">src/types.ts:16</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Provides the type of the resolution value after unwrapping all the <a href="../interfaces/_node_modules_typescript_lib_lib_es5_d_.promiselike.html"><code>PromiseLike</code></a> and <a href="_src_types_.html#promisable"><code>Promisable</code></a> interfaces (if any).</p>
+							<p>Provides the type of the resolution value after unwrapping all the [[<code>PromiseLike</code>]] and <a href="_src_types_.html#promisable"><code>Promisable</code></a> interfaces (if any).</p>
 						</div>
 					</div>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -301,6 +299,9 @@
 				<ul>
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_index_.html">&quot;index&quot;</a>
 					</li>
 					<li class="current tsd-kind-module">
 						<a href="_src_types_.html">&quot;src/types&quot;</a>
