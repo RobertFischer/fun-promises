@@ -36,7 +36,7 @@ define("src/types", ["require", "exports"], function (require, exports) {
     })(PromiseState = exports.PromiseState || (exports.PromiseState = {}));
 });
 /** @format */
-define("src/fun-promise", ["require", "exports", "tslib", "lodash/defer", "lodash/delay", "lodash/filter", "lodash/flatten", "lodash/identity", "lodash/isEmpty", "lodash/isFunction", "lodash/isNil", "lodash/map", "lodash/negate", "lodash/toArray", "lodash/isError", "lodash/noop"], function (require, exports, tslib_1, defer_1, delay_1, filter_1, flatten_1, identity_1, isEmpty_1, isFunction_1, isNil_1, map_1, negate_1, toArray_1) {
+define("src/fun-promise", ["require", "exports", "tslib", "lodash/defer", "lodash/delay", "lodash/filter", "lodash/flatten", "lodash/identity", "lodash/isEmpty", "lodash/isFunction", "lodash/isNil", "lodash/map", "lodash/negate", "lodash/isError", "lodash/noop", "lodash/toArray"], function (require, exports, tslib_1, defer_1, delay_1, filter_1, flatten_1, identity_1, isEmpty_1, isFunction_1, isNil_1, map_1, negate_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     // import Debug from "debug";
@@ -107,7 +107,7 @@ define("src/fun-promise", ["require", "exports", "tslib", "lodash/defer", "lodas
             return FunPromise.resolve(flatten_1.default(values)).all();
         }
         all() {
-            return this.arrayify().then((ary) => Promise.all(ary));
+            return this.arrayify(true);
         }
         static try(source, ...args) {
             return FunPromise.resolve(source).then((f) => {
@@ -136,19 +136,30 @@ define("src/fun-promise", ["require", "exports", "tslib", "lodash/defer", "lodas
          * Coerces the resolve value (which must be an [[`Iterable`]]) into an array.  The `Iterable` requirement
          * comes from the `Item<T>` return value: `Item<T>` is equivalent to `never` if `T` is not an `Iterable`.
          *
-         * Note that this function does *NOT* resolve the items within the array.
+         * Note that this function does *NOT* resolve the items within the array unless you pass the first argument
+         * as `true`.  The items are not resolved sequentially unless you also pass a second argument as `true`.
          */
-        arrayify() {
-            return this.then(toArray_1.default);
-        }
-        /**
-         * Coerces the resolve value (which must be an [[`Iterable`]]) into an array.  The `Iterable` requirement
-         * comes from the `Item<T>` return value: `Item<T>` is equivalent to `never` if `T` is not an `Iterable`.
-         *
-         * Note that this function *ALSO* resolves the items within the array.
-         */
-        arrayifyResolved() {
-            return this.arrayify().then((ary) => Promise.all(ary));
+        arrayify(resolveValues = false, sequentialResolution = false) {
+            const aryPromise = this.then((iter) => [
+                ...iter,
+            ]);
+            if (resolveValues) {
+                if (sequentialResolution) {
+                    return aryPromise.then((ary) => tslib_1.__awaiter(this, void 0, void 0, function* () {
+                        const results = [];
+                        while (!isEmpty_1.default(ary)) {
+                            results.push(yield ary.shift());
+                        }
+                        return results;
+                    }));
+                }
+                else {
+                    return aryPromise.then((ary) => Promise.all(ary));
+                }
+            }
+            else {
+                return aryPromise;
+            }
         }
         /**
          * Given a mapping function, apply the mapping function to each element of the promise's resolved value,
@@ -164,7 +175,7 @@ define("src/fun-promise", ["require", "exports", "tslib", "lodash/defer", "lodas
             const results = [];
             return FunPromise.try(() => tslib_1.__awaiter(this, void 0, void 0, function* () {
                 yield Promise.all(map_1.default(yield this.arrayify(), (value, idx) => tslib_1.__awaiter(this, void 0, void 0, function* () {
-                    results[idx] = yield mapper(value);
+                    results[idx] = yield mapper(yield value);
                 })));
                 return results;
             }));
@@ -268,6 +279,28 @@ define("src/fun-promise", ["require", "exports", "tslib", "lodash/defer", "lodas
          */
         static filter(items, test) {
             return FunPromise.resolve(items).filter(test);
+        }
+        /**
+         * Given a mapping function, apply the mapping function to each element of the promise's resolved value,
+         * and return an array with the concatenated results of the mapping.  If any of the mapping results are
+         * rejected, the entire operation will be rejected.
+         *
+         * The order of the elements in the result correspond to the order of the elements in the promise's
+         * resolved value.  However, the resolution order is not guaranteed.
+         */
+        flatMap(mapper) {
+            return this.arrayify().then((ary) => tslib_1.__awaiter(this, void 0, void 0, function* () {
+                const promises = map_1.default(ary, (value) => tslib_1.__awaiter(this, void 0, void 0, function* () { return mapper(yield value); }));
+                const resolved = yield Promise.all(promises);
+                const flattened = flatten_1.default(resolved);
+                return flattened;
+            }));
+        }
+        /**
+         * Equivalent to `FunPromise.resolve(values).flatMap(mapper)`.
+         */
+        static flatMap(values, mapper) {
+            return FunPromise.resolve(values).flatMap(mapper);
         }
     }
     exports.default = FunPromise;
@@ -526,10 +559,73 @@ define("src/fun-promise.test", ["require", "exports", "tslib", "src/fun-promise"
                 })).resolves.not.toBe(value);
                 expect(value).toHaveLength(4);
             }));
-            it("does not resolve arguments", () => tslib_3.__awaiter(void 0, void 0, void 0, function* () {
+            it("does not resolve values when called without an argument", () => tslib_3.__awaiter(void 0, void 0, void 0, function* () {
                 const rejection = Promise.reject("BOOM!");
-                yield expect(fun_promise_3.default.resolve([1, 2, rejection]).arrayify()).resolves.toBeArrayOfSize(3);
-                rejection.catch((e) => { }); // Disarm the rejection
+                try {
+                    yield expect(fun_promise_3.default.resolve([1, 2, rejection]).arrayify()).resolves.toBeArrayOfSize(3);
+                }
+                finally {
+                    rejection.catch((e) => { }); // Disarm the rejection
+                }
+            }));
+            it("resolves values when called with the sole argument `true`", () => tslib_3.__awaiter(void 0, void 0, void 0, function* () {
+                const rejection = Promise.reject("BOOM!");
+                yield expect(fun_promise_3.default.resolve([1, 2, rejection]).arrayify(true)).rejects.toBe("BOOM!");
+            }));
+            it("rejects values in order when called with the arguments `(true, true)`", () => tslib_3.__awaiter(void 0, void 0, void 0, function* () {
+                const rejection1 = Promise.reject("BOOM!");
+                const rejection2 = Promise.reject("BANG!");
+                try {
+                    yield expect(fun_promise_3.default.resolve([1, 2, rejection1, rejection2]).arrayify(true, true)).rejects.toBe("BOOM!");
+                }
+                finally {
+                    rejection1.catch((e) => { }); // Disarm the rejection
+                    rejection2.catch((e) => { }); // Disarm the rejection
+                }
+            }));
+            it("resolves values in order when called with the arguments `(true, true)`", () => tslib_3.__awaiter(void 0, void 0, void 0, function* () {
+                let sawFirst = false;
+                let sawSecond = false;
+                let sawThird = false;
+                let sawFourth = false;
+                yield expect(fun_promise_3.default.resolve([
+                    fun_promise_3.default.try(() => {
+                        expect(sawFirst).toBe(false);
+                        expect(sawSecond).toBe(false);
+                        expect(sawThird).toBe(false);
+                        expect(sawFourth).toBe(false);
+                        sawFirst = true;
+                        return 1;
+                    }),
+                    fun_promise_3.default.try(() => {
+                        expect(sawFirst).toBe(true);
+                        expect(sawSecond).toBe(false);
+                        expect(sawThird).toBe(false);
+                        expect(sawFourth).toBe(false);
+                        sawSecond = true;
+                        return 2;
+                    }),
+                    fun_promise_3.default.try(() => {
+                        expect(sawFirst).toBe(true);
+                        expect(sawSecond).toBe(true);
+                        expect(sawThird).toBe(false);
+                        expect(sawFourth).toBe(false);
+                        sawThird = true;
+                        return 3;
+                    }),
+                    fun_promise_3.default.try(() => {
+                        expect(sawFirst).toBe(true);
+                        expect(sawSecond).toBe(true);
+                        expect(sawThird).toBe(true);
+                        expect(sawFourth).toBe(false);
+                        sawFourth = true;
+                        return 4;
+                    }),
+                ]).arrayify(true, true)).resolves.toStrictEqual([1, 2, 3, 4]);
+                expect(sawFirst).toBe(true);
+                expect(sawSecond).toBe(true);
+                expect(sawThird).toBe(true);
+                expect(sawFourth).toBe(true);
             }));
         });
         describe("all", () => {
@@ -714,24 +810,40 @@ define("src/fun-promise.test", ["require", "exports", "tslib", "src/fun-promise"
                 });
             });
         });
-        describe("arrayifyResolved", () => {
-            it("basically works", () => tslib_3.__awaiter(void 0, void 0, void 0, function* () {
-                const value = [1, 2, 3, 4];
-                yield expect(fun_promise_3.default.resolve(value).arrayifyResolved()).resolves.toStrictEqual(value);
-            }));
-            it("returns a clone", () => tslib_3.__awaiter(void 0, void 0, void 0, function* () {
-                const value = [1, 2, 3, 4];
-                yield expect(fun_promise_3.default.resolve(value)
-                    .arrayifyResolved()
-                    .then((it) => {
-                    it.pop();
-                    return it;
-                })).resolves.not.toBe(value);
-                expect(value).toHaveLength(4);
-            }));
-            it("resolves arguments", () => tslib_3.__awaiter(void 0, void 0, void 0, function* () {
-                yield expect(fun_promise_3.default.resolve([1, 2, Promise.reject("BOOM!")]).arrayifyResolved()).rejects.toBe("BOOM!");
-            }));
+        describe("flatMap", () => {
+            lodash_1.default.forEach([true, false], (staticVersion) => {
+                describe(staticVersion ? "static" : "instance", () => {
+                    const defaultValues = [
+                        1,
+                        true,
+                        {},
+                        null,
+                        Promise.resolve(null),
+                        Promise.resolve(),
+                        "Hello, Dolly!",
+                    ];
+                    const defaultMapper = (it) => {
+                        if (lodash_1.default.isNil(it)) {
+                            return [];
+                        }
+                        else {
+                            return [it];
+                        }
+                    };
+                    const defaultExpect = [1, true, {}, "Hello, Dolly!"];
+                    function doFlatMap(values = defaultValues, mapper = defaultMapper) {
+                        if (staticVersion) {
+                            return fun_promise_3.default.flatMap(values, mapper);
+                        }
+                        else {
+                            return fun_promise_3.default.resolve(values).flatMap(mapper);
+                        }
+                    }
+                    it("basically works", () => tslib_3.__awaiter(void 0, void 0, void 0, function* () {
+                        yield expect(doFlatMap()).resolves.toStrictEqual(defaultExpect);
+                    }));
+                });
+            });
         });
     });
 });

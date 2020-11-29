@@ -160,16 +160,10 @@ export default class FunPromise<T> implements Promise<T> {
      * Coerces the resolve value (which must be an [[`Iterable`]]) into an array.  The `Iterable` requirement
      * comes from the `Item<T>` return value: `Item<T>` is equivalent to `never` if `T` is not an `Iterable`.
      *
-     * Note that this function does *NOT* resolve the items within the array.
+     * Note that this function does *NOT* resolve the items within the array unless you pass the first argument
+     * as `true`.  The items are not resolved sequentially unless you also pass a second argument as `true`.
      */
-    arrayify(): FunPromise<Item<T>[]>;
-    /**
-     * Coerces the resolve value (which must be an [[`Iterable`]]) into an array.  The `Iterable` requirement
-     * comes from the `Item<T>` return value: `Item<T>` is equivalent to `never` if `T` is not an `Iterable`.
-     *
-     * Note that this function *ALSO* resolves the items within the array.
-     */
-    arrayifyResolved(): FunPromise<Item<T>[]>;
+    arrayify(resolveValues?: boolean, sequentialResolution?: boolean): FunPromise<Item<T>[]>;
     /**
      * Given a mapping function, apply the mapping function to each element of the promise's resolved value,
      * and return an array with the results of the mapping.  If any of the mapping results are rejected,
@@ -236,5 +230,18 @@ export default class FunPromise<T> implements Promise<T> {
      * Equivalent to `FunPromise.resolve(items).filter(test)`.
      */
     static filter<T>(items: PromisableIterable<T>, test: (it: Item<PromisableIterable<T>>) => Promisable<boolean>): FunPromise<Item<PromisableIterable<T>>[]>;
+    /**
+     * Given a mapping function, apply the mapping function to each element of the promise's resolved value,
+     * and return an array with the concatenated results of the mapping.  If any of the mapping results are
+     * rejected, the entire operation will be rejected.
+     *
+     * The order of the elements in the result correspond to the order of the elements in the promise's
+     * resolved value.  However, the resolution order is not guaranteed.
+     */
+    flatMap<T2 = Item<T>>(mapper: (it: Item<T>) => Promisable<T2[]>): FunPromise<T2[]>;
+    /**
+     * Equivalent to `FunPromise.resolve(values).flatMap(mapper)`.
+     */
+    static flatMap<T, T2 = T>(values: PromisableIterable<T>, mapper: (it: T) => Promisable<T2[]>): FunPromise<T2[]>;
 }
 //# sourceMappingURL=fun-promise.d.ts.map

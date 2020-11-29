@@ -61,10 +61,73 @@ describe("FunPromise", () => {
             })).resolves.not.toBe(value);
             expect(value).toHaveLength(4);
         }));
-        it("does not resolve arguments", () => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
+        it("does not resolve values when called without an argument", () => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
             const rejection = Promise.reject("BOOM!");
-            yield expect(fun_promise_1.default.resolve([1, 2, rejection]).arrayify()).resolves.toBeArrayOfSize(3);
-            rejection.catch((e) => { }); // Disarm the rejection
+            try {
+                yield expect(fun_promise_1.default.resolve([1, 2, rejection]).arrayify()).resolves.toBeArrayOfSize(3);
+            }
+            finally {
+                rejection.catch((e) => { }); // Disarm the rejection
+            }
+        }));
+        it("resolves values when called with the sole argument `true`", () => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
+            const rejection = Promise.reject("BOOM!");
+            yield expect(fun_promise_1.default.resolve([1, 2, rejection]).arrayify(true)).rejects.toBe("BOOM!");
+        }));
+        it("rejects values in order when called with the arguments `(true, true)`", () => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
+            const rejection1 = Promise.reject("BOOM!");
+            const rejection2 = Promise.reject("BANG!");
+            try {
+                yield expect(fun_promise_1.default.resolve([1, 2, rejection1, rejection2]).arrayify(true, true)).rejects.toBe("BOOM!");
+            }
+            finally {
+                rejection1.catch((e) => { }); // Disarm the rejection
+                rejection2.catch((e) => { }); // Disarm the rejection
+            }
+        }));
+        it("resolves values in order when called with the arguments `(true, true)`", () => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
+            let sawFirst = false;
+            let sawSecond = false;
+            let sawThird = false;
+            let sawFourth = false;
+            yield expect(fun_promise_1.default.resolve([
+                fun_promise_1.default.try(() => {
+                    expect(sawFirst).toBe(false);
+                    expect(sawSecond).toBe(false);
+                    expect(sawThird).toBe(false);
+                    expect(sawFourth).toBe(false);
+                    sawFirst = true;
+                    return 1;
+                }),
+                fun_promise_1.default.try(() => {
+                    expect(sawFirst).toBe(true);
+                    expect(sawSecond).toBe(false);
+                    expect(sawThird).toBe(false);
+                    expect(sawFourth).toBe(false);
+                    sawSecond = true;
+                    return 2;
+                }),
+                fun_promise_1.default.try(() => {
+                    expect(sawFirst).toBe(true);
+                    expect(sawSecond).toBe(true);
+                    expect(sawThird).toBe(false);
+                    expect(sawFourth).toBe(false);
+                    sawThird = true;
+                    return 3;
+                }),
+                fun_promise_1.default.try(() => {
+                    expect(sawFirst).toBe(true);
+                    expect(sawSecond).toBe(true);
+                    expect(sawThird).toBe(true);
+                    expect(sawFourth).toBe(false);
+                    sawFourth = true;
+                    return 4;
+                }),
+            ]).arrayify(true, true)).resolves.toStrictEqual([1, 2, 3, 4]);
+            expect(sawFirst).toBe(true);
+            expect(sawSecond).toBe(true);
+            expect(sawThird).toBe(true);
+            expect(sawFourth).toBe(true);
         }));
     });
     describe("all", () => {
@@ -249,24 +312,40 @@ describe("FunPromise", () => {
             });
         });
     });
-    describe("arrayifyResolved", () => {
-        it("basically works", () => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
-            const value = [1, 2, 3, 4];
-            yield expect(fun_promise_1.default.resolve(value).arrayifyResolved()).resolves.toStrictEqual(value);
-        }));
-        it("returns a clone", () => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
-            const value = [1, 2, 3, 4];
-            yield expect(fun_promise_1.default.resolve(value)
-                .arrayifyResolved()
-                .then((it) => {
-                it.pop();
-                return it;
-            })).resolves.not.toBe(value);
-            expect(value).toHaveLength(4);
-        }));
-        it("resolves arguments", () => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
-            yield expect(fun_promise_1.default.resolve([1, 2, Promise.reject("BOOM!")]).arrayifyResolved()).rejects.toBe("BOOM!");
-        }));
+    describe("flatMap", () => {
+        lodash_1.default.forEach([true, false], (staticVersion) => {
+            describe(staticVersion ? "static" : "instance", () => {
+                const defaultValues = [
+                    1,
+                    true,
+                    {},
+                    null,
+                    Promise.resolve(null),
+                    Promise.resolve(),
+                    "Hello, Dolly!",
+                ];
+                const defaultMapper = (it) => {
+                    if (lodash_1.default.isNil(it)) {
+                        return [];
+                    }
+                    else {
+                        return [it];
+                    }
+                };
+                const defaultExpect = [1, true, {}, "Hello, Dolly!"];
+                function doFlatMap(values = defaultValues, mapper = defaultMapper) {
+                    if (staticVersion) {
+                        return fun_promise_1.default.flatMap(values, mapper);
+                    }
+                    else {
+                        return fun_promise_1.default.resolve(values).flatMap(mapper);
+                    }
+                }
+                it("basically works", () => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
+                    yield expect(doFlatMap()).resolves.toStrictEqual(defaultExpect);
+                }));
+            });
+        });
     });
 });
 //# sourceMappingURL=fun-promise.test.js.map

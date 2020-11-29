@@ -59,10 +59,73 @@ describe("FunPromise", () => {
             })).resolves.not.toBe(value);
             expect(value).toHaveLength(4);
         }));
-        it("does not resolve arguments", () => __awaiter(void 0, void 0, void 0, function* () {
+        it("does not resolve values when called without an argument", () => __awaiter(void 0, void 0, void 0, function* () {
             const rejection = Promise.reject("BOOM!");
-            yield expect(FunPromise.resolve([1, 2, rejection]).arrayify()).resolves.toBeArrayOfSize(3);
-            rejection.catch((e) => { }); // Disarm the rejection
+            try {
+                yield expect(FunPromise.resolve([1, 2, rejection]).arrayify()).resolves.toBeArrayOfSize(3);
+            }
+            finally {
+                rejection.catch((e) => { }); // Disarm the rejection
+            }
+        }));
+        it("resolves values when called with the sole argument `true`", () => __awaiter(void 0, void 0, void 0, function* () {
+            const rejection = Promise.reject("BOOM!");
+            yield expect(FunPromise.resolve([1, 2, rejection]).arrayify(true)).rejects.toBe("BOOM!");
+        }));
+        it("rejects values in order when called with the arguments `(true, true)`", () => __awaiter(void 0, void 0, void 0, function* () {
+            const rejection1 = Promise.reject("BOOM!");
+            const rejection2 = Promise.reject("BANG!");
+            try {
+                yield expect(FunPromise.resolve([1, 2, rejection1, rejection2]).arrayify(true, true)).rejects.toBe("BOOM!");
+            }
+            finally {
+                rejection1.catch((e) => { }); // Disarm the rejection
+                rejection2.catch((e) => { }); // Disarm the rejection
+            }
+        }));
+        it("resolves values in order when called with the arguments `(true, true)`", () => __awaiter(void 0, void 0, void 0, function* () {
+            let sawFirst = false;
+            let sawSecond = false;
+            let sawThird = false;
+            let sawFourth = false;
+            yield expect(FunPromise.resolve([
+                FunPromise.try(() => {
+                    expect(sawFirst).toBe(false);
+                    expect(sawSecond).toBe(false);
+                    expect(sawThird).toBe(false);
+                    expect(sawFourth).toBe(false);
+                    sawFirst = true;
+                    return 1;
+                }),
+                FunPromise.try(() => {
+                    expect(sawFirst).toBe(true);
+                    expect(sawSecond).toBe(false);
+                    expect(sawThird).toBe(false);
+                    expect(sawFourth).toBe(false);
+                    sawSecond = true;
+                    return 2;
+                }),
+                FunPromise.try(() => {
+                    expect(sawFirst).toBe(true);
+                    expect(sawSecond).toBe(true);
+                    expect(sawThird).toBe(false);
+                    expect(sawFourth).toBe(false);
+                    sawThird = true;
+                    return 3;
+                }),
+                FunPromise.try(() => {
+                    expect(sawFirst).toBe(true);
+                    expect(sawSecond).toBe(true);
+                    expect(sawThird).toBe(true);
+                    expect(sawFourth).toBe(false);
+                    sawFourth = true;
+                    return 4;
+                }),
+            ]).arrayify(true, true)).resolves.toStrictEqual([1, 2, 3, 4]);
+            expect(sawFirst).toBe(true);
+            expect(sawSecond).toBe(true);
+            expect(sawThird).toBe(true);
+            expect(sawFourth).toBe(true);
         }));
     });
     describe("all", () => {
@@ -247,24 +310,40 @@ describe("FunPromise", () => {
             });
         });
     });
-    describe("arrayifyResolved", () => {
-        it("basically works", () => __awaiter(void 0, void 0, void 0, function* () {
-            const value = [1, 2, 3, 4];
-            yield expect(FunPromise.resolve(value).arrayifyResolved()).resolves.toStrictEqual(value);
-        }));
-        it("returns a clone", () => __awaiter(void 0, void 0, void 0, function* () {
-            const value = [1, 2, 3, 4];
-            yield expect(FunPromise.resolve(value)
-                .arrayifyResolved()
-                .then((it) => {
-                it.pop();
-                return it;
-            })).resolves.not.toBe(value);
-            expect(value).toHaveLength(4);
-        }));
-        it("resolves arguments", () => __awaiter(void 0, void 0, void 0, function* () {
-            yield expect(FunPromise.resolve([1, 2, Promise.reject("BOOM!")]).arrayifyResolved()).rejects.toBe("BOOM!");
-        }));
+    describe("flatMap", () => {
+        _.forEach([true, false], (staticVersion) => {
+            describe(staticVersion ? "static" : "instance", () => {
+                const defaultValues = [
+                    1,
+                    true,
+                    {},
+                    null,
+                    Promise.resolve(null),
+                    Promise.resolve(),
+                    "Hello, Dolly!",
+                ];
+                const defaultMapper = (it) => {
+                    if (_.isNil(it)) {
+                        return [];
+                    }
+                    else {
+                        return [it];
+                    }
+                };
+                const defaultExpect = [1, true, {}, "Hello, Dolly!"];
+                function doFlatMap(values = defaultValues, mapper = defaultMapper) {
+                    if (staticVersion) {
+                        return FunPromise.flatMap(values, mapper);
+                    }
+                    else {
+                        return FunPromise.resolve(values).flatMap(mapper);
+                    }
+                }
+                it("basically works", () => __awaiter(void 0, void 0, void 0, function* () {
+                    yield expect(doFlatMap()).resolves.toStrictEqual(defaultExpect);
+                }));
+            });
+        });
     });
 });
 //# sourceMappingURL=fun-promise.test.js.map

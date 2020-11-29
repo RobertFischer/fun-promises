@@ -12,7 +12,7 @@ import _isNil from "lodash/isNil";
 import _map from "lodash/map";
 import _negate from "lodash/negate";
 import "lodash/noop";
-import _toArray from "lodash/toArray";
+import "lodash/toArray";
 // import Debug from "debug";
 // const debug = Debug("fun-promises");
 /**
@@ -81,7 +81,7 @@ export default class FunPromise {
         return FunPromise.resolve(_flatten(values)).all();
     }
     all() {
-        return this.arrayify().then((ary) => Promise.all(ary));
+        return this.arrayify(true);
     }
     static try(source, ...args) {
         return FunPromise.resolve(source).then((f) => {
@@ -110,19 +110,30 @@ export default class FunPromise {
      * Coerces the resolve value (which must be an [[`Iterable`]]) into an array.  The `Iterable` requirement
      * comes from the `Item<T>` return value: `Item<T>` is equivalent to `never` if `T` is not an `Iterable`.
      *
-     * Note that this function does *NOT* resolve the items within the array.
+     * Note that this function does *NOT* resolve the items within the array unless you pass the first argument
+     * as `true`.  The items are not resolved sequentially unless you also pass a second argument as `true`.
      */
-    arrayify() {
-        return this.then(_toArray);
-    }
-    /**
-     * Coerces the resolve value (which must be an [[`Iterable`]]) into an array.  The `Iterable` requirement
-     * comes from the `Item<T>` return value: `Item<T>` is equivalent to `never` if `T` is not an `Iterable`.
-     *
-     * Note that this function *ALSO* resolves the items within the array.
-     */
-    arrayifyResolved() {
-        return this.arrayify().then((ary) => Promise.all(ary));
+    arrayify(resolveValues = false, sequentialResolution = false) {
+        const aryPromise = this.then((iter) => [
+            ...iter,
+        ]);
+        if (resolveValues) {
+            if (sequentialResolution) {
+                return aryPromise.then((ary) => __awaiter(this, void 0, void 0, function* () {
+                    const results = [];
+                    while (!_isEmpty(ary)) {
+                        results.push(yield ary.shift());
+                    }
+                    return results;
+                }));
+            }
+            else {
+                return aryPromise.then((ary) => Promise.all(ary));
+            }
+        }
+        else {
+            return aryPromise;
+        }
     }
     /**
      * Given a mapping function, apply the mapping function to each element of the promise's resolved value,
@@ -138,7 +149,7 @@ export default class FunPromise {
         const results = [];
         return FunPromise.try(() => __awaiter(this, void 0, void 0, function* () {
             yield Promise.all(_map(yield this.arrayify(), (value, idx) => __awaiter(this, void 0, void 0, function* () {
-                results[idx] = yield mapper(value);
+                results[idx] = yield mapper(yield value);
             })));
             return results;
         }));
@@ -242,6 +253,28 @@ export default class FunPromise {
      */
     static filter(items, test) {
         return FunPromise.resolve(items).filter(test);
+    }
+    /**
+     * Given a mapping function, apply the mapping function to each element of the promise's resolved value,
+     * and return an array with the concatenated results of the mapping.  If any of the mapping results are
+     * rejected, the entire operation will be rejected.
+     *
+     * The order of the elements in the result correspond to the order of the elements in the promise's
+     * resolved value.  However, the resolution order is not guaranteed.
+     */
+    flatMap(mapper) {
+        return this.arrayify().then((ary) => __awaiter(this, void 0, void 0, function* () {
+            const promises = _map(ary, (value) => __awaiter(this, void 0, void 0, function* () { return mapper(yield value); }));
+            const resolved = yield Promise.all(promises);
+            const flattened = _flatten(resolved);
+            return flattened;
+        }));
+    }
+    /**
+     * Equivalent to `FunPromise.resolve(values).flatMap(mapper)`.
+     */
+    static flatMap(values, mapper) {
+        return FunPromise.resolve(values).flatMap(mapper);
     }
 }
 //# sourceMappingURL=fun-promise.js.map
