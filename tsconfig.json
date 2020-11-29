@@ -6,7 +6,7 @@
 		"inputFiles": ["index.ts", "./src/types.ts"],
 		"includeDeclarations": true,
 		"excludeNotExported": true,
-		"excludeExternals": false,
+		"excludeExternals": true,
 		"listInvalidSymbolLinks": true,
 		"mode": "modules",
 		"name": "Fun Promises API",
