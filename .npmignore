@@ -5,4 +5,5 @@ infrastructure
 script
 docs
 conf.d
-
+tsconfig/*
+dist/docs.tgz

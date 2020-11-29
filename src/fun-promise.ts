@@ -197,7 +197,7 @@ export default class FunPromise<T> implements Promise<T> {
 		return FunPromise.resolve(_flatten(values)).all();
 	}
 	all(): FunPromise<Item<T>[]> {
-		return this.arrayify().then((ary) => Promise.all(ary));
+		return this.arrayify(true);
 	}
 
 	/**
@@ -346,20 +346,31 @@ export default class FunPromise<T> implements Promise<T> {
 	 * Coerces the resolve value (which must be an [[`Iterable`]]) into an array.  The `Iterable` requirement
 	 * comes from the `Item<T>` return value: `Item<T>` is equivalent to `never` if `T` is not an `Iterable`.
 	 *
-	 * Note that this function does *NOT* resolve the items within the array.
+	 * Note that this function does *NOT* resolve the items within the array unless you pass the first argument
+	 * as `true`.  The items are not resolved sequentially unless you also pass a second argument as `true`.
 	 */
-	arrayify(): FunPromise<Item<T>[]> {
-		return this.then(_toArray);
-	}
-
-	/**
-	 * Coerces the resolve value (which must be an [[`Iterable`]]) into an array.  The `Iterable` requirement
-	 * comes from the `Item<T>` return value: `Item<T>` is equivalent to `never` if `T` is not an `Iterable`.
-	 *
-	 * Note that this function *ALSO* resolves the items within the array.
-	 */
-	arrayifyResolved(): FunPromise<Item<T>[]> {
-		return this.arrayify().then((ary) => Promise.all(ary));
+	arrayify(
+		resolveValues: boolean = false,
+		sequentialResolution: boolean = false
+	): FunPromise<Item<T>[]> {
+		const aryPromise: FunPromise<Item<T>[]> = this.then((iter) => [
+			...((iter as unknown) as Iterable<Item<T>>),
+		]);
+		if (resolveValues) {
+			if (sequentialResolution) {
+				return aryPromise.then(async (ary) => {
+					const results = [];
+					while (!_isEmpty(ary)) {
+						results.push(await ary.shift());
+					}
+					return results;
+				});
+			} else {
+				return aryPromise.then((ary) => Promise.all(ary));
+			}
+		} else {
+			return aryPromise;
+		}
 	}
 
 	/**
@@ -377,7 +388,7 @@ export default class FunPromise<T> implements Promise<T> {
 		return FunPromise.try(async () => {
 			await Promise.all(
 				_map(await this.arrayify(), async (value, idx) => {
-					results[idx] = await mapper(value);
+					results[idx] = await mapper(await value);
 				})
 			);
 			return results;
@@ -518,5 +529,36 @@ export default class FunPromise<T> implements Promise<T> {
 		test: (it: Item<PromisableIterable<T>>) => Promisable<boolean>
 	): FunPromise<Item<PromisableIterable<T>>[]> {
 		return FunPromise.resolve(items).filter(test);
+	}
+
+	/**
+	 * Given a mapping function, apply the mapping function to each element of the promise's resolved value,
+	 * and return an array with the concatenated results of the mapping.  If any of the mapping results are
+	 * rejected, the entire operation will be rejected.
+	 *
+	 * The order of the elements in the result correspond to the order of the elements in the promise's
+	 * resolved value.  However, the resolution order is not guaranteed.
+	 */
+	flatMap<T2 = Item<T>>(
+		mapper: (it: Item<T>) => Promisable<T2[]>
+	): FunPromise<T2[]> {
+		return this.arrayify().then(async (ary: Promisable<Item<T>>[]) => {
+			const promises: Array<Promise<Array<T2>>> = _map(ary, async (value) =>
+				mapper(await value)
+			);
+			const resolved: T2[][] = await Promise.all(promises);
+			const flattened: T2[] = _flatten(resolved);
+			return flattened;
+		});
+	}
+
+	/**
+	 * Equivalent to `FunPromise.resolve(values).flatMap(mapper)`.
+	 */
+	static flatMap<T, T2 = T>(
+		values: PromisableIterable<T>,
+		mapper: (it: T) => Promisable<T2[]>
+	): FunPromise<T2[]> {
+		return FunPromise.resolve(values).flatMap(mapper);
 	}
 }
