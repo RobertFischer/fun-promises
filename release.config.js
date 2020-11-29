@@ -49,7 +49,7 @@ module.exports = {
 	],
 	preset: "conventionalcommits",
 	assets: _.concat(
-		{ path: "docs/**/*", label: "Docs" },
+		{ path: "dist/docs.tgz", label: "Docs" },
 		{ path: "LICENSE", label: "License" },
 		{ path: "package.json", label: "package.json" },
 		_.map(distributions, (path, label) => ({ path, label }))
