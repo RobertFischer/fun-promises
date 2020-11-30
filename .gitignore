@@ -111,7 +111,6 @@ package-lock.json
 
 *.log.*
 .*.swp
-docs
 
 index.js
 index.d.ts
