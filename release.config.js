@@ -15,7 +15,7 @@ function readDistPath(file, prop = "outDir") {
 	if (prop === "outFile") {
 		return distPath;
 	} else {
-		return `${distPath}/**/*`;
+		return `${distPath}/**`;
 	}
 }
 
