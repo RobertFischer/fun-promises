@@ -1,30 +1,26 @@
 # @format
 ---
-name: Release
+name: Update Documentation
 
 on:
   push:
+    branches:
+      - latest
 
 jobs:
-  perform-release:
+  generate-docs:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.ref }}
-          fetch-depth: 2
       - uses: actions/setup-node@v2-beta
         with:
           node-version: "14"
       - name: NPM or Yarn install with caching
         uses: bahmutov/npm-install@v1.1.0
-      - run: git fetch
-      - run: git checkout HEAD^
-      - run: npx semantic-release
-        env:
-          GITHUB_TOKEN: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - run: yarn build:docs
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: "chore(release): post-Semantic Release execution"
+          commit_message: "docs(auto-update): update the documentation"
