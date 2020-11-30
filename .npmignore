@@ -7,3 +7,4 @@ docs
 conf.d
 tsconfig/*
 dist/docs.tgz
+fun-promises-*.tgz
