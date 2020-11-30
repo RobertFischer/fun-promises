@@ -4,7 +4,7 @@ const _ = require("lodash");
 const path = require("path");
 const { name } = require("./package.json");
 
-function readDistPath(file) {
+function readDistPath(file, prop = "outDir") {
 	const distPath = path.relative(
 		".",
 		path.resolve(
@@ -18,7 +18,7 @@ function readDistPath(file) {
 const distributions = {
 	NPM: `dist/${name}-v\${nextRelease.version}.tgz`,
 	"Browser Single-File": "./dist/browser/index.js",
-	"ES6 AMD Single-File": readDistPath("amd"),
+	"ES6 AMD Single-File": readDistPath("amd", "outFile"),
 	"ES6 CJS": readDistPath("cjs"),
 	"ES6 ESM": readDistPath("esm"),
 	"ES6 UMD": readDistPath("umd"),
