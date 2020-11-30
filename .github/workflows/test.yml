@@ -1,0 +1,34 @@
+# @format
+---
+name: Perform Tests
+
+on:
+  push:
+
+jobs:
+  run-test:
+    strategy:
+      matrix:
+        os:
+          - ubuntu-16.04
+          - ubuntu-18.04
+          - ubuntu-20.04
+          - macos-10.15
+          - macos-11.0
+        node:
+          - 10
+          - 12
+          - 14
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+      - uses: actions/setup-node@v2-beta
+        with:
+          node-version: ${{ matrix.node }}
+      - name: NPM or Yarn install with caching
+        uses: bahmutov/npm-install@v1.1.0
+      - run: yarn build
+      - run: yarn test
