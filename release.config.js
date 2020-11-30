@@ -32,6 +32,15 @@ const distributions = {
 	"React Native": readDistPath("rn"),
 };
 
+/*
+	assets: _.concat(
+		{ path: "dist/docs.tgz", label: "Docs" },
+		{ path: "LICENSE", label: "License" },
+		{ path: "package.json", label: "package.json" },
+		_.map(distributions, (path, label) => ({ path, label }))
+	),
+*/
+
 module.exports = {
 	branches: [
 		{ name: "latest" },
@@ -48,12 +57,6 @@ module.exports = {
 		"semantic-release-npm-deprecate-old-versions",
 	],
 	preset: "conventionalcommits",
-	assets: _.concat(
-		{ path: "dist/docs.tgz", label: "Docs" },
-		{ path: "LICENSE", label: "License" },
-		{ path: "package.json", label: "package.json" },
-		_.map(distributions, (path, label) => ({ path, label }))
-	),
 	tarballDir: "dist",
 	changelogFile: "CHANGELOG.md",
 	changelogTitle: `${name} Changelog`,
