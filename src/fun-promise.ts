@@ -561,4 +561,15 @@ export default class FunPromise<T> implements Promise<T> {
 	): FunPromise<T2[]> {
 		return FunPromise.resolve(values).flatMap(mapper);
 	}
+
+	/**
+	 * Access the value without changing it.  Note that if the callback rejects (ie: throws),
+	 * then the resulting promise will be rejected.
+	 */
+	tap(callback: (val: T) => Promisable<void>): FunPromise<T> {
+		return this.then(async (val) => {
+			await callback(val);
+			return val;
+		});
+	}
 }
