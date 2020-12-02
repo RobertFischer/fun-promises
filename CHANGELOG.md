@@ -1,5 +1,12 @@
 fun-promises Changelog
 
+## [1.2.0-rc.2](https://github.com/RobertFischer/fun-promises/compare/v1.2.0-rc.1...v1.2.0-rc.2) (2020-12-02)
+
+
+### Features
+
+* **fold:** implements fold in case map and filter don't cut it ([86c010f](https://github.com/RobertFischer/fun-promises/commit/86c010ff5f934602a2a964cb71ebb73697ed7c2a)), closes [#12](https://github.com/RobertFischer/fun-promises/issues/12)
+
 ## [1.2.0-rc.1](https://github.com/RobertFischer/fun-promises/compare/v1.1.0...v1.2.0-rc.1) (2020-12-02)
 
 
