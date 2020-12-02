@@ -1,0 +1,23 @@
+# @format
+---
+name: Sync 'latest' to 'next'
+
+on:
+  push:
+    branches:
+      - latest
+
+jobs:
+  sync:
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: NPM or Yarn install with caching
+        uses: bahmutov/npm-install@v1.1.0
+      - name: Opening pull request
+        id: pull
+        uses: tretuna/sync-branches@1.2.0
+        with:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
+          FROM_BRANCH: latest
+          TO_BRANCH: next
