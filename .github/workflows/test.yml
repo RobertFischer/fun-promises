@@ -14,6 +14,9 @@ on:
 
 jobs:
   run-test:
+    if:
+      github.event_name == 'push' && contains(github.event.commits[0].message,
+      '[skip ci]') == false
     strategy:
       matrix:
         os:
@@ -35,7 +38,6 @@ jobs:
       - uses: actions/setup-node@v2-beta
         with:
           node-version: ${{ matrix.node }}
-          check-latest: true
       - run: yarn install --frozen-lockfile
       - run: yarn build
       - run: yarn test

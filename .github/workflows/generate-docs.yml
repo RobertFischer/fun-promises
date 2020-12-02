@@ -23,7 +23,6 @@ jobs:
       - uses: actions/setup-node@v2-beta
         with:
           node-version: "14"
-          check-latest: true
       - run: yarn install --frozen-lockfile
       - run: yarn build:docs
       - uses: stefanzweifel/git-auto-commit-action@v4
