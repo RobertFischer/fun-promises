@@ -9,6 +9,8 @@ on:
       - "**.test.js"
       - "**.test.ts"
       - package.json
+    tags-ignore:
+      - v*
 
 jobs:
   run-test:

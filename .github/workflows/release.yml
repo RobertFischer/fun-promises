@@ -10,6 +10,8 @@ on:
       - tsconfig.json
       - "**.config.js"
       - "**.config.cjs"
+    tags-ignore:
+      - v*
 
 jobs:
   perform-release:
