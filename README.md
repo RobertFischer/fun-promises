@@ -26,9 +26,11 @@ Promises gives you that better API without the overhead.
 ### Some Highlights
 
 For more details on these APIs, see
-[GitHub Pages](https://robertfischer.github.io/fun-promises/). You particularly
-may want to check out
-[the BDD spec](http://robertfischer.github.io/fun-promises/test-results.txt).
+[GitHub Pages](https://robertfischer.github.io/fun-promises/). (If you're on
+GitHub Pages, then check out the "Globals" column at the top right corner.) You
+also may want to check out
+[the BDD spec](http://robertfischer.github.io/fun-promises/test-results.txt),
+which gives an overview of how we expect these things to work.
 
 #### `Deferral` class
 
