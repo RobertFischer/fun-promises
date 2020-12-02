@@ -16,10 +16,12 @@ on:
       - "*.md"
 
 jobs:
-  perform-release:
+  perform_release:
     if:
       github.event_name == 'push' && contains(github.event.commits[0].message,
       '[skip ci]') == false
+    outputs:
+      released: ${{ steps.release.outputs.new_release_published }}
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
@@ -37,7 +39,27 @@ jobs:
       - name: Run tests
         run: yarn test
       - name: Perform Semantic Release
+        id: release
         uses: cycjimmy/semantic-release-action@v2.5.3
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  generate_docs:
+    needs:
+      - perform_release
+    if: needs.perform_release.outputs.released
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+      - uses: actions/setup-node@v2-beta
+        with:
+          node-version: "14"
+      - run: yarn install --frozen-lockfile
+      - run: yarn build:docs
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "docs(auto-update): update the documentation"
