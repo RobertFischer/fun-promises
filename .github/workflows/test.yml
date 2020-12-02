@@ -4,11 +4,6 @@ name: Perform Tests
 
 on:
   push:
-    paths:
-      - "**.ts"
-      - "**.test.js"
-      - "**.test.ts"
-      - package.json
 
 jobs:
   run-test:
