@@ -20,9 +20,9 @@ jobs:
         with:
           node-version: "14"
       - name: Install dependencies
-        runs: yarn install --frozen-lockfile
+        run: yarn install --frozen-lockfile
       - name: Run tests
-        runs: yarn test
+        run: yarn test
       - name: Perform Semantic Release
         uses: cycjimmy/semantic-release-action@v2.5.3
         env:
