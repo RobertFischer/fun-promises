@@ -4,6 +4,11 @@ name: Perform Tests
 
 on:
   push:
+    paths:
+      - "**.ts"
+      - "**.test.*"
+      - package.json
+      - yarn.lock
 
 jobs:
   run-test:
