@@ -4,6 +4,12 @@ name: Release
 
 on:
   push:
+    paths:
+      - "**.ts"
+      - package.json
+      - tsconfig.json
+      - "**.config.js"
+      - "**.config.cjs"
 
 jobs:
   perform-release:
