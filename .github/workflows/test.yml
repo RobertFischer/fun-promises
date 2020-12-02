@@ -4,6 +4,10 @@ name: Perform Tests
 
 on:
   push:
+    branches:
+      - "**"
+    tags-ignore:
+      - "v*"
     paths:
       - "**.ts"
       - "**.test.*"

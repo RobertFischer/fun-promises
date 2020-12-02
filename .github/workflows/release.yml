@@ -8,6 +8,12 @@ on:
       - "**"
     tags-ignore:
       - "v*"
+    paths:
+      - "**.ts"
+      - "**.config.*"
+      - package.json
+      - tsconfig.json
+      - "*.md"
 
 jobs:
   perform-release:
