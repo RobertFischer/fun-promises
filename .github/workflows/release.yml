@@ -4,12 +4,6 @@ name: Release
 
 on:
   push:
-    paths:
-      - "**.ts"
-      - package.json
-      - tsconfig.json
-      - "**.config.js"
-      - "**.config.cjs"
     tags-ignore:
       - v*
 
