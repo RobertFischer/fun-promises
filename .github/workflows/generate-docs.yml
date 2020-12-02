@@ -4,6 +4,11 @@ name: Update Documentation
 
 on:
   push:
+    paths:
+      - "**.ts"
+      - tsconfig.json
+      - package.json
+      - "**.md"
     branches:
       - latest
 
