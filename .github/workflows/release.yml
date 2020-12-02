@@ -18,6 +18,7 @@ jobs:
         with:
           node-version: "14"
       - uses: yarn install --frozen-lockfile
+      - uses: yarn test
       - name: Action For Semantic Release
         uses: cycjimmy/semantic-release-action@v2.5.3
         env:
