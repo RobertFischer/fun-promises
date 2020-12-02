@@ -430,4 +430,29 @@ describe("FunPromise", () => {
 			});
 		});
 	});
+
+	describe("tap", () => {
+		it("basically works", async () => {
+			let sawTap = false;
+			await expect(
+				tokenFunPromise.tap((val) => {
+					expect(val).toBe(true);
+					sawTap = true;
+					return false;
+				})
+			).resolves.toBe(true);
+			expect(sawTap).toBe(true);
+		});
+
+		it("rejects if it throws an exception", async () => {
+			let sawTap = false;
+			await expect(
+				tokenFunPromise.tap((val) => {
+					sawTap = true;
+					throw "BOOM!";
+				})
+			).rejects.toBe("BOOM!");
+			expect(sawTap).toBe(true);
+		});
+	});
 });
