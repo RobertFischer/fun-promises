@@ -455,4 +455,29 @@ describe("FunPromise", () => {
 			expect(sawTap).toBe(true);
 		});
 	});
+
+	describe("fold", () => {
+		_.forEach([true, false], (staticVersion) => {
+			describe(staticVersion ? "static" : "instance", () => {
+				const defaultValues = [1, 2, 3, 4, 5];
+
+				function doFold(
+					values = defaultValues,
+					initialValue = 0,
+					accumulator = (a, b) => a + b
+				) {
+					if (staticVersion) {
+						return FunPromise.fold(values, initialValue, accumulator);
+					} else {
+						return FunPromise.resolve(values).fold(initialValue, accumulator);
+					}
+				}
+
+				it("basically works", async () => {
+					const values = [1, 2, 3, 4, 5];
+					await expect(doFold()).resolves.toBe(1 + 2 + 3 + 4 + 5);
+				});
+			});
+		});
+	});
 });
