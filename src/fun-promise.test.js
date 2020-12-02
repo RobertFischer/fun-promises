@@ -430,4 +430,54 @@ describe("FunPromise", () => {
 			});
 		});
 	});
+
+	describe("tap", () => {
+		it("basically works", async () => {
+			let sawTap = false;
+			await expect(
+				tokenFunPromise.tap((val) => {
+					expect(val).toBe(true);
+					sawTap = true;
+					return false;
+				})
+			).resolves.toBe(true);
+			expect(sawTap).toBe(true);
+		});
+
+		it("rejects if it throws an exception", async () => {
+			let sawTap = false;
+			await expect(
+				tokenFunPromise.tap((val) => {
+					sawTap = true;
+					throw "BOOM!";
+				})
+			).rejects.toBe("BOOM!");
+			expect(sawTap).toBe(true);
+		});
+	});
+
+	describe("fold", () => {
+		_.forEach([true, false], (staticVersion) => {
+			describe(staticVersion ? "static" : "instance", () => {
+				const defaultValues = [1, 2, 3, 4, 5];
+
+				function doFold(
+					values = defaultValues,
+					initialValue = 0,
+					accumulator = (a, b) => a + b
+				) {
+					if (staticVersion) {
+						return FunPromise.fold(values, initialValue, accumulator);
+					} else {
+						return FunPromise.resolve(values).fold(initialValue, accumulator);
+					}
+				}
+
+				it("basically works", async () => {
+					const values = [1, 2, 3, 4, 5];
+					await expect(doFold()).resolves.toBe(1 + 2 + 3 + 4 + 5);
+				});
+			});
+		});
+	});
 });

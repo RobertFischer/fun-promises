@@ -561,4 +561,49 @@ export default class FunPromise<T> implements Promise<T> {
 	): FunPromise<T2[]> {
 		return FunPromise.resolve(values).flatMap(mapper);
 	}
+
+	/**
+	 * Access the value without changing it.  Note that if the callback rejects (ie: throws),
+	 * then the resulting promise will be rejected.
+	 */
+	tap(callback: (val: T) => Promisable<void>): FunPromise<T> {
+		return this.then(async (val) => {
+			await callback(val);
+			return val;
+		});
+	}
+
+	/**
+	 * Given an initial value and an accumulator function, apply the accumlator function to each element of the promise's resolved value,
+	 * passing in the current value and the result.  Returns an array with the result of the accumulation.  If any of the promise's values are
+	 * rejected, the entire operation will be rejected.
+	 *
+	 * The resolution order is not guaranteed. The accumulator function will be passed values as those values resolve.
+	 */
+	fold<T2 = Item<T>>(
+		initialValue: T2,
+		accumulator: (memo: T2, it: Item<T>) => Promisable<T2>
+	): FunPromise<T2> {
+		return this.arrayify().then(async (ary: Promisable<Item<T>>[]) => {
+			let memoPromise = FunPromise.resolve(initialValue);
+			await Promise.all(
+				_map(ary, async (promisableValue) => {
+					const value = await promisableValue;
+					memoPromise = memoPromise.then((memo) => accumulator(memo, value));
+				})
+			);
+			return await memoPromise;
+		});
+	}
+
+	/**
+	 * Equivalent to `FunPromise.resolve(values).fold(initialValue, accumulator)`.
+	 */
+	static fold<T, T2 = T>(
+		values: PromisableIterable<T>,
+		initialValue: T2,
+		accumulator: (memo: T2, it: T) => Promisable<T2>
+	): FunPromise<T2> {
+		return FunPromise.resolve(values).fold(initialValue, accumulator);
+	}
 }

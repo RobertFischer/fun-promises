@@ -1,0 +1,43 @@
+# @format
+---
+name: Perform Tests
+
+on:
+  push:
+    paths:
+      - "**.ts"
+      - "**.test.js"
+      - "**.test.ts"
+      - package.json
+    tags-ignore:
+      - v*
+
+jobs:
+  run-test:
+    if:
+      github.event_name == 'push' && contains(github.event.commits[0].message,
+      '[skip ci]') == false
+    strategy:
+      matrix:
+        os:
+          - ubuntu-16.04
+          - ubuntu-18.04
+          - ubuntu-20.04
+          - macos-10.15
+          - macos-11.0
+        node:
+          - 10
+          - 12
+          - 14
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+      - uses: actions/setup-node@v2-beta
+        with:
+          node-version: ${{ matrix.node }}
+      - run: yarn install --frozen-lockfile
+      - run: yarn build
+      - run: yarn test

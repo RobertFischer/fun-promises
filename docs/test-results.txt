@@ -1,0 +1,163 @@
+$ jest --detectOpenHandles --forceExit ./*.test.js ./src/*.test.js --verbose
+PASS src/fun-promise.test.js
+  FunPromise
+    ✓ can be constructed and resolved (4 ms)
+    resolve
+      static
+        resolves correctly
+          ✓ with a value (1 ms)
+          ✓ without a value (1 ms)
+          ✓ rejects when provided a rejection (6 ms)
+      instance
+        resolves correctly
+          ✓ with a value (1 ms)
+          ✓ without a value (1 ms)
+          ✓ rejects when provided a rejection
+    then
+      ✓ works without onrejected (1 ms)
+    catch
+      ✓ handles rejections (2 ms)
+      ✓ returns the error when not passed an argument (1 ms)
+    arrayify
+      ✓ basically works (2 ms)
+      ✓ returns a clone (2 ms)
+      ✓ does not resolve values when called without an argument (1 ms)
+      ✓ resolves values when called with the sole argument `true`
+      ✓ rejects values in order when called with the arguments `(true, true)` (1 ms)
+      ✓ resolves values in order when called with the arguments `(true, true)` (3 ms)
+    all
+      static
+        basically works
+          ✓ for 0 arguments (1 ms)
+          ✓ for 1 arguments (1 ms)
+          ✓ for 2 arguments (1 ms)
+          ✓ for 3 arguments (1 ms)
+          ✓ for 4 arguments (1 ms)
+          ✓ for 5 arguments (1 ms)
+          ✓ for 6 arguments (1 ms)
+          ✓ for 7 arguments (1 ms)
+          ✓ for 8 arguments
+          ✓ for 9 arguments (1 ms)
+      instance
+        basically works
+          ✓ for 0 arguments (1 ms)
+          ✓ for 1 arguments (1 ms)
+          ✓ for 2 arguments (4 ms)
+          ✓ for 3 arguments
+          ✓ for 4 arguments (1 ms)
+          ✓ for 5 arguments (2 ms)
+          ✓ for 6 arguments
+          ✓ for 7 arguments
+          ✓ for 8 arguments (1 ms)
+          ✓ for 9 arguments (1 ms)
+    try
+      ✓ basically works (1 ms)
+      ✓ works with one argument (1 ms)
+      ✓ explodes properly (1 ms)
+    map
+      static
+        ✓ basically works (1 ms)
+        ✓ works with some test values (1 ms)
+      instance
+        ✓ basically works (1 ms)
+        ✓ works with some test values (1 ms)
+    Symbol.toStringTag
+      ✓ is the same as the promise passed in (1 ms)
+    finally
+      ✓ returns the same promise when given no arguments
+      ✓ executes on resolution (1 ms)
+      ✓ executes on rejection (1 ms)
+    reject
+      static
+        ✓ rejects correctly (1 ms)
+        ✓ doesn't change the object that is rejected (1 ms)
+      instance
+        ✓ rejects correctly (1 ms)
+        ✓ doesn't change the object that is rejected
+    coalesce
+      ✓ basically works (2 ms)
+      ✓ returns the first resolving value (1010 ms)
+      ✓ returns the value that passes the test (2 ms)
+      ✓ throws the error if nothing passes the test (2 ms)
+      ✓ punts appropriately after the first resolution (1 ms)
+    delay
+      static
+        When requesting a delay of -1000 milliseconds
+          basically works
+            ✓ with no arg (2 ms)
+            ✓ with one arg (1 ms)
+        When requesting a delay of -1 milliseconds
+          basically works
+            ✓ with no arg (1 ms)
+            ✓ with one arg (1 ms)
+        When requesting a delay of 0 milliseconds
+          basically works
+            ✓ with no arg (1 ms)
+            ✓ with one arg (3 ms)
+        When requesting a delay of 1 milliseconds
+          basically works
+            ✓ with no arg (1 ms)
+            ✓ with one arg (3 ms)
+        When requesting a delay of 1000 milliseconds
+          basically works
+            ✓ with no arg (1 ms)
+            ✓ with one arg (1002 ms)
+      instance
+        When requesting a delay of -1000 milliseconds
+          basically works
+            ✓ with no arg (1 ms)
+            ✓ with one arg (2 ms)
+        When requesting a delay of -1 milliseconds
+          basically works
+            ✓ with no arg (1 ms)
+            ✓ with one arg (2 ms)
+        When requesting a delay of 0 milliseconds
+          basically works
+            ✓ with no arg (1 ms)
+            ✓ with one arg (1 ms)
+        When requesting a delay of 1 milliseconds
+          basically works
+            ✓ with no arg
+            ✓ with one arg (1 ms)
+        When requesting a delay of 1000 milliseconds
+          basically works
+            ✓ with no arg (1 ms)
+            ✓ with one arg (1002 ms)
+    simplify
+      ✓ basically works (1 ms)
+    filter
+      static
+        ✓ basically works (5 ms)
+      instance
+        ✓ basically works (2 ms)
+    flatMap
+      static
+        ✓ basically works (2 ms)
+      instance
+        ✓ basically works (1 ms)
+
+PASS ./assumptions.test.js
+  lodash
+    castArray
+      ✓ DOES NOT turn iterables into arrays (1 ms)
+    toArray
+      ✓ does turn iterables into arrays (1 ms)
+
+----------------|---------|----------|---------|---------|-------------------
+File            | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+----------------|---------|----------|---------|---------|-------------------
+All files       |     100 |      100 |     100 |     100 |                   
+ fun-promise.ts |     100 |      100 |     100 |     100 |                   
+----------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 93/93 )
+Branches     : 100% ( 24/24 )
+Functions    : 100% ( 50/50 )
+Lines        : 100% ( 79/79 )
+================================================================================
+Test Suites: 2 passed, 2 total
+Tests:       83 passed, 83 total
+Snapshots:   0 total
+Time:        4.267 s, estimated 5 s
+Ran all test suites matching /.\/assumptions.test.js|.\/src\/fun-promise.test.js/i.

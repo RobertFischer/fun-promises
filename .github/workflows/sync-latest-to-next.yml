@@ -1,0 +1,20 @@
+# @format
+---
+name: Sync 'latest' to 'next'
+
+on:
+  push:
+    branches:
+      - latest
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Opening pull request
+        id: pull
+        uses: tretuna/sync-branches@1.2.0
+        with:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
+          FROM_BRANCH: latest
+          TO_BRANCH: next
