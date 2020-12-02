@@ -5,7 +5,7 @@ name: Release
 on:
   push:
     tags-ignore:
-      - v*
+      - "v*"
 
 jobs:
   perform-release:
