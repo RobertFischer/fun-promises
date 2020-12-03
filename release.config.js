@@ -5,14 +5,13 @@ const path = require("path");
 const { name } = require("./package.json");
 
 function readDistPath(file, prop = "outDir") {
-	const distPath = path.relative(
-		".",
+	return path.relative(
+		__dirname,
 		path.resolve(
 			"./tsconfig",
 			require(`./tsconfig/${file}.json`).compilerOptions[prop]
 		)
 	);
-	return distPath;
 }
 
 const distributions = {
@@ -28,14 +27,12 @@ const distributions = {
 	"React Native": readDistPath("rn"),
 };
 
-/*
-	assets: _.concat(
-		{ path: "dist/docs.tgz", label: "Docs" },
-		{ path: "LICENSE", label: "License" },
-		{ path: "package.json", label: "package.json" },
-		_.map(distributions, (path, label) => ({ path, label }))
-	),
-*/
+const assets = _.concat(
+	{ path: "dist/docs.tgz", label: "Docs" },
+	{ path: "LICENSE", label: "License" },
+	_.map(distributions, (path, label) => ({ path, label }))
+);
+console.debug(assets);
 
 module.exports = {
 	branches: [
@@ -47,13 +44,14 @@ module.exports = {
 		"@semantic-release/commit-analyzer",
 		"@semantic-release/changelog",
 		"@semantic-release/release-notes-generator",
-		//"@semantic-release/github",
+		"@semantic-release/github",
 		"@semantic-release/npm",
 		"@semantic-release/git",
-		//"semantic-release-npm-deprecate-old-versions",
+		"semantic-release-npm-deprecate-old-versions",
 	],
 	preset: "conventionalcommits",
 	tarballDir: "dist",
 	changelogFile: "CHANGELOG.md",
 	changelogTitle: `${name} Changelog`,
+	assets,
 };
