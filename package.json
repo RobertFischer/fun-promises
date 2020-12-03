@@ -5,7 +5,6 @@
 	"main": "dist/node/v14/index.js",
 	"module": "dist/es6/esm/index.js",
 	"browser": "dist/browser/min/index.js",
-	"reactNative": "dist/rn/index.js",
 	"source": "index.ts",
 	"repository": "git@github.com:RobertFischer/fun-promises.git",
 	"author": "Robert Fischer",
@@ -77,7 +76,7 @@
 	},
 	"scripts": {
 		"test": "jest --detectOpenHandles --forceExit ./*.test.js ./src/*.test.js",
-		"build:docs": "rm -rf ./docs && yarn build:docs:typedocs && yarn build:docs:changelog && yarn build:docs:test && yarn build:docs:coverage && mkdir -p ./dist && tar cavf ./dist/docs.tgz ./docs",
+		"build:docs": "rm -rf ./docs && yarn build:docs:typedocs && yarn build:docs:changelog && yarn build:docs:test && yarn build:docs:coverage && mkdir -p ./dist && tar cJvf ./dist/docs.tar.xz ./docs",
 		"build:docs:typedocs": "typedoc --tsconfig tsconfig.json --gitRevision \"$(git rev-parse --short HEAD)\"",
 		"build:docs:changelog": "cp ./CHANGELOG.md ./docs/ || true",
 		"build:docs:test": "yarn test --verbose 2>&1 | tee ./docs/test-results.txt",
