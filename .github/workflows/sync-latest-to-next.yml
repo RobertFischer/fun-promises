@@ -18,3 +18,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
           FROM_BRANCH: latest
           TO_BRANCH: next
+          DRAFT: true
