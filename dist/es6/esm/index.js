@@ -1,5 +1,14 @@
-/** @format */
+/**
+ * /* @format
+ *
+ * @format
+ */
+/**
+ * Re-exports everything from [`src/types`|_src_types_.html], [`src/fun-promise`|_src_fun-promise_.html], and [`src/deferral`|_src_deferral_.html].
+ *
+ * @packageDocumentation
+ */
 export * from "./src/types";
-export { default as FunPromise } from "./src/fun-promise";
-export { default as Deferral } from "./src/deferral";
+export * from "./src/deferral";
+export * from "./src/fun-promise";
 //# sourceMappingURL=index.js.map

@@ -1,4 +1,6 @@
-/** @format */
+/**
+ * @format
+ */
 /// <reference types="typescript/lib/lib.es5" />
 /// <reference types="typescript/lib/lib.es2015.iterable" />
 /// <reference types="typescript/lib/lib.es2015.symbol.wellknown" />
@@ -8,7 +10,7 @@
 /// <reference types="typescript/lib/lib.esnext.promise" />
 import type { Promisable, PromisableIterable, Unpromise, Item } from "./types";
 /**
- * The class that you should use instead of [[`Promise`]].  It implements the `Promise` API, so it should be a drop-in replacement.
+ * The class that you should use instead of `Promise`.  It implements the `Promise` API, so it should be a drop-in replacement.
  */
 export default class FunPromise<T> implements Promise<T> {
     protected readonly wrapped: Promise<T>;
@@ -29,13 +31,13 @@ export default class FunPromise<T> implements Promise<T> {
     resolve<T2 = void>(value?: Promisable<T2>): FunPromise<T2>;
     /**
      * Takes a value (or a promise of a value) and returns a promise rejecting
-     * with that value, after unwrapping as many layers of [[`PromiseLike`]]
+     * with that value, after unwrapping as many layers of `PromiseLike`
      * wrappers as necessary.
      */
     static reject(value?: unknown): FunPromise<never>;
     /**
      * Takes a value (or a promise of a value) and returns a promise rejecting
-     * with that value, after unwrapping as many layers of [[`PromiseLike`]]
+     * with that value, after unwrapping as many layers of `PromiseLike`
      * wrappers as necessary.  This disregards any existing status.
      */
     reject(value?: unknown): FunPromise<never>;
@@ -128,7 +130,7 @@ export default class FunPromise<T> implements Promise<T> {
      * throws an exception, then that exception becomes the rejection of the promise.
      *
      * Any arguments after the first will be passed into the function when it is invoked. If they are
-     * a [[`PromiseLike`]], then they will be resolved and the resolution value will be passed into the
+     * a `PromiseLike`, then they will be resolved and the resolution value will be passed into the
      * function instead.
      *
      * This function is really useful in the following cases:
@@ -146,7 +148,7 @@ export default class FunPromise<T> implements Promise<T> {
     static try<T, Arg1>(source: Promisable<(arg1: Arg1) => Promisable<T>>, arg1: Promisable<Arg1>): FunPromise<T>;
     static try<T>(source: Promisable<() => Promisable<T>>): FunPromise<T>;
     /**
-     * Unwraps layers of [[`PromiseLike`]] wrappers as necessary.
+     * Unwraps layers of `PromiseLike` wrappers as necessary.
      *
      * This behavior is actually part of the Promise/A+ spec, but the type system struggles with that fact,
      * so this method is a workaround.
@@ -157,7 +159,7 @@ export default class FunPromise<T> implements Promise<T> {
      */
     simplify(): FunPromise<Unpromise<T>>;
     /**
-     * Coerces the resolve value (which must be an [[`Iterable`]]) into an array.  The `Iterable` requirement
+     * Coerces the resolve value (which must be an `Iterable`) into an array.  The `Iterable` requirement
      * comes from the `Item<T>` return value: `Item<T>` is equivalent to `never` if `T` is not an `Iterable`.
      *
      * Note that this function does *NOT* resolve the items within the array unless you pass the first argument
@@ -180,7 +182,7 @@ export default class FunPromise<T> implements Promise<T> {
      */
     static map<T, T2 = T>(values: PromisableIterable<T>, mapper: (it: T) => Promisable<T2>): FunPromise<T2[]>;
     /**
-     * Required to implement [[`Promise`]], but you almost certainly don't care about it.
+     * Required to implement `Promise`, but you almost certainly don't care about it.
      *
      * All the same, it returns the string tag of the underlying promise.
      */
@@ -243,5 +245,27 @@ export default class FunPromise<T> implements Promise<T> {
      * Equivalent to `FunPromise.resolve(values).flatMap(mapper)`.
      */
     static flatMap<T, T2 = T>(values: PromisableIterable<T>, mapper: (it: T) => Promisable<T2[]>): FunPromise<T2[]>;
+    /**
+     * Access the resolved value without changing it.  Note that if the callback rejects (ie: throws),
+     * then the resulting promise will be rejected.
+     */
+    tap(callback: (val: T) => Promisable<void>): FunPromise<T>;
+    /**
+     * Access the rejection reason without changing it.  Note that if the callback itself rejects (ie: throws),
+     * both rejection reasons will be capture in a single [[`NestedError`]].
+     */
+    tapCatch(callback: (reason: unknown) => Promisable<void>): FunPromise<T>;
+    /**
+     * Given an initial value and an accumulator function, apply the accumlator function to each element of the promise's resolved value,
+     * passing in the current value and the result.  Returns an array with the result of the accumulation.  If any of the promise's values are
+     * rejected, the entire operation will be rejected.
+     *
+     * The resolution order is not guaranteed. The accumulator function will be passed values as those values resolve.
+     */
+    fold<T2 = Item<T>>(initialValue: T2, accumulator: (memo: T2, it: Item<T>) => Promisable<T2>): FunPromise<T2>;
+    /**
+     * Equivalent to `FunPromise.resolve(values).fold(initialValue, accumulator)`.
+     */
+    static fold<T, T2 = T>(values: PromisableIterable<T>, initialValue: T2, accumulator: (memo: T2, it: T) => Promisable<T2>): FunPromise<T2>;
 }
 //# sourceMappingURL=fun-promise.d.ts.map
