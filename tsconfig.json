@@ -1,18 +1,21 @@
 {
 	"include": ["/**/*.ts", "src/**/*.js", "src/**/*.json", "index.ts"],
 	"typedocOptions": {
-		"excludePrivate": true,
-		"includeVersion": true,
-		"inputFiles": ["index.ts", "./src/types.ts"],
-		"includeDeclarations": true,
-		"excludeNotExported": true,
+		"exclude": ["**.test.*"],
 		"excludeExternals": true,
+		"excludeNotExported": true,
+		"excludePrivate": true,
+		"includeDeclarations": true,
+		"includeVersion": false,
+		"inputFiles": ["index.ts", "src"],
 		"listInvalidSymbolLinks": true,
 		"mode": "modules",
 		"name": "Fun Promises API",
 		"out": "docs",
 		"readme": "README.md",
-		"stripInternal": true
+		"stripInternal": true,
+		"plugins": ["typedoc-plugin-nojekyll"],
+		"toc": ["EntryClass", "ImportantInterface"]
 	},
 	"compilerOptions": {
 		"target": "ESNext",

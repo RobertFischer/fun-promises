@@ -1,5 +1,5 @@
 /** @format */
 
 export * from "./src/types";
-export { default as FunPromise } from "./src/fun-promise";
-export { default as Deferral } from "./src/deferral";
+export * from "./src/deferral";
+export * from "./src/fun-promise";
