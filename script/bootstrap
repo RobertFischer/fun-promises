@@ -3,8 +3,5 @@
 set -o pipefail
 set -exu
 
-which yarn || ( which brew && brew install yarn ) || ( npm install -g yarn )
-which pip3 || which pip || ( which brew && brew install python ) || ( echo "Please install 'pip'/'pip3'" && exit -1 )
-PIP="$(which pip3 || which pip)"
-which git-fame || "$PIP" install --user git-fame
-
+#which brew || ( timeout 5m /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" ) || ( echo "Please install Homebrew" ; exit -1 )
+which yarn || ( brew install yarn ) || ( npm install -g yarn )
