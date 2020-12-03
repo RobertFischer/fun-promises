@@ -1,7 +1,7 @@
 /** @format */
 
 /**
- * Provides the type of elements within an [[`Iterable`]], which may be wrapped in one or more promises.
+ * Provides the type of elements within an `Iterable`, which may be wrapped in one or more promises.
  * The element type is also unwrapped any promises.
  */
 export type Item<T> = Unpromise<T> extends Array<infer U>
@@ -11,7 +11,7 @@ export type Item<T> = Unpromise<T> extends Array<infer U>
 	: never;
 
 /**
- * Provides the type of the resolution value after unwrapping all the [[`PromiseLike`]] and [[`Promisable`]] interfaces (if any).
+ * Provides the type of the resolution value after unwrapping all the `PromiseLike` and [[`Promisable`]] interfaces (if any).
  */
 export type Unpromise<T> = T extends PromiseLike<infer U>
 	? Unpromise<U>
@@ -27,22 +27,22 @@ export type Unpromise<T> = T extends PromiseLike<infer U>
 export type Promisable<T> = T | PromiseLike<T>;
 
 /**
- * Guarantees that there is at most one [[`Promise`]] wrapper.
+ * Guarantees that there is only one `Promise` wrapper.
  */
 export type SimplifiedPromise<T> = Promise<Unpromise<T>>;
 
 /**
- * Guarantees that there is at most one [[`PromiseLike`]] wrapper.
+ * Guarantees that there is only one `PromiseLike` wrapper.
  */
 export type SimplifiedPromiseLike<T> = PromiseLike<Unpromise<T>>;
 
 /**
- * Guarantees that there is at most one [[`Promisable`]] wrapper.
+ * Guarantees that there is at most one `PromiseLike` wrapper.
  */
 export type SimplifiedPromisable<T> = Promisable<Unpromise<T>>;
 
 /**
- * An [[`Iterable`]] or a promise of an `Iterable`. Its elements are any mix of type `T` and/or `PromiseLike<T>`.
+ * An `Iterable` or a promise of an `Iterable`. Its elements are any mix of type `T` and/or `PromiseLike<T>`.
  * Used as a type for arguments.
  */
 export type PromisableIterable<T> = Promisable<IterableOfPromisables<T>>;
@@ -52,14 +52,6 @@ export type PromisableIterable<T> = Promisable<IterableOfPromisables<T>>;
  * although it may produce either values or promises of values or both.
  */
 export type IterableOfPromisables<T> = Iterable<Promisable<T>>;
-
-/**
- * Similar to [[`ReturnType`]] but defers the check for function-ness until type resolution,
- * instead of requiring the type to be known to be a function.
- */
-export type FunctionReturnType<T> = T extends (...args: any) => infer U
-	? U
-	: never;
 
 /**
  * The various states that a promise can be in.

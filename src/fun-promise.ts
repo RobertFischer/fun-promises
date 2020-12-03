@@ -1,4 +1,8 @@
-/** @format */
+/**
+ * /* @format
+ *
+ * @format
+ */
 
 /* What follows ensures that we have the entire Promise API implemented */
 /// <reference path="../node_modules/typescript/lib/lib.es5.d.ts" />
@@ -29,7 +33,7 @@ import _toArray from "lodash/toArray";
 // const debug = Debug("fun-promises");
 
 /**
- * The class that you should use instead of [[`Promise`]].  It implements the `Promise` API, so it should be a drop-in replacement.
+ * The class that you should use instead of `Promise`.  It implements the `Promise` API, so it should be a drop-in replacement.
  */
 export default class FunPromise<T> implements Promise<T> {
 	/**
@@ -56,7 +60,7 @@ export default class FunPromise<T> implements Promise<T> {
 
 	/**
 	 * Takes a value (or a promise of a value) and returns a promise rejecting
-	 * with that value, after unwrapping as many layers of [[`PromiseLike`]]
+	 * with that value, after unwrapping as many layers of `PromiseLike`
 	 * wrappers as necessary.
 	 */
 	static reject(value?: unknown): FunPromise<never> {
@@ -65,7 +69,7 @@ export default class FunPromise<T> implements Promise<T> {
 
 	/**
 	 * Takes a value (or a promise of a value) and returns a promise rejecting
-	 * with that value, after unwrapping as many layers of [[`PromiseLike`]]
+	 * with that value, after unwrapping as many layers of `PromiseLike`
 	 * wrappers as necessary.  This disregards any existing status.
 	 */
 	reject(value?: unknown): FunPromise<never> {
@@ -206,7 +210,7 @@ export default class FunPromise<T> implements Promise<T> {
 	 * throws an exception, then that exception becomes the rejection of the promise.
 	 *
 	 * Any arguments after the first will be passed into the function when it is invoked. If they are
-	 * a [[`PromiseLike`]], then they will be resolved and the resolution value will be passed into the
+	 * a `PromiseLike`, then they will be resolved and the resolution value will be passed into the
 	 * function instead.
 	 *
 	 * This function is really useful in the following cases:
@@ -329,7 +333,7 @@ export default class FunPromise<T> implements Promise<T> {
 	}
 
 	/**
-	 * Unwraps layers of [[`PromiseLike`]] wrappers as necessary.
+	 * Unwraps layers of `PromiseLike` wrappers as necessary.
 	 *
 	 * This behavior is actually part of the Promise/A+ spec, but the type system struggles with that fact,
 	 * so this method is a workaround.
@@ -343,7 +347,7 @@ export default class FunPromise<T> implements Promise<T> {
 	}
 
 	/**
-	 * Coerces the resolve value (which must be an [[`Iterable`]]) into an array.  The `Iterable` requirement
+	 * Coerces the resolve value (which must be an `Iterable`) into an array.  The `Iterable` requirement
 	 * comes from the `Item<T>` return value: `Item<T>` is equivalent to `never` if `T` is not an `Iterable`.
 	 *
 	 * Note that this function does *NOT* resolve the items within the array unless you pass the first argument
@@ -406,7 +410,7 @@ export default class FunPromise<T> implements Promise<T> {
 	}
 
 	/**
-	 * Required to implement [[`Promise`]], but you almost certainly don't care about it.
+	 * Required to implement `Promise`, but you almost certainly don't care about it.
 	 *
 	 * All the same, it returns the string tag of the underlying promise.
 	 */
