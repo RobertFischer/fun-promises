@@ -17,18 +17,18 @@ function readDistPath(file, prop = "outDir") {
 const distributions = {
 	NPM: `dist/${name}-v\${nextRelease.version}.tgz`,
 	"Browser Single-File": "./dist/browser/index.js",
-	"ES6 AMD Single-File": readDistPath("amd", "outFile"),
-	"ES6 CJS": readDistPath("cjs"),
-	"ES6 ESM": readDistPath("esm"),
-	"ES6 UMD": readDistPath("umd"),
-	"Node 10": readDistPath("node10"),
-	"Node 12": readDistPath("node12"),
-	"Node 14": readDistPath("node14"),
-	"React Native": readDistPath("rn"),
+	"ES6 AMD Single-File": "./dist/es6/amd/index.js",
+	"ES6 AMD": "./dist/amd.tar.xz",
+	"ES6 CJS": "./dist/cjs.tar.xz",
+	"ES6 ESM": "./dist/esm.tar.xz",
+	"ES6 UMD": "./dist/umd.tar.xz",
+	"Node 10": "./dist/v10.tar.xz",
+	"Node 12": "./dist/v12.tar.xz",
+	"Node 14": "./dist/v14.tar.xz",
 };
 
 const assets = _.concat(
-	{ path: "dist/docs.tgz", label: "Docs" },
+	{ path: "dist/docs.tar.xz", label: "Docs" },
 	{ path: "LICENSE", label: "License" },
 	_.map(distributions, (path, label) => ({ path, label }))
 );
