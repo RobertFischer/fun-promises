@@ -23,14 +23,17 @@ promises have been competitive in performance since Node 10
 there's a lot of functionality which native `Promises` don't supply. Fun
 Promises gives you that better API without the overhead.
 
-### Some Highlights
+### API
 
-For more details on these APIs, see
-[GitHub Pages](https://robertfischer.github.io/fun-promises/). (If you're on
-GitHub Pages, then check out the "Globals" column at the top right corner.) You
-also may want to check out
+- [FunPromise](http://robertfischer.github.io/fun-promises/classes/_src_fun_promise_.funpromise.html)
+- [Deferral](http://robertfischer.github.io/fun-promises/modules/_src_deferral_.deferral.html)
+- [Types](http://robertfischer.github.io/fun-promises/modules/_src_types_.html)
+
+You also may want to check out
 [the BDD spec](http://robertfischer.github.io/fun-promises/test-results.txt),
 which gives an overview of how we expect these things to work.
+
+### Some Highlights
 
 #### `Deferral` class
 
@@ -40,10 +43,6 @@ as having accessor to query the state of `promise`.
 
 #### `try`
 
-Wrap your execution in a promise, so that even its invocation
-[won't release Zalgo](https://blog.izs.me/2013/08/designing-apis-for-asynchrony),
-or as a convinent way to build a `FunPromise` off of an `async` function.
-
 ```typescript
 FunPromise.try(() => doSomething(explosivelyFailingParamCalculation()));
 FunPromise.try(async () => {
@@ -51,10 +50,11 @@ FunPromise.try(async () => {
 });
 ```
 
-#### `tap`
+Wrap your execution in a promise, so that even its invocation
+[won't release Zalgo](https://blog.izs.me/2013/08/designing-apis-for-asynchrony),
+or as a convinent way to build a `FunPromise` off of an `async` function.
 
-This lets you take a look at a resolved value without risking changing it. This
-is extremely useful for debugging log messages.
+#### `tap`
 
 ```typescript
 someExpensiveOperation()
@@ -62,19 +62,19 @@ someExpensiveOperation()
 	.then(/* ... */);
 ```
 
-#### `race`
+This lets you take a look at a resolved value without risking changing it. This
+is extremely useful for debugging log messages.
 
-Fire off a bunch of promises and return whichever one resolves first. (The
-results of any later-resolving promises are discarded.)
+#### `race`
 
 ```typescript
 getRelatedShows().race((someShow) => renderSuggestedShow(someShow));
 ```
 
-#### `coalesce`
+Fire off a bunch of promises and return whichever one resolves first. (The
+results of any later-resolving promises are discarded.)
 
-Given a bunch of functions that return either values or promises of values,
-execute them sequentially and return the first one what resolves.
+#### `coalesce`
 
 ```typescript
 FunPromise.coalesce([
@@ -84,28 +84,21 @@ FunPromise.coalesce([
 ]).then((data) => renderUserData(data));
 ```
 
-That code is equivalent to:
-
-```typescript
-FunPromise.resolve([
-	lookupUserInMemoryCache,
-	lookupUserInRedisCache,
-	lookupUserInDB,
-])
-	.coalesce()
-	.then((data) => renderUserData);
-```
+Given a bunch of functions that return either values or promises of values,
+execute them sequentially and return the first one what resolves.
 
 #### Types
 
-There are types that represent unwrapped promises (`Unpromise`), things that may
-be promises or values (`Promisable`), and a few others that are a lot more
-esoteric.
+There are types that represent unwrapped promise values
+([`Unpromise`](https://robertfischer.github.io/fun-promises/modules/_src_types_.html#unpromise)),
+things that may be promises or values
+([`Promisable`](https://robertfischer.github.io/fun-promises/modules/_src_types_.html#promisable)),
+and
+[a few others that are a lot more esoteric](https://robertfischer.github.io/fun-promises/modules/_src_types_.html).
 
-_NOTE_: Compiling these types requires TypeScript 4.1 or greater due to
-conditional recursive types being unavailable in 3.x and buggy in 4.0.x. As of
-this writing, that means explicitly installing `typescript@^4.1.1-rc`, but
-[you can double-check the npm versions page yourself](https://www.npmjs.com/package/typescript?activeTab=versions).
+_NOTE_: Compiling these types requires a recent version of TypeScript (4.1 or
+greater) due to conditional recursive types being unavailable in 3.x and buggy
+in 4.0.x.
 
 ### Distributions
 
