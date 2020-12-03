@@ -2,6 +2,7 @@
 
 import FunPromise from "./fun-promise";
 import _ from "lodash";
+import { NestedError } from "@robertfischer/ts-nested-error";
 
 const tokenPromise = new Promise((resolve) => resolve(true));
 const tokenFunPromise = new FunPromise(tokenPromise);
@@ -478,6 +479,41 @@ describe("FunPromise", () => {
 					await expect(doFold()).resolves.toBe(1 + 2 + 3 + 4 + 5);
 				});
 			});
+		});
+	});
+
+	describe("tapCatch", () => {
+		it("basically works", async () => {
+			let sawTapCatch = false;
+			await expect(
+				FunPromise.reject("BOOM!").tapCatch((e) => {
+					sawTapCatch = true;
+					expect(e).toBe("BOOM!");
+					return "BANG!";
+				})
+			).rejects.toBe("BOOM!");
+			expect(sawTapCatch).toBe(true);
+		});
+
+		it("nests explosions", async () => {
+			let sawCatch = false;
+			const err1 = new Error("BOOM!");
+			const err2 = new Error("BANG!");
+			await expect(
+				FunPromise.reject(err1)
+					.tapCatch((e) => {
+						throw err2;
+					})
+					.catch((e) => {
+						sawCatch = true;
+						expect(e).toBeInstanceOf(NestedError);
+						expect(e).toHaveProperty("innerErrors");
+						expect(e.innerErrors).toHaveLength(2);
+						expect(e.innerErrors).toEqual([err1, err2]);
+						return "Hello!";
+					})
+			).resolves.toBe("Hello!");
+			expect(sawCatch).toBe(true);
 		});
 	});
 });

@@ -12,6 +12,7 @@
 /// <reference path="../node_modules/typescript/lib/lib.esnext.promise.d.ts" />
 
 import type { Promisable, PromisableIterable, Unpromise, Item } from "./types";
+import { NestedError } from "@robertfischer/ts-nested-error";
 
 import _defer from "lodash/defer";
 import _delay from "lodash/delay";
@@ -565,13 +566,28 @@ export default class FunPromise<T> implements Promise<T> {
 	}
 
 	/**
-	 * Access the value without changing it.  Note that if the callback rejects (ie: throws),
+	 * Access the resolved value without changing it.  Note that if the callback rejects (ie: throws),
 	 * then the resulting promise will be rejected.
 	 */
 	tap(callback: (val: T) => Promisable<void>): FunPromise<T> {
 		return this.then(async (val) => {
 			await callback(val);
 			return val;
+		});
+	}
+
+	/**
+	 * Access the rejection reason without changing it.  Note that if the callback itself rejects (ie: throws),
+	 * both rejection reasons will be capture in a single [[`NestedError`]].
+	 */
+	tapCatch(callback: (reason: unknown) => Promisable<void>): FunPromise<T> {
+		return this.catch(async (err) => {
+			try {
+				await callback(err);
+			} catch (err2) {
+				throw new NestedError("Error thrown in 'tapCatch'", err, err2);
+			}
+			throw err;
 		});
 	}
 
