@@ -40,6 +40,9 @@ jobs:
       - uses: actions/setup-node@v2-beta
         with:
           node-version: ${{ matrix.node }}
+      - run: ./script/bootstrap
+        env:
+          NONINTERACTIVE: true
       - run: yarn install --frozen-lockfile
       - run: yarn build
       - run: yarn test
