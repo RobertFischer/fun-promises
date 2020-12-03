@@ -40,6 +40,8 @@ jobs:
         run: yarn test
       - name: Polish Files
         run: yarn polish
+      - name: Bundle Distributions
+        run: ./script/bundle-dists
       - name: Perform Semantic Release
         id: release
         uses: cycjimmy/semantic-release-action@v2.5.3

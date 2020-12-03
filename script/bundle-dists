@@ -1,0 +1,15 @@
+#!/bin/bash
+
+set -o pipefail
+set -exu
+
+cd "$(dirname "$0")/../dist"
+DISTDIR="$(pwd)"
+
+find . -type d -name 'node_modules' -ls -exec rm -r \{\} \;
+find . -type f -name 'index.js' -exec dirname \{\} \; | while read
+do
+	cd "$DISTDIR/$REPLY"
+	DISTNAME="$(basename $REPLY)"
+	tar cJvf "$DISTDIR/$DISTNAME.tar.xz" .
+done
