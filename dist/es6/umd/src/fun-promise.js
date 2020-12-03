@@ -1,16 +1,19 @@
-/** @format */
+/**
+ * @format
+ */
 (function (factory) {
     if (typeof module === "object" && typeof module.exports === "object") {
         var v = factory(require, exports);
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "tslib", "lodash/defer", "lodash/delay", "lodash/filter", "lodash/flatten", "lodash/identity", "lodash/isEmpty", "lodash/isError", "lodash/isFunction", "lodash/isNil", "lodash/map", "lodash/negate", "lodash/noop", "lodash/toArray"], factory);
+        define(["require", "exports", "tslib", "@robertfischer/ts-nested-error", "lodash/defer", "lodash/delay", "lodash/filter", "lodash/flatten", "lodash/identity", "lodash/isEmpty", "lodash/isError", "lodash/isFunction", "lodash/isNil", "lodash/map", "lodash/negate", "lodash/noop", "lodash/toArray"], factory);
     }
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     const tslib_1 = require("tslib");
+    const ts_nested_error_1 = require("@robertfischer/ts-nested-error");
     const defer_1 = require("lodash/defer");
     const delay_1 = require("lodash/delay");
     const filter_1 = require("lodash/filter");
@@ -27,7 +30,7 @@
     // import Debug from "debug";
     // const debug = Debug("fun-promises");
     /**
-     * The class that you should use instead of [[`Promise`]].  It implements the `Promise` API, so it should be a drop-in replacement.
+     * The class that you should use instead of `Promise`.  It implements the `Promise` API, so it should be a drop-in replacement.
      */
     class FunPromise {
         /**
@@ -58,7 +61,7 @@
         }
         /**
          * Takes a value (or a promise of a value) and returns a promise rejecting
-         * with that value, after unwrapping as many layers of [[`PromiseLike`]]
+         * with that value, after unwrapping as many layers of `PromiseLike`
          * wrappers as necessary.
          */
         static reject(value) {
@@ -66,7 +69,7 @@
         }
         /**
          * Takes a value (or a promise of a value) and returns a promise rejecting
-         * with that value, after unwrapping as many layers of [[`PromiseLike`]]
+         * with that value, after unwrapping as many layers of `PromiseLike`
          * wrappers as necessary.  This disregards any existing status.
          */
         reject(value) {
@@ -105,7 +108,7 @@
             });
         }
         /**
-         * Unwraps layers of [[`PromiseLike`]] wrappers as necessary.
+         * Unwraps layers of `PromiseLike` wrappers as necessary.
          *
          * This behavior is actually part of the Promise/A+ spec, but the type system struggles with that fact,
          * so this method is a workaround.
@@ -118,7 +121,7 @@
             return this;
         }
         /**
-         * Coerces the resolve value (which must be an [[`Iterable`]]) into an array.  The `Iterable` requirement
+         * Coerces the resolve value (which must be an `Iterable`) into an array.  The `Iterable` requirement
          * comes from the `Item<T>` return value: `Item<T>` is equivalent to `never` if `T` is not an `Iterable`.
          *
          * Note that this function does *NOT* resolve the items within the array unless you pass the first argument
@@ -172,7 +175,7 @@
             return FunPromise.resolve(values).map(mapper);
         }
         /**
-         * Required to implement [[`Promise`]], but you almost certainly don't care about it.
+         * Required to implement `Promise`, but you almost certainly don't care about it.
          *
          * All the same, it returns the string tag of the underlying promise.
          */
@@ -286,6 +289,54 @@
          */
         static flatMap(values, mapper) {
             return FunPromise.resolve(values).flatMap(mapper);
+        }
+        /**
+         * Access the resolved value without changing it.  Note that if the callback rejects (ie: throws),
+         * then the resulting promise will be rejected.
+         */
+        tap(callback) {
+            return this.then((val) => tslib_1.__awaiter(this, void 0, void 0, function* () {
+                yield callback(val);
+                return val;
+            }));
+        }
+        /**
+         * Access the rejection reason without changing it.  Note that if the callback itself rejects (ie: throws),
+         * both rejection reasons will be capture in a single [[`NestedError`]].
+         */
+        tapCatch(callback) {
+            return this.catch((err) => tslib_1.__awaiter(this, void 0, void 0, function* () {
+                try {
+                    yield callback(err);
+                }
+                catch (err2) {
+                    throw new ts_nested_error_1.NestedError("Error thrown in 'tapCatch'", err, err2);
+                }
+                throw err;
+            }));
+        }
+        /**
+         * Given an initial value and an accumulator function, apply the accumlator function to each element of the promise's resolved value,
+         * passing in the current value and the result.  Returns an array with the result of the accumulation.  If any of the promise's values are
+         * rejected, the entire operation will be rejected.
+         *
+         * The resolution order is not guaranteed. The accumulator function will be passed values as those values resolve.
+         */
+        fold(initialValue, accumulator) {
+            return this.arrayify().then((ary) => tslib_1.__awaiter(this, void 0, void 0, function* () {
+                let memoPromise = FunPromise.resolve(initialValue);
+                yield Promise.all(map_1.default(ary, (promisableValue) => tslib_1.__awaiter(this, void 0, void 0, function* () {
+                    const value = yield promisableValue;
+                    memoPromise = memoPromise.then((memo) => accumulator(memo, value));
+                })));
+                return yield memoPromise;
+            }));
+        }
+        /**
+         * Equivalent to `FunPromise.resolve(values).fold(initialValue, accumulator)`.
+         */
+        static fold(values, initialValue, accumulator) {
+            return FunPromise.resolve(values).fold(initialValue, accumulator);
         }
     }
     exports.default = FunPromise;

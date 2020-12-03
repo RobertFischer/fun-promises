@@ -1,4 +1,11 @@
-/** @format */
+/**
+ * @format
+ *
+ * These are where we put all the type aliases, interfaces, and enumerations that are shared
+ * between multiple things, or may be useful to use without us.
+ *
+ * @packageDocumentation
+ */
 define("src/types", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -35,14 +42,16 @@ define("src/types", ["require", "exports"], function (require, exports) {
         PromiseState["Cancelled"] = "cancelled";
     })(PromiseState = exports.PromiseState || (exports.PromiseState = {}));
 });
-/** @format */
-define("src/fun-promise", ["require", "exports", "tslib", "lodash/defer", "lodash/delay", "lodash/filter", "lodash/flatten", "lodash/identity", "lodash/isEmpty", "lodash/isFunction", "lodash/isNil", "lodash/map", "lodash/negate", "lodash/isError", "lodash/noop", "lodash/toArray"], function (require, exports, tslib_1, defer_1, delay_1, filter_1, flatten_1, identity_1, isEmpty_1, isFunction_1, isNil_1, map_1, negate_1) {
+/**
+ * @format
+ */
+define("src/fun-promise", ["require", "exports", "tslib", "@robertfischer/ts-nested-error", "lodash/defer", "lodash/delay", "lodash/filter", "lodash/flatten", "lodash/identity", "lodash/isEmpty", "lodash/isFunction", "lodash/isNil", "lodash/map", "lodash/negate", "lodash/isError", "lodash/noop", "lodash/toArray"], function (require, exports, tslib_1, ts_nested_error_1, defer_1, delay_1, filter_1, flatten_1, identity_1, isEmpty_1, isFunction_1, isNil_1, map_1, negate_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     // import Debug from "debug";
     // const debug = Debug("fun-promises");
     /**
-     * The class that you should use instead of [[`Promise`]].  It implements the `Promise` API, so it should be a drop-in replacement.
+     * The class that you should use instead of `Promise`.  It implements the `Promise` API, so it should be a drop-in replacement.
      */
     class FunPromise {
         /**
@@ -73,7 +82,7 @@ define("src/fun-promise", ["require", "exports", "tslib", "lodash/defer", "lodas
         }
         /**
          * Takes a value (or a promise of a value) and returns a promise rejecting
-         * with that value, after unwrapping as many layers of [[`PromiseLike`]]
+         * with that value, after unwrapping as many layers of `PromiseLike`
          * wrappers as necessary.
          */
         static reject(value) {
@@ -81,7 +90,7 @@ define("src/fun-promise", ["require", "exports", "tslib", "lodash/defer", "lodas
         }
         /**
          * Takes a value (or a promise of a value) and returns a promise rejecting
-         * with that value, after unwrapping as many layers of [[`PromiseLike`]]
+         * with that value, after unwrapping as many layers of `PromiseLike`
          * wrappers as necessary.  This disregards any existing status.
          */
         reject(value) {
@@ -120,7 +129,7 @@ define("src/fun-promise", ["require", "exports", "tslib", "lodash/defer", "lodas
             });
         }
         /**
-         * Unwraps layers of [[`PromiseLike`]] wrappers as necessary.
+         * Unwraps layers of `PromiseLike` wrappers as necessary.
          *
          * This behavior is actually part of the Promise/A+ spec, but the type system struggles with that fact,
          * so this method is a workaround.
@@ -133,7 +142,7 @@ define("src/fun-promise", ["require", "exports", "tslib", "lodash/defer", "lodas
             return this;
         }
         /**
-         * Coerces the resolve value (which must be an [[`Iterable`]]) into an array.  The `Iterable` requirement
+         * Coerces the resolve value (which must be an `Iterable`) into an array.  The `Iterable` requirement
          * comes from the `Item<T>` return value: `Item<T>` is equivalent to `never` if `T` is not an `Iterable`.
          *
          * Note that this function does *NOT* resolve the items within the array unless you pass the first argument
@@ -187,7 +196,7 @@ define("src/fun-promise", ["require", "exports", "tslib", "lodash/defer", "lodas
             return FunPromise.resolve(values).map(mapper);
         }
         /**
-         * Required to implement [[`Promise`]], but you almost certainly don't care about it.
+         * Required to implement `Promise`, but you almost certainly don't care about it.
          *
          * All the same, it returns the string tag of the underlying promise.
          */
@@ -301,6 +310,54 @@ define("src/fun-promise", ["require", "exports", "tslib", "lodash/defer", "lodas
          */
         static flatMap(values, mapper) {
             return FunPromise.resolve(values).flatMap(mapper);
+        }
+        /**
+         * Access the resolved value without changing it.  Note that if the callback rejects (ie: throws),
+         * then the resulting promise will be rejected.
+         */
+        tap(callback) {
+            return this.then((val) => tslib_1.__awaiter(this, void 0, void 0, function* () {
+                yield callback(val);
+                return val;
+            }));
+        }
+        /**
+         * Access the rejection reason without changing it.  Note that if the callback itself rejects (ie: throws),
+         * both rejection reasons will be capture in a single [[`NestedError`]].
+         */
+        tapCatch(callback) {
+            return this.catch((err) => tslib_1.__awaiter(this, void 0, void 0, function* () {
+                try {
+                    yield callback(err);
+                }
+                catch (err2) {
+                    throw new ts_nested_error_1.NestedError("Error thrown in 'tapCatch'", err, err2);
+                }
+                throw err;
+            }));
+        }
+        /**
+         * Given an initial value and an accumulator function, apply the accumlator function to each element of the promise's resolved value,
+         * passing in the current value and the result.  Returns an array with the result of the accumulation.  If any of the promise's values are
+         * rejected, the entire operation will be rejected.
+         *
+         * The resolution order is not guaranteed. The accumulator function will be passed values as those values resolve.
+         */
+        fold(initialValue, accumulator) {
+            return this.arrayify().then((ary) => tslib_1.__awaiter(this, void 0, void 0, function* () {
+                let memoPromise = FunPromise.resolve(initialValue);
+                yield Promise.all(map_1.default(ary, (promisableValue) => tslib_1.__awaiter(this, void 0, void 0, function* () {
+                    const value = yield promisableValue;
+                    memoPromise = memoPromise.then((memo) => accumulator(memo, value));
+                })));
+                return yield memoPromise;
+            }));
+        }
+        /**
+         * Equivalent to `FunPromise.resolve(values).fold(initialValue, accumulator)`.
+         */
+        static fold(values, initialValue, accumulator) {
+            return FunPromise.resolve(values).fold(initialValue, accumulator);
         }
     }
     exports.default = FunPromise;
@@ -489,17 +546,25 @@ define("src/deferral", ["require", "exports", "src/fun-promise", "src/types", "l
     }
     exports.default = Deferral;
 });
-/** @format */
-define("index", ["require", "exports", "tslib", "src/types", "src/fun-promise", "src/deferral"], function (require, exports, tslib_2, types_2, fun_promise_2, deferral_1) {
+/**
+ * /* @format
+ *
+ * @format
+ */
+define("index", ["require", "exports", "tslib", "src/types", "src/deferral", "src/fun-promise"], function (require, exports, tslib_2, types_2, deferral_1, fun_promise_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.Deferral = exports.FunPromise = void 0;
+    /**
+     * Re-exports everything from [`src/types`|_src_types_.html], [`src/fun-promise`|_src_fun-promise_.html], and [`src/deferral`|_src_deferral_.html].
+     *
+     * @packageDocumentation
+     */
     tslib_2.__exportStar(types_2, exports);
-    Object.defineProperty(exports, "FunPromise", { enumerable: true, get: function () { return fun_promise_2.default; } });
-    Object.defineProperty(exports, "Deferral", { enumerable: true, get: function () { return deferral_1.default; } });
+    tslib_2.__exportStar(deferral_1, exports);
+    tslib_2.__exportStar(fun_promise_2, exports);
 });
 /** @format */
-define("src/fun-promise.test", ["require", "exports", "tslib", "src/fun-promise", "lodash"], function (require, exports, tslib_3, fun_promise_3, lodash_1) {
+define("src/fun-promise.test", ["require", "exports", "tslib", "src/fun-promise", "lodash", "@robertfischer/ts-nested-error"], function (require, exports, tslib_3, fun_promise_3, lodash_1, ts_nested_error_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     const tokenPromise = new Promise((resolve) => resolve(true));
@@ -844,6 +909,73 @@ define("src/fun-promise.test", ["require", "exports", "tslib", "src/fun-promise"
                     }));
                 });
             });
+        });
+        describe("tap", () => {
+            it("basically works", () => tslib_3.__awaiter(void 0, void 0, void 0, function* () {
+                let sawTap = false;
+                yield expect(tokenFunPromise.tap((val) => {
+                    expect(val).toBe(true);
+                    sawTap = true;
+                    return false;
+                })).resolves.toBe(true);
+                expect(sawTap).toBe(true);
+            }));
+            it("rejects if it throws an exception", () => tslib_3.__awaiter(void 0, void 0, void 0, function* () {
+                let sawTap = false;
+                yield expect(tokenFunPromise.tap((val) => {
+                    sawTap = true;
+                    throw "BOOM!";
+                })).rejects.toBe("BOOM!");
+                expect(sawTap).toBe(true);
+            }));
+        });
+        describe("fold", () => {
+            lodash_1.default.forEach([true, false], (staticVersion) => {
+                describe(staticVersion ? "static" : "instance", () => {
+                    const defaultValues = [1, 2, 3, 4, 5];
+                    function doFold(values = defaultValues, initialValue = 0, accumulator = (a, b) => a + b) {
+                        if (staticVersion) {
+                            return fun_promise_3.default.fold(values, initialValue, accumulator);
+                        }
+                        else {
+                            return fun_promise_3.default.resolve(values).fold(initialValue, accumulator);
+                        }
+                    }
+                    it("basically works", () => tslib_3.__awaiter(void 0, void 0, void 0, function* () {
+                        const values = [1, 2, 3, 4, 5];
+                        yield expect(doFold()).resolves.toBe(1 + 2 + 3 + 4 + 5);
+                    }));
+                });
+            });
+        });
+        describe("tapCatch", () => {
+            it("basically works", () => tslib_3.__awaiter(void 0, void 0, void 0, function* () {
+                let sawTapCatch = false;
+                yield expect(fun_promise_3.default.reject("BOOM!").tapCatch((e) => {
+                    sawTapCatch = true;
+                    expect(e).toBe("BOOM!");
+                    return "BANG!";
+                })).rejects.toBe("BOOM!");
+                expect(sawTapCatch).toBe(true);
+            }));
+            it("nests explosions", () => tslib_3.__awaiter(void 0, void 0, void 0, function* () {
+                let sawCatch = false;
+                const err1 = new Error("BOOM!");
+                const err2 = new Error("BANG!");
+                yield expect(fun_promise_3.default.reject(err1)
+                    .tapCatch((e) => {
+                    throw err2;
+                })
+                    .catch((e) => {
+                    sawCatch = true;
+                    expect(e).toBeInstanceOf(ts_nested_error_2.NestedError);
+                    expect(e).toHaveProperty("innerErrors");
+                    expect(e.innerErrors).toHaveLength(2);
+                    expect(e.innerErrors).toEqual([err1, err2]);
+                    return "Hello!";
+                })).resolves.toBe("Hello!");
+                expect(sawCatch).toBe(true);
+            }));
         });
     });
 });

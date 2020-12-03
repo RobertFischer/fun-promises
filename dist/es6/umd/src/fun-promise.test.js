@@ -5,7 +5,7 @@
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "tslib", "./fun-promise", "lodash"], factory);
+        define(["require", "exports", "tslib", "./fun-promise", "lodash", "@robertfischer/ts-nested-error"], factory);
     }
 })(function (require, exports) {
     "use strict";
@@ -13,6 +13,7 @@
     const tslib_1 = require("tslib");
     const fun_promise_1 = require("./fun-promise");
     const lodash_1 = require("lodash");
+    const ts_nested_error_1 = require("@robertfischer/ts-nested-error");
     const tokenPromise = new Promise((resolve) => resolve(true));
     const tokenFunPromise = new fun_promise_1.default(tokenPromise);
     describe("FunPromise", () => {
@@ -355,6 +356,73 @@
                     }));
                 });
             });
+        });
+        describe("tap", () => {
+            it("basically works", () => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
+                let sawTap = false;
+                yield expect(tokenFunPromise.tap((val) => {
+                    expect(val).toBe(true);
+                    sawTap = true;
+                    return false;
+                })).resolves.toBe(true);
+                expect(sawTap).toBe(true);
+            }));
+            it("rejects if it throws an exception", () => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
+                let sawTap = false;
+                yield expect(tokenFunPromise.tap((val) => {
+                    sawTap = true;
+                    throw "BOOM!";
+                })).rejects.toBe("BOOM!");
+                expect(sawTap).toBe(true);
+            }));
+        });
+        describe("fold", () => {
+            lodash_1.default.forEach([true, false], (staticVersion) => {
+                describe(staticVersion ? "static" : "instance", () => {
+                    const defaultValues = [1, 2, 3, 4, 5];
+                    function doFold(values = defaultValues, initialValue = 0, accumulator = (a, b) => a + b) {
+                        if (staticVersion) {
+                            return fun_promise_1.default.fold(values, initialValue, accumulator);
+                        }
+                        else {
+                            return fun_promise_1.default.resolve(values).fold(initialValue, accumulator);
+                        }
+                    }
+                    it("basically works", () => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
+                        const values = [1, 2, 3, 4, 5];
+                        yield expect(doFold()).resolves.toBe(1 + 2 + 3 + 4 + 5);
+                    }));
+                });
+            });
+        });
+        describe("tapCatch", () => {
+            it("basically works", () => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
+                let sawTapCatch = false;
+                yield expect(fun_promise_1.default.reject("BOOM!").tapCatch((e) => {
+                    sawTapCatch = true;
+                    expect(e).toBe("BOOM!");
+                    return "BANG!";
+                })).rejects.toBe("BOOM!");
+                expect(sawTapCatch).toBe(true);
+            }));
+            it("nests explosions", () => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
+                let sawCatch = false;
+                const err1 = new Error("BOOM!");
+                const err2 = new Error("BANG!");
+                yield expect(fun_promise_1.default.reject(err1)
+                    .tapCatch((e) => {
+                    throw err2;
+                })
+                    .catch((e) => {
+                    sawCatch = true;
+                    expect(e).toBeInstanceOf(ts_nested_error_1.NestedError);
+                    expect(e).toHaveProperty("innerErrors");
+                    expect(e.innerErrors).toHaveLength(2);
+                    expect(e.innerErrors).toEqual([err1, err2]);
+                    return "Hello!";
+                })).resolves.toBe("Hello!");
+                expect(sawCatch).toBe(true);
+            }));
         });
     });
 });
