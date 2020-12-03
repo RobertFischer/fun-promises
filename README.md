@@ -135,13 +135,6 @@ containing the Typescript compilation based on
 for those environments. All the versions are the exact same code as of this
 writing, so we default Node to using `node/v14`.
 
-#### React Native
-
-Within `./dist/rn` is the result of the Typescript compilation based on
-[the recommended `tsconfig.json` config for React Native](https://github.com/tsconfig/bases#react-native-tsconfigjson).
-This is also referred to under the `reactNative` key in `package.json`, which
-[you should configure in your `metro.config.js` to prefer](https://facebook.github.io/metro/docs/configuration/#resolvermainfields).
-
 #### Browser
 
 The file at `./dist/browser/index.js` is the result of transpiling the result of
