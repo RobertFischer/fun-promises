@@ -75,7 +75,7 @@
 	"scripts": {
 		"test": "jest --detectOpenHandles --forceExit ./*.test.js ./src/*.test.js",
 		"build:docs": "rm -rf ./docs && yarn build:docs:typedocs && yarn build:docs:changelog && yarn build:docs:test && yarn build:docs:coverage && mkdir -p ./dist && tar cavf ./dist/docs.tgz ./docs",
-		"build:docs:typedocs": "typedoc --tsconfig tsconfig.json --gitRevision \"$(git rev-parse HEAD)\"",
+		"build:docs:typedocs": "typedoc --tsconfig tsconfig.json --gitRevision \"$(git rev-parse --short HEAD)\"",
 		"build:docs:changelog": "cp ./CHANGELOG.md ./docs/ || true",
 		"build:docs:test": "yarn test --verbose 2>&1 | tee ./docs/test-results.txt",
 		"build:docs:coverage": "mkdir -p ./docs && npx browserslist --update-db && (( echo 'Explicitly Supported Browsers (MUST support Promises)' && npx browserslist && npx browserslist --coverage && npx browserslist --coverage=US && echo 'Note that functionally equivalent but unlisted browsers do not count in these stats, so real coverage is much higher than the percentages reported.' ) | tee ./docs/coverage.txt)",
