@@ -38,6 +38,8 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Run tests
         run: yarn test
+      - name: Polish Files
+        run: yarn polish
       - name: Perform Semantic Release
         id: release
         uses: cycjimmy/semantic-release-action@v2.5.3
