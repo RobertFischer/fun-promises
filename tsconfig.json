@@ -14,8 +14,7 @@
 		"out": "docs",
 		"readme": "README.md",
 		"stripInternal": true,
-		"plugins": ["typedoc-plugin-nojekyll"],
-		"toc": ["EntryClass", "ImportantInterface"]
+		"plugins": ["typedoc-plugin-nojekyll"]
 	},
 	"compilerOptions": {
 		"target": "ESNext",
