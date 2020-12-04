@@ -96,6 +96,15 @@ describe("FunPromise", () => {
 		});
 
 		it("resolves values when called with the sole argument `true`", async () => {
+			await expect(
+				FunPromise.resolve([
+					Promise.resolve(1),
+					FunPromise.resolve(2),
+				]).arrayify(true)
+			).resolves.toEqual([1, 2]);
+		});
+
+		it("rejects values when called with the sole argument `true` and a rejection in the mix", async () => {
 			const rejection = Promise.reject("BOOM!");
 			await expect(
 				FunPromise.resolve([1, 2, rejection]).arrayify(true)
@@ -514,6 +523,26 @@ describe("FunPromise", () => {
 					})
 			).resolves.toBe("Hello!");
 			expect(sawCatch).toBe(true);
+		});
+	});
+
+	describe("tapEach", () => {
+		it("basically works", async () => {
+			const values = [
+				123,
+				Promise.resolve(true),
+				"Hello, Dolly!",
+				null,
+				undefined,
+			];
+			const funPromise = FunPromise.resolve(values);
+			let count = 0;
+			await expect(
+				funPromise.tapEach(() => {
+					count++;
+				})
+			).resolves.toEqual(await Promise.all(values));
+			expect(count).toBe(values.length);
 		});
 	});
 });
