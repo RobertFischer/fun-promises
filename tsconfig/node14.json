@@ -3,6 +3,9 @@
 	"include": ["../index.ts", "../src/**/*"],
 	"compilerOptions": {
 		"outDir": "../dist/node/v14/",
-		"strict": false
+		"strict": false,
+		"noEmit": false,
+		"sourceMap": true,
+		"listEmittedFiles": true
 	}
 }

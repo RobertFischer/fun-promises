@@ -142,6 +142,14 @@ the `ESNext` code above using [Parcel](http://parceljs.org/). The result is a
 single minified file, appropriate for use in a CDN. It exposes the module under
 the global `FunPromise` namespace.
 
+#### React Native
+
+Within `./dist/react-native` is the result of transpiling the result with
+[the recommended `tsconfig.json` configs](https://github.com/tsconfig/bases#react-native-tsconfigjson)
+for React Native. The distribution is specified in `package.json` under the
+`"reactNative"` key,
+[which you can configure Metro to prefer](https://facebook.github.io/metro/docs/configuration/#resolvermainfields).
+
 ### Documentation
 
 The full documentation (including this content) is available on
