@@ -40,6 +40,8 @@ jobs:
         run: yarn test
       - name: Polish Files
         run: yarn polish
+      - name: Build Distributions
+        run: yarn build:dists
       - name: Bundle Distributions
         run: ./script/bundle-dists
       - name: Perform Semantic Release
