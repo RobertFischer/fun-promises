@@ -5,6 +5,9 @@
 		"target": "ES6",
 		"module": "AMD",
 		"isolatedModules": false,
-		"strict": false
+		"strict": false,
+		"noEmit": false,
+		"sourceMap": true,
+		"listEmittedFiles": true
 	}
 }

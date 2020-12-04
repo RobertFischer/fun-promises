@@ -5,6 +5,9 @@
 		"target": "ES6",
 		"module": "UMD",
 		"resolveJsonModule": false,
-		"isolatedModules": false
+		"isolatedModules": false,
+		"noEmit": false,
+		"sourceMap": true,
+		"listEmittedFiles": true
 	}
 }

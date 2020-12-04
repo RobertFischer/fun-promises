@@ -1,8 +1,8 @@
 {
-	"extends": "@tsconfig/node12/tsconfig.json",
+	"extends": "@tsconfig/react-native/tsconfig.json",
 	"include": ["../index.ts", "../src/**/*"],
 	"compilerOptions": {
-		"outDir": "../dist/node/v12/",
+		"outDir": "../dist/react-native",
 		"strict": false,
 		"noEmit": false,
 		"sourceMap": true,

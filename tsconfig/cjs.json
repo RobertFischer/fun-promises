@@ -4,6 +4,9 @@
 		"outDir": "../dist/es6/cjs",
 		"target": "ES6",
 		"module": "CommonJS",
-		"strict": false
+		"strict": false,
+		"noEmit": false,
+		"sourceMap": true,
+		"listEmittedFiles": true
 	}
 }
