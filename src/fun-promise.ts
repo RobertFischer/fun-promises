@@ -592,6 +592,16 @@ export default class FunPromise<T> implements Promise<T> {
 	}
 
 	/**
+	 * Access each of the resolved values of a resolved iterable without changing it.  Note that if the callback rejects (ie: throws),
+	 * then the resulting promise will be rejected.
+	 */
+	tapEach(callback: (val: Item<T>) => Promisable<void>): FunPromise<Item<T>[]> {
+		return this.arrayify(true).tap(async (ary) => {
+			await Promise.all(_map(ary, callback));
+		});
+	}
+
+	/**
 	 * Given an initial value and an accumulator function, apply the accumlator function to each element of the promise's resolved value,
 	 * passing in the current value and the result.  Returns an array with the result of the accumulation.  If any of the promise's values are
 	 * rejected, the entire operation will be rejected.
