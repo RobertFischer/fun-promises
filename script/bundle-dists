@@ -11,5 +11,5 @@ find . -type f -name 'index.js' -exec dirname \{\} \; | while read
 	do
 		cd "$DISTDIR/$REPLY"
 		DISTNAME="$(basename $REPLY)"
-		tar -c -v --xz --options xz:compression-level=9 -f "$DISTDIR/$DISTNAME.tar.xz" .
+		gtar -c -v --xz -f "$DISTDIR/$DISTNAME.tar.xz" .
 	done
