@@ -5,5 +5,5 @@ set -exu
 
 which brew || ( timeout 5m /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" ) || ( echo "Please install Homebrew" ; exit -1 )
 which yarn || ( brew install yarn ) || ( npm install -g yarn )
-which xz || brew install xz
-which gtar || brew install coreutils
+which xz || ( brew install xz )
+which gtar || ( tar --version | grep '(GNU tar)' ) || ( brew install coreutils )

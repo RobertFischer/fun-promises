@@ -6,10 +6,12 @@ set -exu
 cd "$(dirname "$0")/../dist"
 DISTDIR="$(pwd)"
 
+GTAR="$(which gtar || which tar)"
+
 find . -type d -name 'node_modules' -ls -exec rm -r \{\} \;
 find . -type f -name 'index.js' -exec dirname \{\} \; | while read
 	do
 		cd "$DISTDIR/$REPLY"
 		DISTNAME="$(basename $REPLY)"
-		gtar -c -v --xz -f "$DISTDIR/$DISTNAME.tar.xz" .
+		"$GTAR" -c -v --xz -f "$DISTDIR/$DISTNAME.tar.xz" .
 	done
