@@ -44,5 +44,5 @@ jobs:
         env:
           NONINTERACTIVE: true
       - run: yarn install --frozen-lockfile
-      - run: yarn build
       - run: yarn test
+      - run: yarn build
