@@ -2,7 +2,7 @@
 
 import FunPromise from "./fun-promise";
 import _ from "lodash";
-import { NestedError } from "@robertfischer/ts-nested-error";
+import { NestedError } from "ts-nested-error";
 
 const tokenPromise = new Promise((resolve) => resolve(true));
 const tokenFunPromise = new FunPromise(tokenPromise);
@@ -516,6 +516,7 @@ describe("FunPromise", () => {
 					.catch((e) => {
 						sawCatch = true;
 						expect(e).toBeInstanceOf(NestedError);
+						expect(e).toHaveProperty("message", "Error thrown in 'tapCatch'");
 						expect(e).toHaveProperty("innerErrors");
 						expect(e.innerErrors).toHaveLength(2);
 						expect(e.innerErrors).toEqual([err1, err2]);
@@ -543,6 +544,43 @@ describe("FunPromise", () => {
 				})
 			).resolves.toEqual(await Promise.all(values));
 			expect(count).toBe(values.length);
+		});
+	});
+
+	describe("wrapError", () => {
+		it("basically works", async () => {
+			const reason = "BOOM!";
+			await expect(
+				FunPromise.reject(reason).wrapError("BANG!")
+			).rejects.toHaveProperty("message", "BANG!");
+			await expect(
+				FunPromise.reject(reason).wrapError("BANG!")
+			).rejects.toHaveProperty("innerError");
+		});
+	});
+
+	describe("wrapErrors", () => {
+		it("basically works", async () => {
+			const err1 = new Error("BOOM!");
+			const err2 = new Error("BANG!");
+			await expect(
+				FunPromise.resolve([Promise.reject(err1), Promise.reject(err2)])
+					.wrapErrors("ERRORS!")
+					.catch((e) => {
+						expect(e).toBeInstanceOf(NestedError);
+						expect(e).toHaveProperty("message", "ERRORS!");
+						expect(e.innerErrors).toHaveLength(2);
+						expect(e.innerErrors).toEqual([err1, err2]);
+						return true;
+					})
+			).resolves.toBe(true);
+		});
+
+		it("doesn't do anything if there is no error", async () => {
+			const values = [1, 2, 3, true, false, null, undefined];
+			await expect(
+				FunPromise.resolve(values).wrapErrors("ERRORS!")
+			).resolves.toEqual(values);
 		});
 	});
 });
