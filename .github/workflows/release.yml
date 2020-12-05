@@ -64,7 +64,7 @@ jobs:
       - uses: actions/setup-node@v2-beta
         with:
           node-version: "14"
-      - run: git checkout HEAD^
+      - run: git pull origin
       - run: ./script/bootstrap
         env:
           NONINTERACTIVE: true
