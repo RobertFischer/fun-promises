@@ -20,8 +20,26 @@ npm install --save fun-promises
 
 #### CDN for Browsers
 
+The following URL contains a script which will set the `FunPromise` global to be
+an object containing the various exports of
+[`index.ts`](https://robertfischer.github.io/fun-promises/modules/_index_.html).
+
 ```
 https://unpkg.com/browse/fun-promises@latest/dist/browser/index.js
+```
+
+### Usage
+
+#### ES Modules
+
+```
+import FunPromise from "fun-promises";
+```
+
+#### CJS
+
+```
+const { FunPromise } = require("fun-promises");
 ```
 
 ### What This Is Not
