@@ -8,6 +8,7 @@ DISTDIR="$(pwd)"
 
 GTAR="$(which gtar || which tar)"
 
+find . -type f -name '*.test.*' -ls -exec rm -r \{\} \;
 find . -type d -name 'node_modules' -ls -exec rm -r \{\} \;
 find . -type f -name 'index.js' -exec dirname \{\} \; | while read
 	do
