@@ -1,7 +1,7 @@
 $ jest --detectOpenHandles --forceExit ./*.test.js ./src/*.test.js --verbose
-PASS src/fun-promise.test.js (6.786 s)
+PASS src/fun-promise.test.js (7.153 s)
   FunPromise
-    ✓ can be constructed and resolved (3 ms)
+    ✓ can be constructed and resolved (4 ms)
     resolve
       static
         resolves correctly
@@ -11,86 +11,86 @@ PASS src/fun-promise.test.js (6.786 s)
       instance
         resolves correctly
           ✓ with a value (1 ms)
-          ✓ without a value (10 ms)
-          ✓ rejects when provided a rejection (1 ms)
+          ✓ without a value
+          ✓ rejects when provided a rejection
     then
-      ✓ works without onrejected (1 ms)
+      ✓ works without onrejected
     catch
       ✓ handles rejections (1 ms)
       ✓ returns the error when not passed an argument (1 ms)
     arrayify
       ✓ basically works (2 ms)
       ✓ returns a clone (1 ms)
-      ✓ does not resolve values when called without an argument
+      ✓ does not resolve values when called without an argument (1 ms)
       ✓ resolves values when called with the sole argument `true` (1 ms)
-      ✓ rejects values when called with the sole argument `true` and a rejection in the mix
-      ✓ rejects values in order when called with the arguments `(true, true)` (2 ms)
-      ✓ resolves values in order when called with the arguments `(true, true)` (3 ms)
+      ✓ rejects values when called with the sole argument `true` and a rejection in the mix (1 ms)
+      ✓ rejects values in order when called with the arguments `(true, true)` (1 ms)
+      ✓ resolves values in order when called with the arguments `(true, true)` (4 ms)
     all
       static
         basically works
           ✓ for 0 arguments (1 ms)
           ✓ for 1 arguments (1 ms)
           ✓ for 2 arguments (1 ms)
-          ✓ for 3 arguments
+          ✓ for 3 arguments (1 ms)
           ✓ for 4 arguments (2 ms)
           ✓ for 5 arguments (1 ms)
-          ✓ for 6 arguments
+          ✓ for 6 arguments (1 ms)
           ✓ for 7 arguments
-          ✓ for 8 arguments (1 ms)
+          ✓ for 8 arguments (10 ms)
           ✓ for 9 arguments (1 ms)
       instance
         basically works
           ✓ for 0 arguments (1 ms)
-          ✓ for 1 arguments
-          ✓ for 2 arguments (2 ms)
+          ✓ for 1 arguments (1 ms)
+          ✓ for 2 arguments (1 ms)
           ✓ for 3 arguments (1 ms)
-          ✓ for 4 arguments
+          ✓ for 4 arguments (1 ms)
           ✓ for 5 arguments (1 ms)
-          ✓ for 6 arguments (1 ms)
-          ✓ for 7 arguments (6 ms)
-          ✓ for 8 arguments
+          ✓ for 6 arguments
+          ✓ for 7 arguments (1 ms)
+          ✓ for 8 arguments (1 ms)
           ✓ for 9 arguments (1 ms)
     try
       ✓ basically works (1 ms)
-      ✓ works with one argument (1 ms)
-      ✓ explodes properly
+      ✓ works with one argument
+      ✓ explodes properly (1 ms)
     map
       static
-        ✓ basically works (1 ms)
+        ✓ basically works (2 ms)
         ✓ works with some test values (1 ms)
       instance
-        ✓ basically works
+        ✓ basically works (1 ms)
         ✓ works with some test values (1 ms)
     Symbol.toStringTag
       ✓ is the same as the promise passed in (1 ms)
     finally
       ✓ returns the same promise when given no arguments (1 ms)
-      ✓ executes on resolution
+      ✓ executes on resolution (1 ms)
       ✓ executes on rejection (1 ms)
     reject
       static
-        ✓ rejects correctly (1 ms)
+        ✓ rejects correctly
         ✓ doesn't change the object that is rejected (1 ms)
       instance
-        ✓ rejects correctly
+        ✓ rejects correctly (1 ms)
         ✓ doesn't change the object that is rejected (1 ms)
     coalesce
       ✓ basically works (1 ms)
-      ✓ returns the first resolving value (1011 ms)
-      ✓ returns the value that passes the test (1 ms)
-      ✓ throws the error if nothing passes the test (1 ms)
-      ✓ punts appropriately after the first resolution (1 ms)
+      ✓ returns the first resolving value (1012 ms)
+      ✓ returns the value that passes the test (2 ms)
+      ✓ throws the error if nothing passes the test (2 ms)
+      ✓ punts appropriately after the first resolution (2 ms)
     delay
       static
         When requesting a delay of -1000 milliseconds
           basically works
-            ✓ with no arg (1 ms)
-            ✓ with one arg (1 ms)
+            ✓ with no arg (2 ms)
+            ✓ with one arg (2 ms)
         When requesting a delay of -1 milliseconds
           basically works
             ✓ with no arg (1 ms)
-            ✓ with one arg (1 ms)
+            ✓ with one arg (7 ms)
         When requesting a delay of 0 milliseconds
           basically works
             ✓ with no arg (1 ms)
@@ -101,17 +101,17 @@ PASS src/fun-promise.test.js (6.786 s)
             ✓ with one arg (2 ms)
         When requesting a delay of 1000 milliseconds
           basically works
-            ✓ with no arg
-            ✓ with one arg (1000 ms)
+            ✓ with no arg (1 ms)
+            ✓ with one arg (1001 ms)
       instance
         When requesting a delay of -1000 milliseconds
           basically works
-            ✓ with no arg (1 ms)
+            ✓ with no arg (2 ms)
             ✓ with one arg (2 ms)
         When requesting a delay of -1 milliseconds
           basically works
-            ✓ with no arg
-            ✓ with one arg (2 ms)
+            ✓ with no arg (1 ms)
+            ✓ with one arg (1 ms)
         When requesting a delay of 0 milliseconds
           basically works
             ✓ with no arg
@@ -128,7 +128,7 @@ PASS src/fun-promise.test.js (6.786 s)
       ✓ basically works (1 ms)
     filter
       static
-        ✓ basically works (2 ms)
+        ✓ basically works (3 ms)
       instance
         ✓ basically works (2 ms)
     flatMap
@@ -146,7 +146,7 @@ PASS src/fun-promise.test.js (6.786 s)
         ✓ basically works (1 ms)
     tapCatch
       ✓ basically works (1 ms)
-      ✓ nests explosions (3 ms)
+      ✓ nests explosions (4 ms)
     tapEach
       ✓ basically works (1 ms)
 
@@ -173,5 +173,5 @@ Lines        : 100% ( 98/98 )
 Test Suites: 2 passed, 2 total
 Tests:       91 passed, 91 total
 Snapshots:   0 total
-Time:        7.063 s
+Time:        7.455 s
 Ran all test suites matching /.\/assumptions.test.js|.\/src\/fun-promise.test.js/i.
