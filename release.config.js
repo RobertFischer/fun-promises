@@ -4,18 +4,8 @@ const _ = require("lodash");
 const path = require("path");
 const { name } = require("./package.json");
 
-function readDistPath(file, prop = "outDir") {
-	return path.relative(
-		__dirname,
-		path.resolve(
-			"./tsconfig",
-			require(`./tsconfig/${file}.json`).compilerOptions[prop]
-		)
-	);
-}
-
 const distributions = {
-	NPM: `dist/${name}-v\${nextRelease.version}.tgz`,
+	NPM: `dist/${name}-v*.tgz`,
 	"Browser - Single File": "./dist/browser.index.js.xz",
 	"Browser - with Source Maps": "./dist/browser.tar.xz",
 	"ES6 AMD - Single File": "./dist/amd.index.js.xz",
