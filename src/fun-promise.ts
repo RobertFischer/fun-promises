@@ -12,7 +12,7 @@
 /// <reference path="../node_modules/typescript/lib/lib.esnext.promise.d.ts" />
 
 import type { Promisable, PromisableIterable, Unpromise, Item } from "./types";
-import { NestedError } from "@robertfischer/ts-nested-error";
+import { NestedError } from "ts-nested-error";
 
 import _defer from "lodash/defer";
 import _delay from "lodash/delay";
@@ -86,11 +86,11 @@ export default class FunPromise<T> implements Promise<T> {
 	): FunPromise<TResult1>;
 	then<TResult1 = T, TResult2 = TResult1>(
 		onfulfilled: (value: T) => Promisable<TResult1>,
-		onrejected: (reason: any) => Promisable<TResult2>
+		onrejected: (reason: unknown) => Promisable<TResult2>
 	): FunPromise<TResult1 | TResult2>;
 	then<TResult1 = T, TResult2 = TResult1>(
 		onfulfilled: (value: T) => Promisable<TResult1>,
-		onrejected?: (reason: any) => Promisable<TResult2>
+		onrejected?: (reason: unknown) => Promisable<TResult2>
 	): FunPromise<TResult1 | TResult2> {
 		if (_isNil(onrejected)) {
 			return new FunPromise(this.wrapped.then(onfulfilled));
@@ -100,12 +100,14 @@ export default class FunPromise<T> implements Promise<T> {
 	}
 
 	/**
-	 * Attaches a callback for only the rejection of the Promise.
+	 * Attaches a callback for only the rejection of the Promise.  If the callback throws, then throws a [[`NestedError`]] with
+	 * both the original rejection reason and the new thrown value.
+	 *
 	 * @param onrejected The callback to execute when the Promise is rejected.
 	 * @returns A Promise for the completion of the callback.
 	 */
 	catch<TResult = never>(
-		onrejected: (reason: any) => Promisable<TResult> = _identity
+		onrejected: (reason: unknown) => Promisable<TResult> = _identity
 	): FunPromise<T | TResult> {
 		return new FunPromise(this.wrapped.catch(onrejected));
 	}
@@ -445,7 +447,7 @@ export default class FunPromise<T> implements Promise<T> {
 		test: (item: T) => Promisable<boolean> = _negate(_isNil)
 	): FunPromise<T> {
 		let resolved = false;
-		let lastSeenReason = new Error("No values left after coalescing");
+		let lastSeenReason: unknown = new Error("No values left after coalescing");
 		let resolveValue;
 		return FunPromise.map(fns, (fn) =>
 			FunPromise.try(fn)
@@ -633,5 +635,30 @@ export default class FunPromise<T> implements Promise<T> {
 		accumulator: (memo: T2, it: T) => Promisable<T2>
 	): FunPromise<T2> {
 		return FunPromise.resolve(values).fold(initialValue, accumulator);
+	}
+
+	/**
+	 * Handles rejections like 'catch', but wraps them in a [[`NestedError`]] with the given message.
+	 */
+	wrapError(msg: string): FunPromise<T> {
+		return this.catch(NestedError.rethrow(msg));
+	}
+
+	/**
+	 * Resolves all the elements of the resolved value, which is assumed to be an `Iterable`.  If any
+	 * of the values reject, all the reasons are collected and wrapped in a [[`NestedError`]].
+	 */
+	wrapErrors(msg: string): FunPromise<Item<T>[]> {
+		return this.arrayify().then(async (ary) => {
+			let errors = [];
+			await Promise.all(
+				_map(ary, (val) => Promise.resolve(val).catch((e) => errors.push(e)))
+			);
+			if (_isEmpty(errors)) {
+				return ary;
+			} else {
+				throw new NestedError(msg, ...errors);
+			}
+		});
 	}
 }
