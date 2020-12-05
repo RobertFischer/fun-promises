@@ -16,10 +16,10 @@ function readDistPath(file, prop = "outDir") {
 
 const distributions = {
 	NPM: `dist/${name}-v\${nextRelease.version}.tgz`,
-	"Browser (Single File)": "./dist/browser/index.js",
-	"Browser (w/Source Maps)": "./dist/browser.tar.xz",
-	"ES6 AMD (Single File)": "./dist/es6/amd/index.js",
-	"ES6 AMD (w/Source Maps)": "./dist/amd.tar.xz",
+	"Browser - Single File": "./dist/browser.index.js.xz",
+	"Browser - with Source Maps": "./dist/browser.tar.xz",
+	"ES6 AMD - Single File": "./dist/amd.index.js.xz",
+	"ES6 AMD - with Source Maps": "./dist/amd.tar.xz",
 	"ES6 CJS": "./dist/cjs.tar.xz",
 	"ES6 ESM": "./dist/esm.tar.xz",
 	"ES6 UMD": "./dist/umd.tar.xz",

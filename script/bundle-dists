@@ -13,5 +13,6 @@ find . -type f -name 'index.js' -exec dirname \{\} \; | while read
 	do
 		cd "$DISTDIR/$REPLY"
 		DISTNAME="$(basename $REPLY)"
+		"$GTAR" -c -v --xz -f "$DISTDIR/$DISTNAME.index.js.xz" ./index.js
 		"$GTAR" -c -v --xz -f "$DISTDIR/$DISTNAME.tar.xz" .
 	done
