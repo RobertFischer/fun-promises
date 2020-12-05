@@ -3,7 +3,9 @@
  */
 
 /**
- * Re-exports everything from [`src/types`|_src_types_.html], [`src/fun-promise`|_src_fun-promise_.html], and [`src/deferral`|_src_deferral_.html].
+ * Re-exports everything from [`src/types`|https://robertfischer.github.io/fun-promises/modules/_src_types_.html],
+ * [`src/fun-promise`|https://robertfischer.github.io/fun-promises/modules/_src_fun_promise_.html], and
+ * [`src/deferral`|https://robertfischer.github.io/fun-promises/modules/_src_deferral_.html].
  *
  * @packageDocumentation
  */
