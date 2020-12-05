@@ -4,6 +4,26 @@
 
 ## A library for making Promises more friendly, fluent, and fun(ctional).
 
+### Install
+
+#### Yarn
+
+```
+yarn add fun-promises
+```
+
+#### npm
+
+```
+npm install --save fun-promises
+```
+
+#### CDN for Browsers
+
+```
+https://unpkg.com/browse/fun-promises@latest/dist/browser/index.js
+```
+
 ### What This Is Not
 
 This is _not_ an implementation of [Promises/A+](https://promisesaplus.com/). It
