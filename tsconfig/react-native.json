@@ -1,6 +1,6 @@
 {
 	"extends": "@tsconfig/react-native/tsconfig.json",
-	"include": ["../index.ts", "../src/**/*"],
+	"include": ["../index.ts", "../src/**/*.ts"],
 	"compilerOptions": {
 		"outDir": "../dist/react-native",
 		"strict": false,
