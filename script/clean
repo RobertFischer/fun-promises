@@ -5,4 +5,6 @@ set -exu
 
 cd "$(dirname "$0")/.."
 
-rm -rvf index.js ./index.d.ts ./*.map ./lib/*.js ./lib/*.d.ts ./lib/*.map dist docs
+git restore docs
+git restore dist
+rm -rvf index.js ./index.d.ts ./*.map ./lib/*.js ./lib/*.d.ts ./lib/*.map
