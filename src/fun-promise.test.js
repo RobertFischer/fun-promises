@@ -12,24 +12,32 @@ describe("FunPromise", () => {
 		await expect(new FunPromise(tokenPromise)).resolves.toBe(true);
 	});
 
-	describe("resolve", () => {
+	describe("resolve/return", () => {
 		_.forEach(
 			{ static: FunPromise, instance: tokenFunPromise },
-			(impl, name) => {
-				describe(name, () => {
-					describe("resolves correctly", () => {
-						it("with a value", async () => {
-							await expect(impl.resolve(tokenPromise)).resolves.toBe(true);
-						});
+			(impl, implName) => {
+				_.forEach(["resolve", "return"], (methodName) => {
+					describe(methodName, () => {
+						describe(implName, () => {
+							describe("resolves correctly", () => {
+								function doResolve(value) {
+									return impl[methodName](value);
+								}
 
-						it("without a value", async () => {
-							await expect(impl.resolve()).resolves.toBeNil();
-						});
+								it("with a value", async () => {
+									await expect(doResolve(tokenPromise)).resolves.toBe(true);
+								});
 
-						it("rejects when provided a rejection", async () => {
-							await expect(impl.resolve(Promise.reject("BOOM!"))).rejects.toBe(
-								"BOOM!"
-							);
+								it("without a value", async () => {
+									await expect(doResolve()).resolves.toBeNil();
+								});
+
+								it("rejects when provided a rejection", async () => {
+									await expect(doResolve(Promise.reject("BOOM!"))).rejects.toBe(
+										"BOOM!"
+									);
+								});
+							});
 						});
 					});
 				});
