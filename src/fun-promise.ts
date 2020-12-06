@@ -51,10 +51,27 @@ export default class FunPromise<T> implements Promise<T> {
 	/**
 	 * Takes a value (or a promise of a value) and resolves to the new value,
 	 * disregarding any previous resolution value.
-	 *
 	 */
 	resolve<T2 = void>(value?: Promisable<T2>): FunPromise<T2> {
 		return new FunPromise(this.wrapped.then(() => value));
+	}
+
+	/**
+	 * An alias for `resolve` provided for consistency with the instance `return` method.
+	 *
+	 * @deprecated Use `resolve` instead.
+	 */
+	static return<T = void>(value?: Promisable<T>): FunPromise<T> {
+		return FunPromise.resolve(value);
+	}
+
+	/**
+	 * An alias for `resolve` provided for compatibility with [the Bluebird API|http://bluebirdjs.com/docs/api/return.html].
+	 *
+	 * @deprecated Use `resolve` instead.
+	 */
+	return<T2 = void>(value?: Promisable<T2>): FunPromise<T2> {
+		return this.resolve(value);
 	}
 
 	/**
