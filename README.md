@@ -2,7 +2,7 @@
 
 # fun-promises
 
-A library for making Promises more friendly, fluent, and fun(ctional).
+**A library for making Promises more friendly, fluent, and fun(ctional).**
 
 ## Install
 
