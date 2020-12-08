@@ -1,9 +1,8 @@
 /** @format */
 
 import FunPromise from "./fun-promise";
-import { PromiseState, Promisable } from "./types";
-import _defer from "lodash/defer";
 import _noop from "lodash/noop";
+import type { Promisable } from "./types";
 
 /**
  * A class that is an "inside-out" [[`FunPromise`]]: the `resolve` and `reject` functions
@@ -21,11 +20,6 @@ export default class Deferral<T> {
 	readonly promise: FunPromise<T>;
 
 	/**
-	 * The state of `promise`.
-	 */
-	private stateValue: PromiseState = PromiseState.Pending;
-
-	/**
 	 * The function used to resolve [[`promise`]].
 	 */
 	private resolver: (it: Promisable<T>) => Promisable<void> | null = null;
@@ -36,83 +30,13 @@ export default class Deferral<T> {
 	private rejector: (err: unknown) => Promisable<void> | null = null;
 
 	/**
-	 * Provides the state of `promise`.
-	 */
-	get state() {
-		return this.stateValue;
-	}
-
-	/**
-	 * Whether `promise` is in the process of resolving or rejecting.
-	 */
-	get isSettling() {
-		switch (this.stateValue) {
-			case PromiseState.Resolving:
-				return true;
-			case PromiseState.Rejecting:
-				return true;
-			default:
-				return false;
-		}
-	}
-
-	/**
-	 * Whether `promise` has resolved or rejected.
-	 */
-	get isSettled() {
-		switch (this.stateValue) {
-			case PromiseState.Resolved:
-				return true;
-			case PromiseState.Rejected:
-				return true;
-			default:
-				return false;
-		}
-	}
-
-	/**
-	 * Whether `promise` has resolved.
-	 */
-	get isResolved() {
-		return this.stateValue === PromiseState.Resolved;
-	}
-
-	/**
-	 * Whether `promise` was rejected.
-	 */
-	get isRejected() {
-		return this.stateValue === PromiseState.Rejected;
-	}
-
-	/**
 	 * Resolves `promise` with the given value.
 	 */
 	resolve(it) {
 		const { resolver } = this;
-		if (resolver) {
-			try {
-				const { rejector } = this;
-				this.stateValue = PromiseState.Resolving;
-				_defer(() => {
-					try {
-						resolver(it);
-						this.stateValue = PromiseState.Resolved;
-					} catch (e) {
-						if (rejector) {
-							this.rejector = rejector;
-							this.reject(e);
-						} else {
-							console.warn(`Uncaught exception during resolution`, e);
-						}
-					}
-				});
-			} catch (e) {
-				this.reject(e);
-			} finally {
-				this.resolver = null;
-				this.rejector = null;
-			}
-		}
+		this.resolver = null;
+		this.rejector = null;
+		if (resolver) resolver(it);
 		return this.promise;
 	}
 
@@ -121,21 +45,9 @@ export default class Deferral<T> {
 	 */
 	reject(e: Error) {
 		const { rejector } = this;
-		if (rejector) {
-			try {
-				this.stateValue = PromiseState.Rejecting;
-				_defer(() => {
-					try {
-						rejector(e);
-					} finally {
-						this.stateValue = PromiseState.Rejected;
-					}
-				});
-			} finally {
-				this.resolver = null;
-				this.rejector = null;
-			}
-		}
+		this.resolver = null;
+		this.rejector = null;
+		if (rejector) rejector(e);
 		return this.promise;
 	}
 
@@ -156,7 +68,7 @@ export default class Deferral<T> {
 	 * Whether or not the deferral is cancelled.
 	 */
 	get isCancelled() {
-		return !this.isSettled && this.resolver === null && this.resolver === null;
+		return this.resolver === null;
 	}
 
 	/**
@@ -164,10 +76,11 @@ export default class Deferral<T> {
 	 * never be called. If the deferral is settled or cancelled, this is a noop.
 	 */
 	cancel() {
-		if (this.isSettled) return;
-		this.stateValue = PromiseState.Cancelled;
-		this.resolver = null;
-		this.rejector = null;
-		this.promise.catch(_noop); // Suppress "UnhandledException" errors.
+		if (!this.isCancelled) {
+			this.promise.catch(_noop); // Suppress "UnhandledException" errors.
+			this.reject(new Error(`Deferral was cancelled`));
+			this.resolver = null;
+			this.rejector = null;
+		}
 	}
 }

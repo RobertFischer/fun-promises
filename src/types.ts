@@ -59,39 +59,3 @@ export type PromisableIterable<T> = Promisable<IterableOfPromisables<T>>;
  * although it may produce either values or promises of values or both.
  */
 export type IterableOfPromisables<T> = Iterable<Promisable<T>>;
-
-/**
- * The various states that a promise can be in.
- */
-export enum PromiseState {
-	/**
-	 * The promise is neither resolved nor rejected.
-	 */
-	Pending = "pending",
-
-	/**
-	 * The promise has begun resolving, but is not yet fully resolved.
-	 */
-	Resolving = "resolving",
-
-	/**
-	 * The promise has resolved to a value.
-	 */
-	Resolved = "resolved",
-
-	/**
-	 * The promise has begun rejecting, but is not yet fully rejected.
-	 */
-	Rejecting = "rejecting",
-
-	/**
-	 * The promise has rejected with a cause.
-	 */
-	Rejected = "rejected",
-
-	/**
-	 * The promise has been cancelled, which will prevent its
-	 * callbacks from firing.
-	 */
-	Cancelled = "cancelled",
-}
