@@ -1,0 +1,21 @@
+/**
+ * @format
+ *
+ * These are where we put all the type aliases, interfaces, and enumerations that are shared
+ * between multiple things, or may be useful to use without us.
+ *
+ * @packageDocumentation
+ */
+(function (factory) {
+    if (typeof module === "object" && typeof module.exports === "object") {
+        var v = factory(require, exports);
+        if (v !== undefined) module.exports = v;
+    }
+    else if (typeof define === "function" && define.amd) {
+        define(["require", "exports"], factory);
+    }
+})(function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
+//# sourceMappingURL=types.js.map
