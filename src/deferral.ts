@@ -33,10 +33,7 @@ export default class Deferral<T> {
 	 * Resolves `promise` with the given value.
 	 */
 	resolve(it) {
-		const { resolver } = this;
-		this.resolver = null;
-		this.rejector = null;
-		if (resolver) resolver(it);
+		this.resolver(it);
 		return this.promise;
 	}
 
@@ -44,10 +41,7 @@ export default class Deferral<T> {
 	 * Rejects `promise` with the given cause.
 	 */
 	reject(e: Error) {
-		const { rejector } = this;
-		this.resolver = null;
-		this.rejector = null;
-		if (rejector) rejector(e);
+		this.rejector(e);
 		return this.promise;
 	}
 
@@ -62,25 +56,5 @@ export default class Deferral<T> {
 				this.rejector = reject;
 			})
 		);
-	}
-
-	/**
-	 * Whether or not the deferral is cancelled.
-	 */
-	get isCancelled() {
-		return this.resolver === null;
-	}
-
-	/**
-	 * Cancels the deferral.  If the deferral is not settled, its callbacks will
-	 * never be called. If the deferral is settled or cancelled, this is a noop.
-	 */
-	cancel() {
-		if (!this.isCancelled) {
-			this.promise.catch(_noop); // Suppress "UnhandledException" errors.
-			this.reject(new Error(`Deferral was cancelled`));
-			this.resolver = null;
-			this.rejector = null;
-		}
 	}
 }

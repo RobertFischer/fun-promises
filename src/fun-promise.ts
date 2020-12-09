@@ -31,14 +31,42 @@ import _toArray from "lodash/toArray";
 // import Debug from "debug";
 // const debug = Debug("fun-promises");
 
+const rejection = (() => {
+	const it = Promise.reject("FunPromise has been cancelled");
+	it.catch(_noop); // Disable UnhandledException errors
+	return it;
+})();
+
 /**
  * The class that you should use instead of `Promise`.  It implements the `Promise` API, so it should be a drop-in replacement.
  */
 export default class FunPromise<T> implements Promise<T> {
 	/**
+	 * Whether or not this FunPromise has been cancelled.
+	 */
+	private _isCancelled: boolean = false;
+
+	/**
+	 * The promise that was wrapped after attaching our custom logic.
+	 */
+	protected readonly wrapped: Promise<T>;
+
+	/**
 	 * Constructor, which takes the promise to wrap.
 	 */
-	constructor(protected readonly wrapped: Promise<T>) {}
+	constructor(wrapped: Promise<T>) {
+		this.wrapped = new Promise(async (resolve, reject) => {
+			let resolved = null;
+			try {
+				resolved = await wrapped;
+			} catch (e) {
+				if (this._isCancelled) return;
+				reject(e);
+			}
+			if (this._isCancelled) return;
+			resolve(resolved);
+		});
+	}
 
 	/**
 	 * Takes a value (or a promise of a value) and returns a promise wrapping
@@ -677,5 +705,20 @@ export default class FunPromise<T> implements Promise<T> {
 				throw new NestedError(msg, ...errors);
 			}
 		});
+	}
+
+	/**
+	 * Cancel the FunPromise.  A cancelled FunPromise will silently disregard any resolution or rejection which occurs after the cancellation.
+	 */
+	cancel() {
+		this._isCancelled = true;
+		return this;
+	}
+
+	/**
+	 * Returns whether or not the promise has been cancelled.  See `cancel()` for more details.
+	 */
+	isCancelled() {
+		return this._isCancelled;
 	}
 }
