@@ -108,7 +108,7 @@
 		"prepack": "echo 'Executing prepack' && yarn build:dists",
 		"serve:docs": "yarn build:docs && npx http-server ./docs",
 		"test": "jest --detectOpenHandles --forceExit ./*.test.js ./src/*.test.js",
-		"watch:compile": "tsc --watch --noEmit -p tsconfig.json",
+		"watch:compile": "tsc --watch -p tsconfig.json",
 		"watch:test": "yarn test --watch"
 	},
 	"husky": {
