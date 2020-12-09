@@ -1,5 +1,5 @@
 {
-	"include": ["/**/*.ts", "src/**/*.js", "src/**/*.json", "index.ts"],
+	"include": ["**/*.ts", "src/**/*.js", "src/**/*.json", "index.ts"],
 	"typedocOptions": {
 		"exclude": ["**.test.*"],
 		"excludeExternals": true,
