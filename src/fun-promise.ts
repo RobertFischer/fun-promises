@@ -31,12 +31,6 @@ import _toArray from "lodash/toArray";
 // import Debug from "debug";
 // const debug = Debug("fun-promises");
 
-const rejection = (() => {
-	const it = Promise.reject("FunPromise has been cancelled");
-	it.catch(_noop); // Disable UnhandledException errors
-	return it;
-})();
-
 /**
  * The class that you should use instead of `Promise`.  It implements the `Promise` API, so it should be a drop-in replacement.
  */
