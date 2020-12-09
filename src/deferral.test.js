@@ -53,43 +53,4 @@ describe("Deferral", () => {
 			);
 		});
 	});
-
-	describe("cancellation", () => {
-		it("is initially not cancelled", () => {
-			expect(new Deferral()).toHaveProperty("isCancelled", false);
-		});
-
-		it("is cancelled after calling 'cancel'", () => {
-			const deferral = new Deferral();
-			deferral.cancel();
-			expect(deferral).toHaveProperty("isCancelled", true);
-		});
-
-		it("is safe to call 'cancel' multiple times", () => {
-			const deferral = new Deferral();
-			deferral.cancel();
-			deferral.cancel();
-			expect(deferral).toHaveProperty("isCancelled", true);
-		});
-
-		it("prevents resolve from doing anything", () => {
-			let sawThen = false;
-			const deferral = new Deferral();
-			deferral.promise.then(() => {
-				sawThen = true;
-			});
-			deferral.cancel();
-			deferral.resolve(true);
-			expect(sawThen).toBe(false);
-		});
-
-		it("rejects with a known message", async () => {
-			const deferral = new Deferral();
-			deferral.cancel();
-			await expect(deferral.promise).rejects.toHaveProperty(
-				"message",
-				"Deferral was cancelled"
-			);
-		});
-	});
 });
