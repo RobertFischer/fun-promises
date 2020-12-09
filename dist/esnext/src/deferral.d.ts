@@ -35,14 +35,5 @@ export default class Deferral<T> {
      * and reject functions.
      */
     constructor();
-    /**
-     * Whether or not the deferral is cancelled.
-     */
-    get isCancelled(): boolean;
-    /**
-     * Cancels the deferral.  If the deferral is not settled, its callbacks will
-     * never be called. If the deferral is settled or cancelled, this is a noop.
-     */
-    cancel(): void;
 }
 //# sourceMappingURL=deferral.d.ts.map

@@ -121,12 +121,14 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_src_fun_promise_.funpromise.html#all" class="tsd-kind-icon">all</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_src_fun_promise_.funpromise.html#arrayify" class="tsd-kind-icon">arrayify</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_src_fun_promise_.funpromise.html#cancel" class="tsd-kind-icon">cancel</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="_src_fun_promise_.funpromise.html#catch" class="tsd-kind-icon">catch</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="_src_fun_promise_.funpromise.html#delay" class="tsd-kind-icon">delay</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_src_fun_promise_.funpromise.html#filter" class="tsd-kind-icon">filter</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_src_fun_promise_.funpromise.html#finally" class="tsd-kind-icon">finally</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="_src_fun_promise_.funpromise.html#flatmap" class="tsd-kind-icon">flat<wbr>Map</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="_src_fun_promise_.funpromise.html#fold" class="tsd-kind-icon">fold</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_src_fun_promise_.funpromise.html#iscancelled" class="tsd-kind-icon">is<wbr>Cancelled</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="_src_fun_promise_.funpromise.html#map" class="tsd-kind-icon">map</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_src_fun_promise_.funpromise.html#reject" class="tsd-kind-icon">reject</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="_src_fun_promise_.funpromise.html#resolve" class="tsd-kind-icon">resolve</a></li>
@@ -166,7 +168,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L37">src/fun-promise.ts:37</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L46">src/fun-promise.ts:46</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -193,9 +195,14 @@
 					<div class="tsd-signature tsd-kind-icon">wrapped<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L41">src/fun-promise.ts:41</a></li>
+							<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L46">src/fun-promise.ts:46</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The promise that was wrapped after attaching our custom logic.</p>
+						</div>
+					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
@@ -210,7 +217,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L435">src/fun-promise.ts:435</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L457">src/fun-promise.ts:457</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -236,7 +243,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L221">src/fun-promise.ts:221</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L243">src/fun-promise.ts:243</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="_src_fun_promise_.funpromise.html" class="tsd-signature-type">FunPromise</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/_src_types_.html#item" class="tsd-signature-type">Item</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -253,7 +260,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L374">src/fun-promise.ts:374</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L396">src/fun-promise.ts:396</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -277,6 +284,28 @@
 						</li>
 					</ul>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="cancel" class="tsd-anchor"></a>
+					<h3>cancel</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">cancel<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L707">src/fun-promise.ts:707</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Cancel the FunPromise.  A cancelled FunPromise will silently disregard any resolution or rejection which occurs after the cancellation.</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
 					<a name="catch" class="tsd-anchor"></a>
 					<h3>catch</h3>
@@ -287,7 +316,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L126">src/fun-promise.ts:126</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L148">src/fun-promise.ts:148</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -344,7 +373,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L512">src/fun-promise.ts:512</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L534">src/fun-promise.ts:534</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -382,7 +411,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L538">src/fun-promise.ts:538</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L560">src/fun-promise.ts:560</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -436,7 +465,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L442">src/fun-promise.ts:442</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L464">src/fun-promise.ts:464</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -449,7 +478,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L443">src/fun-promise.ts:443</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L465">src/fun-promise.ts:465</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -484,7 +513,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L564">src/fun-promise.ts:564</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L586">src/fun-promise.ts:586</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -540,7 +569,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L630">src/fun-promise.ts:630</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L652">src/fun-promise.ts:652</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -591,6 +620,28 @@
 						</li>
 					</ul>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="iscancelled" class="tsd-anchor"></a>
+					<h3>is<wbr>Cancelled</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">is<wbr>Cancelled<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L715">src/fun-promise.ts:715</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns whether or not the promise has been cancelled.  See <code>cancel()</code> for more details.</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
 					<a name="map" class="tsd-anchor"></a>
 					<h3>map</h3>
@@ -601,7 +652,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L408">src/fun-promise.ts:408</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L430">src/fun-promise.ts:430</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -659,7 +710,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L91">src/fun-promise.ts:91</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L113">src/fun-promise.ts:113</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -689,7 +740,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L55">src/fun-promise.ts:55</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L77">src/fun-promise.ts:77</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -724,7 +775,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L73">src/fun-promise.ts:73</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L95">src/fun-promise.ts:95</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -763,7 +814,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L363">src/fun-promise.ts:363</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L385">src/fun-promise.ts:385</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -790,7 +841,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L591">src/fun-promise.ts:591</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L613">src/fun-promise.ts:613</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -837,7 +888,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L602">src/fun-promise.ts:602</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L624">src/fun-promise.ts:624</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -884,7 +935,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L617">src/fun-promise.ts:617</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L639">src/fun-promise.ts:639</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -932,7 +983,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L101">src/fun-promise.ts:101</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L123">src/fun-promise.ts:123</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -979,7 +1030,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L104">src/fun-promise.ts:104</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L126">src/fun-promise.ts:126</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -1050,7 +1101,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L660">src/fun-promise.ts:660</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L682">src/fun-promise.ts:682</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1078,7 +1129,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L668">src/fun-promise.ts:668</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L690">src/fun-promise.ts:690</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1117,7 +1168,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L138">src/fun-promise.ts:138</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L160">src/fun-promise.ts:160</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1147,7 +1198,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L139">src/fun-promise.ts:139</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L161">src/fun-promise.ts:161</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -1194,7 +1245,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L153">src/fun-promise.ts:153</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L175">src/fun-promise.ts:175</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -1238,7 +1289,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L166">src/fun-promise.ts:166</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L188">src/fun-promise.ts:188</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -1279,7 +1330,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L178">src/fun-promise.ts:178</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L200">src/fun-promise.ts:200</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -1317,7 +1368,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L189">src/fun-promise.ts:189</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L211">src/fun-promise.ts:211</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -1352,7 +1403,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L199">src/fun-promise.ts:199</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L221">src/fun-promise.ts:221</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -1384,7 +1435,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L208">src/fun-promise.ts:208</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L230">src/fun-promise.ts:230</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -1413,7 +1464,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L211">src/fun-promise.ts:211</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L233">src/fun-promise.ts:233</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -1439,7 +1490,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L214">src/fun-promise.ts:214</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L236">src/fun-promise.ts:236</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -1462,7 +1513,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L217">src/fun-promise.ts:217</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L239">src/fun-promise.ts:239</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -1491,7 +1542,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L462">src/fun-promise.ts:462</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L484">src/fun-promise.ts:484</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1552,7 +1603,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L498">src/fun-promise.ts:498</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L520">src/fun-promise.ts:520</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1572,7 +1623,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L499">src/fun-promise.ts:499</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L521">src/fun-promise.ts:521</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -1604,7 +1655,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L549">src/fun-promise.ts:549</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L571">src/fun-promise.ts:571</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1659,7 +1710,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L580">src/fun-promise.ts:580</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L602">src/fun-promise.ts:602</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1717,7 +1768,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L649">src/fun-promise.ts:649</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L671">src/fun-promise.ts:671</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1781,7 +1832,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L423">src/fun-promise.ts:423</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L445">src/fun-promise.ts:445</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1839,7 +1890,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L82">src/fun-promise.ts:82</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L104">src/fun-promise.ts:104</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1869,7 +1920,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L47">src/fun-promise.ts:47</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L69">src/fun-promise.ts:69</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1904,7 +1955,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L64">src/fun-promise.ts:64</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L86">src/fun-promise.ts:86</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1951,7 +2002,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L239">src/fun-promise.ts:239</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L261">src/fun-promise.ts:261</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2035,7 +2086,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L261">src/fun-promise.ts:261</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L283">src/fun-promise.ts:283</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -2097,7 +2148,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L281">src/fun-promise.ts:281</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L303">src/fun-promise.ts:303</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -2153,7 +2204,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L299">src/fun-promise.ts:299</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L321">src/fun-promise.ts:321</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -2203,7 +2254,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L315">src/fun-promise.ts:315</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L337">src/fun-promise.ts:337</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -2247,7 +2298,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L324">src/fun-promise.ts:324</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L346">src/fun-promise.ts:346</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -2285,7 +2336,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L330">src/fun-promise.ts:330</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L352">src/fun-promise.ts:352</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -2317,7 +2368,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L335">src/fun-promise.ts:335</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L357">src/fun-promise.ts:357</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -2343,7 +2394,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/e8881e7/src/fun-promise.ts#L339">src/fun-promise.ts:339</a></li>
+									<li>Defined in <a href="https://github.com/RobertFischer/fun-promises/blob/7d8efe7/src/fun-promise.ts#L361">src/fun-promise.ts:361</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -2406,6 +2457,9 @@
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_src_fun_promise_.funpromise.html#arrayify" class="tsd-kind-icon">arrayify</a>
 							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_src_fun_promise_.funpromise.html#cancel" class="tsd-kind-icon">cancel</a>
+							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
 								<a href="_src_fun_promise_.funpromise.html#catch" class="tsd-kind-icon">catch</a>
 							</li>
@@ -2423,6 +2477,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
 								<a href="_src_fun_promise_.funpromise.html#fold" class="tsd-kind-icon">fold</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_src_fun_promise_.funpromise.html#iscancelled" class="tsd-kind-icon">is<wbr>Cancelled</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
 								<a href="_src_fun_promise_.funpromise.html#map" class="tsd-kind-icon">map</a>

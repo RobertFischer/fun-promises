@@ -13,6 +13,13 @@ import type { Promisable, PromisableIterable, Unpromise, Item } from "./types";
  * The class that you should use instead of `Promise`.  It implements the `Promise` API, so it should be a drop-in replacement.
  */
 export default class FunPromise<T> implements Promise<T> {
+    /**
+     * Whether or not this FunPromise has been cancelled.
+     */
+    private _isCancelled;
+    /**
+     * The promise that was wrapped after attaching our custom logic.
+     */
     protected readonly wrapped: Promise<T>;
     /**
      * Constructor, which takes the promise to wrap.
@@ -294,5 +301,13 @@ export default class FunPromise<T> implements Promise<T> {
      * of the values reject, all the reasons are collected and wrapped in a [[`NestedError`]].
      */
     wrapErrors(msg: string): FunPromise<Item<T>[]>;
+    /**
+     * Cancel the FunPromise.  A cancelled FunPromise will silently disregard any resolution or rejection which occurs after the cancellation.
+     */
+    cancel(): this;
+    /**
+     * Returns whether or not the promise has been cancelled.  See `cancel()` for more details.
+     */
+    isCancelled(): boolean;
 }
 //# sourceMappingURL=fun-promise.d.ts.map

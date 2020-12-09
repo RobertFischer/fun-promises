@@ -26,12 +26,38 @@ export default class FunPromise {
      * Constructor, which takes the promise to wrap.
      */
     constructor(wrapped) {
+        /**
+         * Whether or not this FunPromise has been cancelled.
+         */
+        Object.defineProperty(this, "_isCancelled", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: false
+        });
+        /**
+         * The promise that was wrapped after attaching our custom logic.
+         */
         Object.defineProperty(this, "wrapped", {
             enumerable: true,
             configurable: true,
             writable: true,
-            value: wrapped
+            value: void 0
         });
+        this.wrapped = new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
+            let resolved = null;
+            try {
+                resolved = yield wrapped;
+            }
+            catch (e) {
+                if (this._isCancelled)
+                    return;
+                reject(e);
+            }
+            if (this._isCancelled)
+                return;
+            resolve(resolved);
+        }));
     }
     /**
      * Takes a value (or a promise of a value) and returns a promise wrapping
@@ -374,6 +400,19 @@ export default class FunPromise {
                 throw new NestedError(msg, ...errors);
             }
         }));
+    }
+    /**
+     * Cancel the FunPromise.  A cancelled FunPromise will silently disregard any resolution or rejection which occurs after the cancellation.
+     */
+    cancel() {
+        this._isCancelled = true;
+        return this;
+    }
+    /**
+     * Returns whether or not the promise has been cancelled.  See `cancel()` for more details.
+     */
+    isCancelled() {
+        return this._isCancelled;
     }
 }
 //# sourceMappingURL=fun-promise.js.map

@@ -469,5 +469,63 @@ describe("FunPromise", () => {
             await expect(FunPromise.resolve(values).wrapErrors("ERRORS!")).resolves.toEqual(values);
         });
     });
+    describe("cancellation", () => {
+        it("initially reports not cancelled", () => {
+            expect(FunPromise.resolve(true).isCancelled()).toBe(false);
+        });
+        it("reports cancelled after cancel is called", () => {
+            expect(FunPromise.resolve(true).cancel().isCancelled()).toBe(true);
+        });
+        it("prevents resolution after cancellation", () => {
+            let resolver;
+            let sawResolve = false;
+            const promise = new Promise((resolve) => {
+                resolver = resolve;
+            }).then(() => {
+                sawResolve = true;
+            });
+            expect(resolver).not.toBeNil();
+            const cancelled = new FunPromise(promise).cancel();
+            resolver(true);
+            expect(sawResolve).toBe(false);
+        });
+        it("prevents rejection after cancellation", () => {
+            let rejector;
+            let sawReject = false;
+            const promise = new Promise((resolve, reject) => {
+                rejector = reject;
+            }).catch(() => {
+                sawReject = true;
+            });
+            expect(rejector).not.toBeNil();
+            const cancelled = new FunPromise(promise).cancel();
+            rejector("BOOM!");
+            expect(sawReject).toBe(false);
+        });
+        it("prevents rejection when resolving throws after cancellation", () => {
+            let resolver;
+            let sawThen = true;
+            let sawCatch = false;
+            let doCancel;
+            const promise = new Promise((resolve) => {
+                resolver = resolve;
+            }).then(() => {
+                sawThen = true;
+                doCancel();
+                throw "BOOM!";
+            });
+            expect(resolver).not.toBeNil();
+            const toCancel = new FunPromise(promise);
+            doCancel = () => {
+                toCancel.cancel();
+            };
+            toCancel.catch((e) => {
+                sawCatch = true;
+            });
+            resolver(true);
+            expect(sawThen).toBe(true);
+            expect(sawCatch).toBe(false);
+        });
+    });
 });
 //# sourceMappingURL=fun-promise.test.js.map

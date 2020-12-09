@@ -21,12 +21,32 @@ import "lodash/toArray";
  * The class that you should use instead of `Promise`.  It implements the `Promise` API, so it should be a drop-in replacement.
  */
 export default class FunPromise {
+    /**
+     * Whether or not this FunPromise has been cancelled.
+     */
+    _isCancelled = false;
+    /**
+     * The promise that was wrapped after attaching our custom logic.
+     */
     wrapped;
     /**
      * Constructor, which takes the promise to wrap.
      */
     constructor(wrapped) {
-        this.wrapped = wrapped;
+        this.wrapped = new Promise(async (resolve, reject) => {
+            let resolved = null;
+            try {
+                resolved = await wrapped;
+            }
+            catch (e) {
+                if (this._isCancelled)
+                    return;
+                reject(e);
+            }
+            if (this._isCancelled)
+                return;
+            resolve(resolved);
+        });
     }
     /**
      * Takes a value (or a promise of a value) and returns a promise wrapping
@@ -369,6 +389,19 @@ export default class FunPromise {
                 throw new NestedError(msg, ...errors);
             }
         });
+    }
+    /**
+     * Cancel the FunPromise.  A cancelled FunPromise will silently disregard any resolution or rejection which occurs after the cancellation.
+     */
+    cancel() {
+        this._isCancelled = true;
+        return this;
+    }
+    /**
+     * Returns whether or not the promise has been cancelled.  See `cancel()` for more details.
+     */
+    isCancelled() {
+        return this._isCancelled;
     }
 }
 //# sourceMappingURL=fun-promise.js.map

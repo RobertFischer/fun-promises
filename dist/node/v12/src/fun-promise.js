@@ -27,7 +27,24 @@ class FunPromise {
      * Constructor, which takes the promise to wrap.
      */
     constructor(wrapped) {
-        this.wrapped = wrapped;
+        /**
+         * Whether or not this FunPromise has been cancelled.
+         */
+        this._isCancelled = false;
+        this.wrapped = new Promise(async (resolve, reject) => {
+            let resolved = null;
+            try {
+                resolved = await wrapped;
+            }
+            catch (e) {
+                if (this._isCancelled)
+                    return;
+                reject(e);
+            }
+            if (this._isCancelled)
+                return;
+            resolve(resolved);
+        });
     }
     /**
      * Takes a value (or a promise of a value) and returns a promise wrapping
@@ -370,6 +387,19 @@ class FunPromise {
                 throw new ts_nested_error_1.NestedError(msg, ...errors);
             }
         });
+    }
+    /**
+     * Cancel the FunPromise.  A cancelled FunPromise will silently disregard any resolution or rejection which occurs after the cancellation.
+     */
+    cancel() {
+        this._isCancelled = true;
+        return this;
+    }
+    /**
+     * Returns whether or not the promise has been cancelled.  See `cancel()` for more details.
+     */
+    isCancelled() {
+        return this._isCancelled;
     }
 }
 exports.default = FunPromise;
