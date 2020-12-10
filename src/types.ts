@@ -7,6 +7,8 @@
  * @packageDocumentation
  */
 
+/// <reference lib="es2020.promise" />
+
 /**
  * Provides the type of elements within an `Iterable`, which may be wrapped in one or more promises.
  * The element type is also unwrapped any promises.
