@@ -3,9 +3,19 @@
 import FunPromise from "./fun-promise";
 import _ from "lodash";
 import { NestedError } from "ts-nested-error";
+import { Fulfillment, Rejection } from "./types";
 
 const tokenPromise = new Promise((resolve) => resolve(true));
 const tokenFunPromise = new FunPromise(tokenPromise);
+
+function withRejection(rejectionReason, callback) {
+	const rejection = Promise.reject(rejectionReason);
+	try {
+		return callback(rejection);
+	} finally {
+		rejection.catch(_.noop); // Disable uncaught exception issues
+	}
+}
 
 describe("FunPromise", () => {
 	it("can be constructed and resolved", async () => {
@@ -19,23 +29,34 @@ describe("FunPromise", () => {
 				_.forEach(["resolve", "return"], (methodName) => {
 					describe(methodName, () => {
 						describe(implName, () => {
-							describe("resolves correctly", () => {
-								function doResolve(value) {
-									return impl[methodName](value);
-								}
+							function doResolve(value) {
+								return impl[methodName](value);
+							}
 
+							it("rejects when provided a rejection", async () => {
+								await expect(doResolve(Promise.reject("BOOM!"))).rejects.toBe(
+									"BOOM!"
+								);
+							});
+
+							it("does not resolve the elements of an array", async () => {
+								expect.hasAssertions();
+								await withRejection("BOOM!", async (rejection) => {
+									await expect(doResolve([rejection])).resolves.toHaveLength(1);
+								});
+							});
+
+							describe("resolves correctly", () => {
 								it("with a value", async () => {
 									await expect(doResolve(tokenPromise)).resolves.toBe(true);
 								});
 
-								it("without a value", async () => {
-									await expect(doResolve()).resolves.toBeNil();
+								it("returns the FunPromise if passed a FunPromise", () => {
+									expect(doResolve(tokenFunPromise)).toEqual(tokenFunPromise);
 								});
 
-								it("rejects when provided a rejection", async () => {
-									await expect(doResolve(Promise.reject("BOOM!"))).rejects.toBe(
-										"BOOM!"
-									);
+								it("without a value", async () => {
+									await expect(doResolve()).resolves.toBeNil();
 								});
 							});
 						});
@@ -652,6 +673,68 @@ describe("FunPromise", () => {
 			resolver(true);
 			expect(sawThen).toBe(true);
 			expect(sawCatch).toBe(false);
+		});
+	});
+
+	describe("simplifyAll", () => {
+		it("basically works", async () => {
+			await expect(FunPromise.resolve("Hello").simplifyAll()).resolves.toEqual([
+				"H",
+				"e",
+				"l",
+				"l",
+				"o",
+			]);
+		});
+
+		it("doesn't explode on an empty list", async () => {
+			await expect(FunPromise.resolve([]).simplifyAll()).resolves.toEqual([]);
+		});
+	});
+
+	describe("settle", () => {
+		it("basically works for rejections", async () => {
+			await expect(FunPromise.reject("BOOM!").settle()).resolves.toHaveProperty(
+				"reason",
+				"BOOM!"
+			);
+		});
+
+		it("basically works for fulfillments", async () => {
+			await expect(FunPromise.resolve(true).settle()).resolves.toHaveProperty(
+				"value",
+				true
+			);
+		});
+	});
+
+	describe("settleAll", () => {
+		_.forEach([true, false], (staticVersion) => {
+			describe(staticVersion ? "static" : "instance", () => {
+				function doSettleAll(values) {
+					if (staticVersion) {
+						return FunPromise.settleAll(values);
+					} else {
+						return FunPromise.resolve(values).settleAll();
+					}
+				}
+
+				it("basically works", async () => {
+					const values = [
+						{ in: Promise.resolve(true), out: new Fulfillment(true) },
+						{ in: Promise.reject("BOOM!"), out: new Rejection("BOOM!") },
+						{ in: Promise.reject(null), out: new Rejection(null) },
+						{ in: null, out: new Fulfillment(null) },
+					];
+					await expect(doSettleAll(_.map(values, "in"))).resolves.toEqual(
+						_.map(values, "out")
+					);
+				});
+
+				it("doesn't explode on empty lists", async () => {
+					await expect(doSettleAll([])).resolves.toEqual([]);
+				});
+			});
 		});
 	});
 });

@@ -11,7 +11,15 @@
 /// <reference path="../node_modules/typescript/lib/lib.es2020.promise.d.ts" />
 /// <reference path="../node_modules/typescript/lib/lib.esnext.promise.d.ts" />
 
-import type { Promisable, PromisableIterable, Unpromise, Item } from "./types";
+import {
+	Promisable,
+	PromisableIterable,
+	Unpromise,
+	Item,
+	Settlement,
+	Fulfillment,
+	Rejection,
+} from "./types";
 import { NestedError } from "ts-nested-error";
 
 import _defer from "lodash/defer";
@@ -67,7 +75,13 @@ export default class FunPromise<T> implements Promise<T> {
 	 * it.
 	 */
 	static resolve<T = void>(value?: Promisable<T>): FunPromise<T> {
-		return new FunPromise(Promise.resolve(value));
+		if (value instanceof FunPromise) {
+			return value as FunPromise<T>;
+		} else if (value instanceof Promise) {
+			return new FunPromise(value);
+		} else {
+			return new FunPromise(new Promise((resolve) => resolve(value)));
+		}
 	}
 
 	/**
@@ -384,6 +398,13 @@ export default class FunPromise<T> implements Promise<T> {
 	 */
 	simplify(): FunPromise<Unpromise<T>> {
 		return (this as unknown) as FunPromise<Unpromise<T>>;
+	}
+
+	/**
+	 * For each element of the resolved iterable, unwraps layers of `PromiseLike` wrappers as necessary.
+	 */
+	simplifyAll(): FunPromise<Unpromise<Item<T>>[]> {
+		return this.arrayify().map((it) => FunPromise.resolve(it).simplify());
 	}
 
 	/**
@@ -714,5 +735,56 @@ export default class FunPromise<T> implements Promise<T> {
 	 */
 	isCancelled() {
 		return this._isCancelled;
+	}
+
+	/**
+	 * Captures either fulfillment or rejection and resolves an object that describes the result.
+	 */
+	settle(): FunPromise<Settlement<T>> {
+		return new FunPromise(
+			this.wrapped.then(
+				(value) => new Fulfillment(value),
+				(reason) => new Rejection(reason)
+			)
+		);
+	}
+
+	/**
+	 * Assuming that the resolved value is an iterable, then for each element of the
+	 * array, captures either the fulfillment or rejection of that element.
+	 */
+	settleAll(): FunPromise<Settlement<Item<T>>[]> {
+		return new FunPromise(
+			this.arrayify().wrapped.then((ary) =>
+				Promise.all(
+					_map(ary, (val) =>
+						Promise.resolve(val).then(
+							(value) => new Fulfillment(value),
+							(reason) => new Rejection(reason)
+						)
+					)
+				)
+			)
+		);
+	}
+
+	/**
+	 *  Equivalent to `FunPromise.resolve(iterable).settleAll()`.
+	 */
+	static settleAll<T>(
+		iterable: PromisableIterable<T>
+	): FunPromise<Settlement<T>[]> {
+		return new FunPromise(
+			Promise.resolve(iterable).then((ary) =>
+				Promise.all(
+					_map(ary, (val) =>
+						Promise.resolve(val).then(
+							(value) => new Fulfillment(value),
+							(reason) => new Rejection(reason)
+						)
+					)
+				)
+			)
+		);
 	}
 }
