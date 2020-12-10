@@ -2,6 +2,16 @@
  * @format
  */
 
+/// <reference lib="es5" />
+/// <reference lib="es2015.iterable" />
+/// <reference lib="es2015.promise" />
+/// <reference lib="es2015.symbol.wellknown" />
+/// <reference lib="es2018.asyncgenerator" />
+/// <reference lib="es2018.asynciterable" />
+/// <reference lib="es2018.promise" />
+/// <reference lib="es2020.promise" />
+/// <reference lib="esnext.promise" />
+
 import {
 	Promisable,
 	PromisableIterable,
