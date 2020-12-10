@@ -5,6 +5,7 @@ set -exu
 
 cd "$(dirname "$0")/.."
 
+rm -rf docs dist
 git restore docs
 git restore dist
-rm -rvf index.js ./index.d.ts ./*.map ./lib/*.js ./lib/*.d.ts ./lib/*.map
+rm -rf index.js ./index.d.ts ./*.map ./lib/*.js ./lib/*.d.ts ./lib/*.map
