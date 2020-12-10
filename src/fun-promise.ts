@@ -2,15 +2,6 @@
  * @format
  */
 
-/* What follows ensures that we have the entire Promise API implemented */
-/// <reference path="../node_modules/typescript/lib/lib.es5.d.ts" />
-/// <reference path="../node_modules/typescript/lib/lib.es2015.iterable.d.ts" />
-/// <reference path="../node_modules/typescript/lib/lib.es2015.promise.d.ts" />
-/// <reference path="../node_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts" />
-/// <reference path="../node_modules/typescript/lib/lib.es2018.promise.d.ts" />
-/// <reference path="../node_modules/typescript/lib/lib.es2020.promise.d.ts" />
-/// <reference path="../node_modules/typescript/lib/lib.esnext.promise.d.ts" />
-
 import {
 	Promisable,
 	PromisableIterable,
