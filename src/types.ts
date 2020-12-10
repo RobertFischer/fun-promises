@@ -59,3 +59,30 @@ export type PromisableIterable<T> = Promisable<IterableOfPromisables<T>>;
  * although it may produce either values or promises of values or both.
  */
 export type IterableOfPromisables<T> = Iterable<Promisable<T>>;
+
+/**
+ * Represents a `PromiseSettledResult` value for a fulfilled promise.
+ */
+export class Fulfillment<T> implements PromiseFulfilledResult<T> {
+	constructor(public readonly value: T) {}
+
+	get status(): "fulfilled" {
+		return "fulfilled";
+	}
+}
+
+/**
+ * Represents a `PromiseSettledResult` value for a rejected promise.
+ */
+export class Rejection implements PromiseRejectedResult {
+	constructor(public readonly reason: unknown) {}
+
+	get status(): "rejected" {
+		return "rejected";
+	}
+}
+
+/**
+ * Equivalent to a `PromiseSettledResult`, but specific to our classes.
+ */
+export type Settlement<T> = Fulfillment<T> | Rejection;
