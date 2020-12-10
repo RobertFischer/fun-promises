@@ -73,6 +73,12 @@ which gives an overview of how we expect these things to work.
 
 ## Some Highlights
 
+### `settle` / `settleAll`
+
+This changes a promise of a value into a promise of an object describing the
+result. The finally resolved object has a `status` property that is either
+`"fulfilled"` or `"rejected"`, and also provides access to the reason or value.
+
 ### `Deferral` class
 
 This is an inside-out promise: it gives you access to the `resolve` and `reject`
