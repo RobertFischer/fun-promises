@@ -87,4 +87,5 @@ export class Rejection implements PromiseRejectedResult {
 /**
  * Equivalent to a `PromiseSettledResult`, but specific to our classes.
  */
-export type Settlement<T> = Fulfillment<T> | Rejection;
+export type Settlement<T> = PromiseSettledResult<T> &
+	(Fulfillment<T> | Rejection);
