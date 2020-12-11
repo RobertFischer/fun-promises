@@ -7,6 +7,8 @@
  * @packageDocumentation
  */
 
+/// <reference lib="es2020.promise" />
+
 /**
  * Provides the type of elements within an `Iterable`, which may be wrapped in one or more promises.
  * The element type is also unwrapped any promises.
@@ -85,4 +87,5 @@ export class Rejection implements PromiseRejectedResult {
 /**
  * Equivalent to a `PromiseSettledResult`, but specific to our classes.
  */
-export type Settlement<T> = Fulfillment<T> | Rejection;
+export type Settlement<T> = PromiseSettledResult<T> &
+	(Fulfillment<T> | Rejection);

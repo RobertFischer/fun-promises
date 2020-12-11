@@ -7,6 +7,7 @@
 	"browser": "dist/browser/index.js",
 	"reactNative": "dist/react-native/index.js",
 	"source": "index.ts",
+	"types": "dist/esnext/index.d.ts",
 	"repository": "git@github.com:RobertFischer/fun-promises.git",
 	"author": "Robert Fischer",
 	"license": "Unlicense",
