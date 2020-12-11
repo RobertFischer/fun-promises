@@ -83,7 +83,7 @@
 		"typedoc-plugin-nojekyll": "^1.0.1"
 	},
 	"scripts": {
-		"build": "echo 'Executing build' && yarn build:dists && yarn build:docs",
+		"build": "echo 'Executing build' && yarn build:bundles && yarn build:docs",
 		"build:amd": "tsc -p ./tsconfig/amd.json",
 		"build:browser": "( test -d ./dist/esnext || yarn build:esnext ) && parcel build ./dist/esnext/index.js --target browser --out-dir ./dist/browser/ --global FunPromise --detailed-report 15",
 		"build:bundles": "./script/bootstrap && yarn build:dists && ./script/bundle-dists",
