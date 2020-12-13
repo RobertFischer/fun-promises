@@ -20,8 +20,8 @@ npm install --save fun-promises
 
 ### CDN for Browsers
 
-The following URL contains a script which will set the `FunPromise` global to be
-an object containing the various exports of
+The following URL contains a script which will set the `FunPromises` global to
+be an object containing the various exports of
 [`index.ts`](https://robertfischer.github.io/fun-promises/modules/_index_.html).
 
 ```
