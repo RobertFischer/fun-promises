@@ -57,7 +57,7 @@ export default class FunPromise<T> implements Promise<T> {
 	/**
 	 * Constructor, which takes the promise to wrap.
 	 */
-	constructor(wrapped: Promise<T>) {
+	constructor(wrapped: Promisable<T>) {
 		this.wrapped = new Promise(async (resolve, reject) => {
 			let resolved = null;
 			try {
