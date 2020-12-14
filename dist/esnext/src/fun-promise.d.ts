@@ -299,6 +299,18 @@ export default class FunPromise<T> implements Promise<T> {
      */
     static fold<T, T2 = T>(values: PromisableIterable<T>, initialValue: T2, accumulator: (memo: T2, it: T) => Promisable<T2>): FunPromise<T2>;
     /**
+     * Given an initial array of values and an accumulator function, apply the accumlator function to each element of the promise's resolved value,
+     * passing in the current array of values and the resolved item.  Returns an array with the concatenated results of the accumulation.
+     * If any of the promise's values are rejected, the entire operation will be rejected.
+     *
+     * The resolution order is not guaranteed. The accumulator function will be passed values as those values resolve.
+     */
+    flatFold<T2 = Item<T>>(initialValue: PromisableIterable<T2>, accumulator: (memo: T2[], it: Item<T>) => PromisableIterable<T2>): FunPromise<T2[]>;
+    /**
+     * Equivalent to `FunPromise.resolve(values).flatFold(initialValue, accumulator)`.
+     */
+    static flatFold<T, T2 = T>(values: PromisableIterable<T>, initialValue: PromisableIterable<T2>, accumulator: (memo: T2[], it: T) => PromisableIterable<T2>): FunPromise<T2[]>;
+    /**
      * Handles rejections like 'catch', but wraps them in a [[`NestedError`]] with the given message.
      */
     wrapError(msg: string): FunPromise<T>;

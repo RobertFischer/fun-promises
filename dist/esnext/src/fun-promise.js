@@ -24,7 +24,7 @@ import _isNil from "lodash/isNil";
 import _map from "lodash/map";
 import _negate from "lodash/negate";
 import "lodash/noop";
-import "lodash/toArray";
+import _toArray from "lodash/toArray";
 // import Debug from "debug";
 // const debug = Debug("fun-promises");
 /**
@@ -173,9 +173,8 @@ export default class FunPromise {
      * as `true`.  The items are not resolved sequentially unless you also pass a second argument as `true`.
      */
     arrayify(resolveValues = false, sequentialResolution = false) {
-        const aryPromise = this.then((iter) => [
-            ...iter,
-        ]);
+        const aryPromise = this.then(async (iterPromise) => _toArray(await iterPromise) // Just to be sure we're all de-promise'd
+        );
         if (resolveValues) {
             if (sequentialResolution) {
                 return aryPromise.then(async (ary) => {
@@ -391,6 +390,29 @@ export default class FunPromise {
      */
     static fold(values, initialValue, accumulator) {
         return FunPromise.resolve(values).fold(initialValue, accumulator);
+    }
+    /**
+     * Given an initial array of values and an accumulator function, apply the accumlator function to each element of the promise's resolved value,
+     * passing in the current array of values and the resolved item.  Returns an array with the concatenated results of the accumulation.
+     * If any of the promise's values are rejected, the entire operation will be rejected.
+     *
+     * The resolution order is not guaranteed. The accumulator function will be passed values as those values resolve.
+     */
+    flatFold(initialValue, accumulator) {
+        return this.arrayify().then(async (ary) => {
+            let memoPromise = FunPromise.resolve(initialValue).arrayify();
+            await Promise.all(_map(ary, async (promisableValue) => {
+                const value = await promisableValue;
+                memoPromise = memoPromise.then(async (memo) => memo.concat(_toArray(await accumulator(memo, value))));
+            }));
+            return memoPromise;
+        });
+    }
+    /**
+     * Equivalent to `FunPromise.resolve(values).flatFold(initialValue, accumulator)`.
+     */
+    static flatFold(values, initialValue, accumulator) {
+        return FunPromise.resolve(values).flatFold(initialValue, accumulator);
     }
     /**
      * Handles rejections like 'catch', but wraps them in a [[`NestedError`]] with the given message.
