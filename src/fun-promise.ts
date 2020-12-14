@@ -419,9 +419,9 @@ export default class FunPromise<T> implements Promise<T> {
 		resolveValues: boolean = false,
 		sequentialResolution: boolean = false
 	): FunPromise<Item<T>[]> {
-		const aryPromise: FunPromise<Item<T>[]> = this.then((iter) => [
-			...((iter as unknown) as Iterable<Item<T>>),
-		]);
+		const aryPromise = (this.then(
+			async (iterPromise) => _toArray(await iterPromise) // Just to be sure we're all de-promise'd
+		) as unknown) as FunPromise<Item<T>[]>;
 		if (resolveValues) {
 			if (sequentialResolution) {
 				return aryPromise.then(async (ary) => {
@@ -696,6 +696,44 @@ export default class FunPromise<T> implements Promise<T> {
 		accumulator: (memo: T2, it: T) => Promisable<T2>
 	): FunPromise<T2> {
 		return FunPromise.resolve(values).fold(initialValue, accumulator);
+	}
+
+	/**
+	 * Given an initial array of values and an accumulator function, apply the accumlator function to each element of the promise's resolved value,
+	 * passing in the current array of values and the resolved item.  Returns an array with the concatenated results of the accumulation.
+	 * If any of the promise's values are rejected, the entire operation will be rejected.
+	 *
+	 * The resolution order is not guaranteed. The accumulator function will be passed values as those values resolve.
+	 */
+	flatFold<T2 = Item<T>>(
+		initialValue: PromisableIterable<T2>,
+		accumulator: (memo: T2[], it: Item<T>) => PromisableIterable<T2>
+	): FunPromise<T2[]> {
+		return this.arrayify().then(async (ary: Promisable<Item<T>>[]) => {
+			let memoPromise: FunPromise<T2[]> = FunPromise.resolve(
+				initialValue
+			).arrayify() as FunPromise<T2[]>;
+			await Promise.all(
+				_map(ary, async (promisableValue) => {
+					const value = await promisableValue;
+					memoPromise = memoPromise.then(async (memo) =>
+						memo.concat(_toArray(await accumulator(memo, value)))
+					);
+				})
+			);
+			return memoPromise;
+		});
+	}
+
+	/**
+	 * Equivalent to `FunPromise.resolve(values).flatFold(initialValue, accumulator)`.
+	 */
+	static flatFold<T, T2 = T>(
+		values: PromisableIterable<T>,
+		initialValue: PromisableIterable<T2>,
+		accumulator: (memo: T2[], it: T) => PromisableIterable<T2>
+	): FunPromise<T2[]> {
+		return FunPromise.resolve(values).flatFold(initialValue, accumulator);
 	}
 
 	/**
