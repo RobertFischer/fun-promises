@@ -6,6 +6,5 @@ script
 docs
 conf.d
 tsconfig/*
-fun-promises-*.tgz
-dist/*.tgz
-dist/*.tar.xz
+*.tgz
+*.xz
