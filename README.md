@@ -85,6 +85,12 @@ This is an inside-out promise: it gives you access to the `resolve` and `reject`
 methods of the promise so that you can perform operations on them later, as well
 as having accessor to query the state of `promise`.
 
+### `fold`/`map`/`filter`
+
+Optimized promise-based implementations for all your collection-processing
+needs. Note that `map` and `fold` also come in "flat" varieties for
+concatenating iterables: `flatMap` and `flatFold`.
+
 ### `try`
 
 ```typescript
