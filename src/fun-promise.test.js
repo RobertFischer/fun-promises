@@ -737,4 +737,30 @@ describe("FunPromise", () => {
 			});
 		});
 	});
+
+	describe("flatFold", () => {
+		_.forEach([true, false], (staticVersion) => {
+			describe(staticVersion ? "static" : "instance", () => {
+				function doFlatFold(values, initialValues, accumulator) {
+					if (staticVersion) {
+						return FunPromise.flatFold(values, initialValues, accumulator);
+					} else {
+						return FunPromise.resolve(values).flatFold(
+							initialValues,
+							accumulator
+						);
+					}
+				}
+
+				it("basically works", async () => {
+					const values = [4, 5, 6];
+					const initialValues = [1, 2, 3];
+					const accumulator = (xs, x) => [x, x];
+					await expect(
+						doFlatFold(values, initialValues, accumulator)
+					).resolves.toEqual([1, 2, 3, 4, 4, 5, 5, 6, 6]);
+				});
+			});
+		});
+	});
 });
