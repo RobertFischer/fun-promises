@@ -119,8 +119,6 @@ index.*.map
 
 *.old
 
-fun-promises-*.tgz
-
-dist/*.tgz
-dist/*.tar.gz
-dist/*.tar.xz
+*.tgz
+*.tar.gz
+*.tar.xz
