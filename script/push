@@ -1,0 +1,10 @@
+#!/bin/bash
+
+set -o pipefail
+set -exu
+
+cd "$(dirname "$0")/.."
+
+./script/clean
+git pull
+git push
