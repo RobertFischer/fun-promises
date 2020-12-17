@@ -25,7 +25,7 @@ be an object containing the various exports of
 [`index.ts`](https://robertfischer.github.io/fun-promises/modules/_index_.html).
 
 ```
-https://unpkg.com/browse/fun-promises@latest/dist/browser/index.js
+https://unpkg.com/fun-promises@latest/dist/browser/index.js
 ```
 
 ## Usage
