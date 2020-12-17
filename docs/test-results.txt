@@ -5,26 +5,11 @@ PASS src/fun-promise.test.js
     resolve/return
       resolve
         static
-          ✓ rejects when provided a rejection (23 ms)
-          ✓ does not resolve the elements of an array (2 ms)
+          ✓ rejects when provided a rejection (21 ms)
+          ✓ does not resolve the elements of an array (1 ms)
           resolves correctly
             ✓ with a value (1 ms)
             ✓ returns the FunPromise if passed a FunPromise (2 ms)
-            ✓ without a value (1 ms)
-        instance
-          ✓ rejects when provided a rejection (1 ms)
-          ✓ does not resolve the elements of an array (2 ms)
-          resolves correctly
-            ✓ with a value (1 ms)
-            ✓ returns the FunPromise if passed a FunPromise (1 ms)
-            ✓ without a value (1 ms)
-      return
-        static
-          ✓ rejects when provided a rejection (2 ms)
-          ✓ does not resolve the elements of an array
-          resolves correctly
-            ✓ with a value
-            ✓ returns the FunPromise if passed a FunPromise (10 ms)
             ✓ without a value (1 ms)
         instance
           ✓ rejects when provided a rejection (1 ms)
@@ -32,14 +17,29 @@ PASS src/fun-promise.test.js
           resolves correctly
             ✓ with a value (1 ms)
             ✓ returns the FunPromise if passed a FunPromise (1 ms)
+            ✓ without a value (1 ms)
+      return
+        static
+          ✓ rejects when provided a rejection (1 ms)
+          ✓ does not resolve the elements of an array (1 ms)
+          resolves correctly
+            ✓ with a value (1 ms)
+            ✓ returns the FunPromise if passed a FunPromise (9 ms)
             ✓ without a value
+        instance
+          ✓ rejects when provided a rejection (2 ms)
+          ✓ does not resolve the elements of an array (1 ms)
+          resolves correctly
+            ✓ with a value
+            ✓ returns the FunPromise if passed a FunPromise (1 ms)
+            ✓ without a value (1 ms)
     then
-      ✓ works without onrejected
+      ✓ works without onrejected (1 ms)
     catch
-      ✓ handles rejections (1 ms)
+      ✓ handles rejections (2 ms)
       ✓ returns the error when not passed an argument (1 ms)
     arrayify
-      ✓ basically works (2 ms)
+      ✓ basically works (1 ms)
       ✓ returns a clone (1 ms)
       ✓ does not resolve values when called without an argument (1 ms)
       ✓ resolves values when called with the sole argument `true` (2 ms)
@@ -54,8 +54,8 @@ PASS src/fun-promise.test.js
           ✓ for 2 arguments (1 ms)
           ✓ for 3 arguments (1 ms)
           ✓ for 4 arguments (1 ms)
-          ✓ for 5 arguments (1 ms)
-          ✓ for 6 arguments (7 ms)
+          ✓ for 5 arguments (6 ms)
+          ✓ for 6 arguments (1 ms)
           ✓ for 7 arguments (1 ms)
           ✓ for 8 arguments (1 ms)
           ✓ for 9 arguments (1 ms)
@@ -65,7 +65,7 @@ PASS src/fun-promise.test.js
           ✓ for 1 arguments (1 ms)
           ✓ for 2 arguments (1 ms)
           ✓ for 3 arguments (1 ms)
-          ✓ for 4 arguments
+          ✓ for 4 arguments (1 ms)
           ✓ for 5 arguments (1 ms)
           ✓ for 6 arguments (1 ms)
           ✓ for 7 arguments (1 ms)
@@ -74,7 +74,7 @@ PASS src/fun-promise.test.js
     try
       ✓ basically works (1 ms)
       ✓ works with one argument (1 ms)
-      ✓ explodes properly (1 ms)
+      ✓ explodes properly (2 ms)
     map
       static
         ✓ basically works (2 ms)
@@ -94,19 +94,19 @@ PASS src/fun-promise.test.js
         ✓ doesn't change the object that is rejected (1 ms)
       instance
         ✓ rejects correctly (1 ms)
-        ✓ doesn't change the object that is rejected (1 ms)
+        ✓ doesn't change the object that is rejected (2 ms)
     coalesce
       ✓ basically works (2 ms)
       ✓ returns the first resolving value (1004 ms)
       ✓ returns the value that passes the test (1 ms)
-      ✓ throws the error if nothing passes the test (3 ms)
-      ✓ punts appropriately after the first resolution (1 ms)
+      ✓ throws the error if nothing passes the test (2 ms)
+      ✓ punts appropriately after the first resolution (3 ms)
     delay
       static
         When requesting a delay of -1000 milliseconds
           basically works
-            ✓ with no arg (2 ms)
-            ✓ with one arg (10 ms)
+            ✓ with no arg (4 ms)
+            ✓ with one arg (9 ms)
         When requesting a delay of -1 milliseconds
           basically works
             ✓ with no arg (1 ms)
@@ -118,7 +118,7 @@ PASS src/fun-promise.test.js
         When requesting a delay of 1 milliseconds
           basically works
             ✓ with no arg (1 ms)
-            ✓ with one arg (1 ms)
+            ✓ with one arg (2 ms)
         When requesting a delay of 1000 milliseconds
           basically works
             ✓ with no arg (1 ms)
@@ -139,21 +139,21 @@ PASS src/fun-promise.test.js
         When requesting a delay of 1 milliseconds
           basically works
             ✓ with no arg (1 ms)
-            ✓ with one arg (1 ms)
+            ✓ with one arg (2 ms)
         When requesting a delay of 1000 milliseconds
           basically works
             ✓ with no arg (1 ms)
-            ✓ with one arg (1001 ms)
+            ✓ with one arg (1002 ms)
     simplify
       ✓ basically works (1 ms)
     filter
       static
         ✓ basically works (4 ms)
       instance
-        ✓ basically works (3 ms)
+        ✓ basically works (1 ms)
     flatMap
       static
-        ✓ basically works (2 ms)
+        ✓ basically works (1 ms)
       instance
         ✓ basically works (1 ms)
     tap
@@ -166,19 +166,19 @@ PASS src/fun-promise.test.js
         ✓ basically works (1 ms)
     tapCatch
       ✓ basically works (2 ms)
-      ✓ nests explosions (3 ms)
+      ✓ nests explosions (4 ms)
     tapEach
       ✓ basically works (6 ms)
     wrapError
-      ✓ basically works (3 ms)
+      ✓ basically works (2 ms)
     wrapErrors
-      ✓ basically works (3 ms)
+      ✓ basically works (2 ms)
       ✓ doesn't do anything if there is no error (1 ms)
     cancellation
       ✓ initially reports not cancelled (1 ms)
-      ✓ reports cancelled after cancel is called
+      ✓ reports cancelled after cancel is called (1 ms)
       ✓ prevents resolution after cancellation (1 ms)
-      ✓ prevents rejection after cancellation (1 ms)
+      ✓ prevents rejection after cancellation
       ✓ prevents rejection when resolving throws after cancellation (1 ms)
     simplifyAll
       ✓ basically works (2 ms)
@@ -188,22 +188,22 @@ PASS src/fun-promise.test.js
       ✓ basically works for fulfillments (1 ms)
     settleAll
       static
-        ✓ basically works (2 ms)
-        ✓ doesn't explode on empty lists
-      instance
         ✓ basically works (1 ms)
+        ✓ doesn't explode on empty lists (1 ms)
+      instance
+        ✓ basically works (2 ms)
         ✓ doesn't explode on empty lists
     flatFold
       static
         ✓ basically works (1 ms)
       instance
-        ✓ basically works (1 ms)
+        ✓ basically works (2 ms)
 
 PASS src/deferral.test.js
   Deferral
     ✓ can be constructed (1 ms)
     promise
-      ✓ is a FunPromise (11 ms)
+      ✓ is a FunPromise (7 ms)
     resolve
       ✓ basically works (2 ms)
       ✓ does not change resolved value if called multiple times (2 ms)
@@ -211,20 +211,13 @@ PASS src/deferral.test.js
       ✓ basically works (1 ms)
       ✓ does not change reason if called multiple times (3 ms)
 
-PASS ./assumptions.test.js
-  lodash
-    castArray
-      ✓ DOES NOT turn iterables into arrays (1 ms)
-    toArray
-      ✓ does turn iterables into arrays (2 ms)
-
 PASS src/types.test.js
   Fulfillment
     when passed the boolean argument 'true'
       ✓ exposes the argument on the 'value' property (1 ms)
-      ✓ has a 'status' property of 'fulfilled'
+      ✓ has a 'status' property of 'fulfilled' (1 ms)
     when passed the object argument '{"foo":true}'
-      ✓ exposes the argument on the 'value' property
+      ✓ exposes the argument on the 'value' property (1 ms)
       ✓ has a 'status' property of 'fulfilled' (1 ms)
   Rejection
     when passed the string argument: 'BOOM!'
@@ -233,6 +226,13 @@ PASS src/types.test.js
     when passed the object argument: 'Error: BOOM!'
       ✓ returns the argument in the 'reason' property (1 ms)
       ✓ has a 'status' property whose value is 'rejected' (1 ms)
+
+PASS ./assumptions.test.js
+  lodash
+    castArray
+      ✓ DOES NOT turn iterables into arrays (2 ms)
+    toArray
+      ✓ does turn iterables into arrays (2 ms)
 
 ----------------|---------|----------|---------|---------|-------------------
 File            | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
@@ -252,5 +252,5 @@ Lines        : 100% ( 166/166 )
 Test Suites: 4 passed, 4 total
 Tests:       137 passed, 137 total
 Snapshots:   0 total
-Time:        4.661 s, estimated 9 s
+Time:        4.675 s, estimated 9 s
 Ran all test suites matching /.\/assumptions.test.js|.\/src\/deferral.test.js|.\/src\/fun-promise.test.js|.\/src\/types.test.js/i.
