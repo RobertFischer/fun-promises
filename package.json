@@ -76,7 +76,7 @@
 		"lint-staged": "^10.5.3",
 		"parcel": "^1.12.4",
 		"prettier": "^2.2.1",
-		"semantic-release": "^17.3.0",
+		"semantic-release": "^19.0.3",
 		"semantic-release-npm-deprecate-old-versions": "^1.0.1",
 		"ts-jest": "^26.4.4",
 		"typedoc": "^0.19.2",
